@@ -1,0 +1,50 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MiMaster.master.cs" Inherits="presentacion.MiMaster" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>Mi Web</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <!-- NAVBAR GENERAL -->
+        <asp:Panel ID="pnlNavbar" runat="server">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Clínica Médica</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNavAltMarkup"
+                            aria-controls="navbarNavAltMarkup"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" aria-current="page" href="Menu.aspx">Inicio</a>
+                            <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
+                            <a class="nav-link" href="Medicos.aspx">Médicos</a>
+                            <a class="nav-link" href="Turnos.aspx">Turnos</a>
+                            <a class="nav-link disabled" aria-disabled="true">Salir</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </asp:Panel>
+
+        <!-- CONTENIDO DE LAS PÁGINAS -->
+        <div class="container mt-4">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" />
+        </div>
+
+    </form>
+</body>
+
+</html>
