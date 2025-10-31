@@ -107,14 +107,14 @@ CREATE TABLE Turno (
 
 INSERT INTO Rol (Descripcion) VALUES 
 ('Administrador'), 
-('Recepcionista'), 
+('Paciente'), 
 ('Medico');
 
 INSERT INTO EstadoTurno (Descripcion) VALUES 
 ('Nuevo'),
 ('Reprogramado'),
 ('Cancelado'),
-('No Asistió'),
+('No AsistiÃ³'),
 ('Cerrado');
 
 INSERT INTO Cobertura (Tipo, NombreObraSocial, PlanCobertura) VALUES 
@@ -123,7 +123,7 @@ INSERT INTO Cobertura (Tipo, NombreObraSocial, PlanCobertura) VALUES
 ('Obra Social', 'Swiss Medical', 'SMG 50');
 
 INSERT INTO Especialidad (Descripcion) VALUES 
-('Clínica Médica'),
-('Odontología'),
-('Dermatología'),
-('Cardiología');
+('ClÃ­nica MÃ©dica'),
+('OdontologÃ­a'),
+('DermatologÃ­a'),
+('CardiologÃ­a');
