@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{68B4CC14-28CF-4EE0-9FD1-B08A67F3E88A}</ProjectGuid>
+    <ProjectGuid>{0A53753D-B752-4DA7-82C0-C855488C4549}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Negocio</RootNamespace>
-    <AssemblyName>Negocio</AssemblyName>
+    <RootNamespace>AccesoDatos</RootNamespace>
+    <AssemblyName>AccesoDatos</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -38,6 +38,7 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,25 +48,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EstadoTurnoNegocio.cs" />
-    <Compile Include="PacienteNegocio.cs" />
+    <Compile Include="Datos.cs" />
+    <Compile Include="EspecialidadDatos.cs" />
+    <Compile Include="EstadoTurnoDatos.cs" />
+    <Compile Include="MedicoDatos.cs" />
+    <Compile Include="CoberturaDatos.cs" />
+    <Compile Include="PacienteDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RolNegocio.cs" />
-    <Compile Include="TurnoTrabajoNegocio.cs" />
-    <Compile Include="UsuarioNegocio.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AccesoDatos\AccesoDatos.csproj">
-      <Project>{0a53753d-b752-4da7-82c0-c855488c4549}</Project>
-      <Name>AccesoDatos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dominio\Dominio.csproj">
-      <Project>{73edd239-0471-4934-b658-c838252c506c}</Project>
-      <Name>Dominio</Name>
-    </ProjectReference>
+    <Compile Include="RolDatos.cs" />
+    <Compile Include="TurnoDatos.cs" />
+    <Compile Include="TurnoTrabajoDatos.cs" />
+    <Compile Include="UsuarioDatos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dominio\Dominio.csproj">
+      <Project>{73edd239-0471-4934-b658-c838252c506c}</Project>
+      <Name>Dominio</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
