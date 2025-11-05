@@ -1,2 +1,25 @@
-.vs/TpFinal-Clinica-Grupo25B/v17/DocumentLayout.json
-/AccesoDatos/obj
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Otros archivos temporales
+*.cache
+*.pdb
+*.dll
+*.exe
+*.log
+
+# Archivos generados por Visual Studio / GitHub Copilot
+**/CopilotIndices/
+*.vsidx
+*.backup.json
