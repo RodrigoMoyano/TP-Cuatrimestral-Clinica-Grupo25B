@@ -70,6 +70,8 @@
     <Content Include="css\misEstilos.css" />
     <Content Include="Global.asax" />
     <Content Include="Imagenes\3662541.jpg" />
+    <Content Include="Imagenes\calendario-menu.jpg" />
+    <Content Include="Imagenes\calendarioMenu.png" />
     <Content Include="LogIn.aspx" />
     <Content Include="Menu.aspx" />
     <Content Include="Web.config" />

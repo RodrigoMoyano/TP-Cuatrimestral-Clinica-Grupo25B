@@ -7,16 +7,13 @@
 
     <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 90vh;">
 
-        <!-- Imagen de portada -->
-        <div class="card shadow" style="max-width: 500px; width: 100%;">
-            <div style="width: 100%; height: 200px; overflow: hidden;">
-                <img src="~/imagenes/3662541.jpg"
-                    runat="server"
-                    alt="imagen clínica"
-                    style="width: 100%; height: 100%; object-fit: cover;">
+        <!-- Imagen -->
+        <div class="card-shadow">
+            <div class="card-image-container">
+                <img class="card-image" src="~/imagenes/3662541.jpg" runat="server" alt="imagen clínica">
             </div>
 
-            <!-- Formulario de login -->
+            <!-- Login -->
             <div class="card-body">
                 <h4 class="card-title text-center mb-4">Inicio de Sesión</h4>
 
