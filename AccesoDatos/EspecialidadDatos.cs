@@ -19,7 +19,7 @@ namespace AccesoDatos
                     Especialidad aux = new Especialidad
                     {
                         IdEspecialidad = (int)Lector["IdEspecialidad"],
-                        Nombre = Lector["¨Nombre"].ToString(),
+                        Nombre = Lector["Nombre"].ToString(),
                         Descripcion = Lector["Descripcion"].ToString()
                     };
                     lista.Add(aux);
