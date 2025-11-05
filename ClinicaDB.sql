@@ -19,12 +19,12 @@ GO
 
 
 CREATE TABLE Rol (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdRol INT IDENTITY(1,1) PRIMARY KEY,
     Descripcion NVARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Usuario (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdUsuario INT IDENTITY(1,1) PRIMARY KEY,
     NombreUsuario NVARCHAR(50) NOT NULL,
     Clave NVARCHAR(100) NOT NULL,
     Activo BIT DEFAULT 1,
@@ -33,14 +33,14 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Cobertura (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdCobertura INT IDENTITY(1,1) PRIMARY KEY,
     Tipo NVARCHAR(50) NOT NULL,
     NombreObraSocial NVARCHAR(100) NULL,
     PlanCobertura NVARCHAR(100) NULL
 );
 
 CREATE TABLE Paciente (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdPaciente INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,
     Apellido NVARCHAR(100) NOT NULL,
     Dni NVARCHAR(20) NOT NULL,
@@ -51,12 +51,13 @@ CREATE TABLE Paciente (
 );
 
 CREATE TABLE Especialidad (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdEspecialidad INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(100)NOT NULL,
     Descripcion NVARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Medico (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdMedico INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,
     Apellido NVARCHAR(100) NOT NULL,
     Matricula NVARCHAR(50),
@@ -75,12 +76,12 @@ CREATE TABLE MedicoEspecialidad (
 );
 
 CREATE TABLE EstadoTurno (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdEstadoTurno INT IDENTITY(1,1) PRIMARY KEY,
     Descripcion NVARCHAR(50) NOT NULL
 );
 
 CREATE TABLE TurnoTrabajo (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdTurnoTrabajo INT IDENTITY(1,1) PRIMARY KEY,
     IdMedico INT NOT NULL,
     DiaSemana NVARCHAR(20) NOT NULL,
     HoraInicio TIME NOT NULL,
@@ -89,7 +90,7 @@ CREATE TABLE TurnoTrabajo (
 );
 
 CREATE TABLE Turno (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdTurno INT IDENTITY(1,1) PRIMARY KEY,
     IdPaciente INT NOT NULL,
     IdMedico INT NOT NULL,
     IdEspecialidad INT NOT NULL,
@@ -114,7 +115,7 @@ INSERT INTO EstadoTurno (Descripcion) VALUES
 ('Nuevo'),
 ('Reprogramado'),
 ('Cancelado'),
-('No AsistiÃ³'),
+('No Asistió'),
 ('Cerrado');
 
 INSERT INTO Cobertura (Tipo, NombreObraSocial, PlanCobertura) VALUES 
@@ -122,8 +123,8 @@ INSERT INTO Cobertura (Tipo, NombreObraSocial, PlanCobertura) VALUES
 ('Obra Social', 'OSDE', '210'),
 ('Obra Social', 'Swiss Medical', 'SMG 50');
 
-INSERT INTO Especialidad (Descripcion) VALUES 
-('ClÃ­nica MÃ©dica'),
-('OdontologÃ­a'),
-('DermatologÃ­a'),
-('CardiologÃ­a');
+INSERT INTO Especialidad (Nombre, Descripcion) VALUES 
+('Clínica Médica', 'Atención integral de pacientes adultos y niños para diagnósticos y tratamientos generales.'),
+('Odontología', 'Cuidado y tratamiento de dientes, encías y salud bucal en general.'),
+('Dermatología', 'Diagnóstico y tratamiento de enfermedades de la piel, cabello y uñas.'),
+('Cardiología', 'Prevención, diagnóstico y tratamiento de enfermedades del corazón y sistema circulatorio.');

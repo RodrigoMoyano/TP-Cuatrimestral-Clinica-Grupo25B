@@ -15,7 +15,7 @@ namespace Dominio
         public string Apellido { get; set; }
         public string Matricula { get; set; }
 
-        public List<Especialidad> Especialidades { get; set; }
+        public List<Especialidad> Especialidad { get; set; }
         public List<TurnoTrabajo> TurnosTrabajo { get; set; }
 
         public Usuario Usuario { get; set; } // Relación con la cuenta del sistema

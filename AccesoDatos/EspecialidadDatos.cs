@@ -11,15 +11,16 @@ namespace AccesoDatos
             List<Especialidad> lista = new List<Especialidad>();
             try
             {
-                SetearConsulta("SELECT Id, Nombre FROM Especialidades");
+                SetearConsulta("SELECT IdEspecialidad, Nombre, Descripcion  FROM Especialidad");
                 EjecutarLectura();
 
                 while (Lector.Read())
                 {
                     Especialidad aux = new Especialidad
                     {
-                        Id = (int)Lector["Id"],
-                        Nombre = Lector["Nombre"].ToString()
+                        IdEspecialidad = (int)Lector["IdEspecialidad"],
+                        Nombre = Lector["¨Nombre"].ToString(),
+                        Descripcion = Lector["Descripcion"].ToString()
                     };
                     lista.Add(aux);
                 }
@@ -33,9 +34,9 @@ namespace AccesoDatos
         {
             try
             {
-                SetearConsulta("INSERT INTO Especialidades (Nombre) VALUES (@Nombre)");
+                SetearConsulta("INSERT INTO Especialidad (Nombre, Descripcion) VALUES (@Nombre, @Descripcion)");
                 SetearParametro("@Nombre", nueva.Nombre);
-                EjecutarAccion();
+                SetearParametro("@Descripcion", nueva.Descripcion);
             }
             finally { CerrarConexion(); }
         }
@@ -44,9 +45,10 @@ namespace AccesoDatos
         {
             try
             {
-                SetearConsulta("UPDATE Especialidades SET Nombre=@Nombre WHERE Id=@Id");
-                SetearParametro("@Id", mod.Id);
+                SetearConsulta("UPDATE Especialidad SET Nombre=@Nombre, Descripcion=@Descripcion WHERE IdEspecialidad=@IdEspecialidad");
+                SetearParametro("@IdEspecialidad", mod.IdEspecialidad);
                 SetearParametro("@Nombre", mod.Nombre);
+                SetearParametro("@Descripcion", mod.Descripcion);
                 EjecutarAccion();
             }
             finally { CerrarConexion(); }
@@ -56,8 +58,8 @@ namespace AccesoDatos
         {
             try
             {
-                SetearConsulta("DELETE FROM Especialidades WHERE Id=@Id");
-                SetearParametro("@Id", id);
+                SetearConsulta("DELETE FROM Especialidad WHERE IdEspecialidad=@IdEspecialidad");
+                SetearParametro("@IdEspecialidad", id);
                 EjecutarAccion();
             }
             finally { CerrarConexion(); }
