@@ -14,7 +14,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT Id, Nombre, Apellido, Matricula, IdEspecialidad FROM Medicos");
+                    datos.SetearConsulta("SELECT Id, Nombre, Apellido, Matricula, IdEspecialidad FROM Medico");
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -46,7 +46,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Medicos (Nombre, Apellido, Matricula, IdEspecialidad) VALUES (@Nombre, @Apellido, @Matricula, @IdEspecialidad)");
+                    datos.SetearConsulta("INSERT INTO Medico (Nombre, Apellido, Matricula, IdEspecialidad) VALUES (@Nombre, @Apellido, @Matricula, @IdEspecialidad)");
                     datos.SetearParametro("@Nombre", nuevo.Nombre);
                     datos.SetearParametro("@Apellido", nuevo.Apellido);
                     datos.SetearParametro("@Matricula", nuevo.Matricula);
@@ -66,7 +66,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Medicos SET Nombre=@Nombre, Apellido=@Apellido, Matricula=@Matricula, IdEspecialidad=@IdEspecialidad WHERE Id=@Id");
+                    datos.SetearConsulta("UPDATE Medico SET Nombre=@Nombre, Apellido=@Apellido, Matricula=@Matricula, IdEspecialidad=@IdEspecialidad WHERE Id=@Id");
                     datos.SetearParametro("@Id", modificado.Id);
                     datos.SetearParametro("@Nombre", modificado.Nombre);
                     datos.SetearParametro("@Apellido", modificado.Apellido);
@@ -87,7 +87,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM Medicos WHERE Id=@Id");
+                    datos.SetearConsulta("DELETE FROM Medico WHERE Id=@Id");
                     datos.SetearParametro("@Id", id);
                     datos.EjecutarAccion();
                 }

@@ -32,7 +32,6 @@
                             <a class="nav-link active" aria-current="page" href="Menu.aspx">Inicio</a>
                             <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
                             <a class="nav-link" href="Medicos.aspx">Médicos</a>
-                            <a class="nav-link" href="Especialidad.aspx">Especialidades</a>
                             <a class="nav-link" href="Turnos.aspx">Turnos</a>
                             <a class="nav-link" href="LogIn.aspx" aria-disabled="true">Salir</a>
                         </div>

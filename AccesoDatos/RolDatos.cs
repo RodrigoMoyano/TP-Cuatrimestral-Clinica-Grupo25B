@@ -13,7 +13,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT Id, Descripcion FROM Roles");
+                    datos.SetearConsulta("SELECT Id, Descripcion FROM Rol");
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -41,7 +41,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Roles (Descripcion) VALUES (@Descripcion)");
+                    datos.SetearConsulta("INSERT INTO Rol (Descripcion) VALUES (@Descripcion)");
                     datos.SetearParametro("@Descripcion", rol.Descripcion);
                     datos.EjecutarAccion();
                 }
@@ -58,7 +58,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Roles SET Descripcion = @Descripcion WHERE Id = @Id");
+                    datos.SetearConsulta("UPDATE Rol SET Descripcion = @Descripcion WHERE Id = @Id");
                     datos.SetearParametro("@Descripcion", rol.Descripcion);
                     datos.SetearParametro("@Id", rol.Id);
                     datos.EjecutarAccion();
@@ -76,7 +76,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM Roles WHERE Id = @Id");
+                    datos.SetearConsulta("DELETE FROM Rol WHERE Id = @Id");
                     datos.SetearParametro("@Id", id);
                     datos.EjecutarAccion();
                 }

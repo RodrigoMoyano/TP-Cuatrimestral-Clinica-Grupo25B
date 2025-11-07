@@ -16,8 +16,8 @@ namespace AccesoDatos
                     datos.SetearConsulta(@"
                         SELECT u.Id, u.NombreUsuario, u.Contrasenia, u.Activo,
                                r.Id AS RolId, r.Nombre AS RolNombre
-                        FROM Usuarios u
-                        INNER JOIN Roles r ON u.IdRol = r.Id
+                        FROM Usuario u
+                        INNER JOIN Rol r ON u.IdRol = r.Id
                     ");
                     datos.EjecutarLectura();
 
@@ -53,7 +53,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Usuarios (NombreUsuario, Contrasenia, Activo, IdRol) VALUES (@NombreUsuario, @Contrasenia, @Activo, @IdRol)");
+                    datos.SetearConsulta("INSERT INTO Usuario (NombreUsuario, Contrasenia, Activo, IdRol) VALUES (@NombreUsuario, @Contrasenia, @Activo, @IdRol)");
                     datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
                     datos.SetearParametro("@Contrasenia", usuario.Contrasenia);
                     datos.SetearParametro("@Activo", usuario.Activo);
@@ -73,7 +73,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Usuarios SET NombreUsuario=@NombreUsuario, Contrasenia=@Contrasenia, Activo=@Activo, IdRol=@IdRol WHERE Id=@Id");
+                    datos.SetearConsulta("UPDATE Usuario SET NombreUsuario=@NombreUsuario, Contrasenia=@Contrasenia, Activo=@Activo, IdRol=@IdRol WHERE Id=@Id");
                     datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
                     datos.SetearParametro("@Contrasenia", usuario.Contrasenia);
                     datos.SetearParametro("@Activo", usuario.Activo);
@@ -94,7 +94,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM Usuarios WHERE Id=@Id");
+                    datos.SetearConsulta("DELETE FROM Usuario WHERE Id=@Id");
                     datos.SetearParametro("@Id", id);
                     datos.EjecutarAccion();
                 }
@@ -111,7 +111,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuarios WHERE NombreUsuario=@NombreUsuario AND Contrasenia=@Contrasenia AND Activo=1");
+                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE NombreUsuario=@NombreUsuario AND Contrasenia=@Contrasenia AND Activo=1");
                     datos.SetearParametro("@NombreUsuario", nombreUsuario);
                     datos.SetearParametro("@Contrasenia", contrasenia);
 

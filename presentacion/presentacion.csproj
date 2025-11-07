@@ -78,7 +78,6 @@
     <Content Include="Pacientes.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="Web.config" />
-    <Content Include="Especialidad.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -120,15 +119,9 @@
       <DependentUpon>Pacientes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Especialidad.aspx.cs">
-      <DependentUpon>Especialidad.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Especialidad.aspx.designer.cs">
-      <DependentUpon>Especialidad.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Turnos.aspx.cs">
       <DependentUpon>Turnos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Turnos.aspx.designer.cs">
       <DependentUpon>Turnos.aspx</DependentUpon>

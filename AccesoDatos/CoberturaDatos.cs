@@ -15,7 +15,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT Id, Tipo, NombreObraSocial, Plan FROM Coberturas");
+                    datos.SetearConsulta("SELECT Id, Tipo, NombreObraSocial, Plan FROM Cobertura");
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -45,7 +45,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Coberturas (Tipo, NombreObraSocial, Plan) VALUES (@Tipo, @NombreObraSocial, @Plan)");
+                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, Plan) VALUES (@Tipo, @NombreObraSocial, @Plan)");
                     datos.SetearParametro("@Tipo", nueva.Tipo);
                     datos.SetearParametro("@NombreObraSocial", nueva.NombreObraSocial);
                     datos.SetearParametro("@Plan", nueva.Plan);
@@ -65,7 +65,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Coberturas SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, Plan = @Plan WHERE Id = @Id");
+                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, Plan = @Plan WHERE Id = @Id");
                     datos.SetearParametro("@Tipo", cobertura.Tipo);
                     datos.SetearParametro("@NombreObraSocial", cobertura.NombreObraSocial);
                     datos.SetearParametro("@Plan", cobertura.Plan);
@@ -86,7 +86,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM Coberturas WHERE Id = @Id");
+                    datos.SetearConsulta("DELETE FROM Cobertura WHERE Id = @Id");
                     datos.SetearParametro("@Id", id);
                     datos.EjecutarAccion();
                 }

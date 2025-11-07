@@ -25,9 +25,9 @@ namespace AccesoDatos
                             p.Nombre AS NombrePaciente, 
                             m.Id AS IdMedico, 
                             m.Nombre AS NombreMedico
-                        FROM Turnos t
-                        INNER JOIN Pacientes p ON p.Id = t.IdPaciente
-                        INNER JOIN Medicos m ON m.Id = t.IdMedico");
+                        FROM Turno t
+                        INNER JOIN Paciente p ON p.Id = t.IdPaciente
+                        INNER JOIN Medico m ON m.Id = t.IdMedico");
 
                     datos.EjecutarLectura();
 
@@ -69,7 +69,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Turnos (Fecha, Hora, IdPaciente, IdMedico) VALUES (@Fecha, @Hora, @IdPaciente, @IdMedico)");
+                    datos.SetearConsulta("INSERT INTO Turno (Fecha, Hora, IdPaciente, IdMedico) VALUES (@Fecha, @Hora, @IdPaciente, @IdMedico)");
                     datos.SetearParametro("@Fecha", turno.Fecha);
                     datos.SetearParametro("@Hora", turno.Hora);
                     datos.SetearParametro("@IdPaciente", turno.Paciente.Id);
@@ -98,8 +98,8 @@ namespace AccesoDatos
                             p.Id AS IdPaciente, p.Nombre AS NombrePaciente, 
                             m.Id AS IdMedico, m.Nombre AS NombreMedico
                         FROM Turnos t
-                        INNER JOIN Pacientes p ON p.Id = t.IdPaciente
-                        INNER JOIN Medicos m ON m.Id = t.IdMedico
+                        INNER JOIN Paciente p ON p.Id = t.IdPaciente
+                        INNER JOIN Medico m ON m.Id = t.IdMedico
                         WHERE p.Id = @IdPaciente");
 
                     datos.SetearParametro("@IdPaciente", idPaciente);
@@ -150,8 +150,8 @@ namespace AccesoDatos
                             p.Id AS IdPaciente, p.Nombre AS NombrePaciente, 
                             m.Id AS IdMedico, m.Nombre AS NombreMedico
                         FROM Turnos t
-                        INNER JOIN Pacientes p ON p.Id = t.IdPaciente
-                        INNER JOIN Medicos m ON m.Id = t.IdMedico
+                        INNER JOIN Paciente p ON p.Id = t.IdPaciente
+                        INNER JOIN Medico m ON m.Id = t.IdMedico
                         WHERE m.Id = @IdMedico");
 
                     datos.SetearParametro("@IdMedico", idMedico);

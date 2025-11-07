@@ -16,8 +16,8 @@ namespace AccesoDatos
                     datos.SetearConsulta(@"
                         SELECT tt.Id, tt.DiaSemana, tt.HoraInicio, tt.HoraFin,
                                m.Id AS MedicoId, m.Nombre, m.Apellido
-                        FROM TurnosTrabajo tt
-                        INNER JOIN Medicos m ON tt.IdMedico = m.Id
+                        FROM TurnoTrabajo tt
+                        INNER JOIN Medico m ON tt.IdMedico = m.Id
                     ");
                     datos.EjecutarLectura();
 
@@ -54,7 +54,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO TurnosTrabajo (IdMedico, DiaSemana, HoraInicio, HoraFin) VALUES (@IdMedico, @DiaSemana, @HoraInicio, @HoraFin)");
+                    datos.SetearConsulta("INSERT INTO TurnoTrabajo (IdMedico, DiaSemana, HoraInicio, HoraFin) VALUES (@IdMedico, @DiaSemana, @HoraInicio, @HoraFin)");
                     datos.SetearParametro("@IdMedico", turno.Medico.IdMedico);
                     datos.SetearParametro("@DiaSemana", turno.DiaSemana.ToString());
                     datos.SetearParametro("@HoraInicio", turno.HoraInicio);
@@ -74,7 +74,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE TurnosTrabajo SET IdMedico=@IdMedico, DiaSemana=@DiaSemana, HoraInicio=@HoraInicio, HoraFin=@HoraFin WHERE Id=@Id");
+                    datos.SetearConsulta("UPDATE TurnoTrabajo SET IdMedico=@IdMedico, DiaSemana=@DiaSemana, HoraInicio=@HoraInicio, HoraFin=@HoraFin WHERE Id=@Id");
                     datos.SetearParametro("@IdMedico", turno.Medico.IdMedico);
                     datos.SetearParametro("@DiaSemana", turno.DiaSemana.ToString());
                     datos.SetearParametro("@HoraInicio", turno.HoraInicio);
@@ -95,7 +95,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM TurnosTrabajo WHERE Id=@Id");
+                    datos.SetearConsulta("DELETE FROM TurnoTrabajo WHERE Id=@Id");
                     datos.SetearParametro("@Id", id);
                     datos.EjecutarAccion();
                 }
