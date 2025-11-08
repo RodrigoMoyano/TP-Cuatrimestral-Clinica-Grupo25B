@@ -1,5 +1,4 @@
-﻿using AccesoDatos;
-using Dominio;
+﻿using Dominio;
 using System;
 using System.Collections.Generic;
 
@@ -7,37 +6,104 @@ namespace Negocio
 {
     public class TurnoTrabajoNegocio
     {
-        private TurnoTrabajoDatos _datos;
-
-        public TurnoTrabajoNegocio()
-        {
-            _datos = new TurnoTrabajoDatos();
-        }
-
         public List<TurnoTrabajo> Listar()
         {
-            return _datos.Listar();
+            List<TurnoTrabajo> lista = new List<TurnoTrabajo>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"
+                        SELECT tt.Id, tt.DiaSemana, tt.HoraInicio, tt.HoraFin,
+                               m.Id AS MedicoId, m.Nombre, m.Apellido
+                        FROM TurnoTrabajo tt
+                        INNER JOIN Medico m ON tt.IdMedico = m.Id
+                    ");
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        TurnoTrabajo t = new TurnoTrabajo
+                        {
+                            Id = (int)datos.Lector["Id"],
+                            DiaSemana = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), datos.Lector["DiaSemana"].ToString()),
+                            HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
+                            HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+                            Medico = new Medico
+                            {
+                                IdMedico = (int)datos.Lector["MedicoId"],
+                                Nombre = datos.Lector["Nombre"].ToString(),
+                                Apellido = datos.Lector["Apellido"].ToString()
+                            }
+                        };
+                        lista.Add(t);
+                    }
+
+                    return lista;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al listar turnos de trabajo: " + ex.Message);
+                }
+            }
         }
 
         public void Agregar(TurnoTrabajo turno)
         {
-            if (turno.HoraInicio >= turno.HoraFin)
-                throw new Exception("La hora de inicio debe ser menor que la hora de fin.");
-
-            if (turno.Medico == null)
-                throw new Exception("Debe asignarse un médico al turno de trabajo.");
-
-            _datos.Agregar(turno);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("INSERT INTO TurnoTrabajo (IdMedico, DiaSemana, HoraInicio, HoraFin) VALUES (@IdMedico, @DiaSemana, @HoraInicio, @HoraFin)");
+                    datos.SetearParametro("@IdMedico", turno.Medico.IdMedico);
+                    datos.SetearParametro("@DiaSemana", turno.DiaSemana.ToString());
+                    datos.SetearParametro("@HoraInicio", turno.HoraInicio);
+                    datos.SetearParametro("@HoraFin", turno.HoraFin);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al agregar turno de trabajo: " + ex.Message);
+                }
+            }
         }
 
         public void Modificar(TurnoTrabajo turno)
         {
-            _datos.Modificar(turno);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("UPDATE TurnoTrabajo SET IdMedico=@IdMedico, DiaSemana=@DiaSemana, HoraInicio=@HoraInicio, HoraFin=@HoraFin WHERE Id=@Id");
+                    datos.SetearParametro("@IdMedico", turno.Medico.IdMedico);
+                    datos.SetearParametro("@DiaSemana", turno.DiaSemana.ToString());
+                    datos.SetearParametro("@HoraInicio", turno.HoraInicio);
+                    datos.SetearParametro("@HoraFin", turno.HoraFin);
+                    datos.SetearParametro("@Id", turno.Id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al modificar turno de trabajo: " + ex.Message);
+                }
+            }
         }
 
         public void Eliminar(int id)
         {
-            _datos.Eliminar(id);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("DELETE FROM TurnoTrabajo WHERE Id=@Id");
+                    datos.SetearParametro("@Id", id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar turno de trabajo: " + ex.Message);
+                }
+            }
         }
     }
 }

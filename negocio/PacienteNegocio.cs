@@ -1,5 +1,4 @@
 ﻿using Dominio;
-using AccesoDatos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,38 +9,80 @@ namespace Negocio
 {
     public class PacienteNegocio
     {
-        private readonly PacienteDatos _pacienteDatos;
-
-        public PacienteNegocio()
+        public List<Paciente> ObtenerTodos()
         {
-            _pacienteDatos = new PacienteDatos();
+            List<Paciente> lista = new List<Paciente>();
+
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("SELECT Id, Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono FROM Paciente");
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Paciente p = new Paciente
+                    {
+                        Id = (int)datos.Lector["Id"],
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        Apellido = datos.Lector["Apellido"].ToString(),
+                        Dni = datos.Lector["Dni"].ToString(),
+                        FechaNacimiento = Convert.ToDateTime(datos.Lector["FechaNacimiento"]),
+                        Email = datos.Lector["Email"].ToString(),
+                        Telefono = datos.Lector["Telefono"].ToString()
+                    };
+                    lista.Add(p);
+                }
+            }
+
+            return lista;
         }
 
-        public List<Paciente> ListarPacientes()
+        public void Agregar(Paciente paciente)
         {
-            return _pacienteDatos.ObtenerTodos();
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("INSERT INTO Paciente (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono) " +
+                                     "VALUES (@Nombre, @Apellido, @Dni, @FechaNacimiento, @Email, @Telefono)");
+
+                datos.SetearParametro("@Nombre", paciente.Nombre);
+                datos.SetearParametro("@Apellido", paciente.Apellido);
+                datos.SetearParametro("@Dni", paciente.Dni);
+                datos.SetearParametro("@FechaNacimiento", paciente.FechaNacimiento);
+                datos.SetearParametro("@Email", paciente.Email);
+                datos.SetearParametro("@Telefono", paciente.Telefono);
+
+                datos.EjecutarAccion();
+            }
         }
 
-        public void AgregarPaciente(Paciente paciente)
+        public void Modificar(Paciente paciente)
         {
-            
-            if (string.IsNullOrEmpty(paciente.Nombre) || string.IsNullOrEmpty(paciente.Apellido))
-                throw new System.Exception("El nombre y apellido son obligatorios.");
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("UPDATE Paciente SET Nombre = @Nombre, Apellido = @Apellido, Dni = @Dni, " +
+                                     "FechaNacimiento = @FechaNacimiento, Email = @Email, Telefono = @Telefono " +
+                                     "WHERE Id = @Id");
 
-            
-            _pacienteDatos.Agregar(paciente);
+                datos.SetearParametro("@Nombre", paciente.Nombre);
+                datos.SetearParametro("@Apellido", paciente.Apellido);
+                datos.SetearParametro("@Dni", paciente.Dni);
+                datos.SetearParametro("@FechaNacimiento", paciente.FechaNacimiento);
+                datos.SetearParametro("@Email", paciente.Email);
+                datos.SetearParametro("@Telefono", paciente.Telefono);
+                datos.SetearParametro("@Id", paciente.Id);
+
+                datos.EjecutarAccion();
+            }
         }
 
-        public void ModificarPaciente(Paciente paciente)
+        public void Eliminar(int id)
         {
-            
-            _pacienteDatos.Modificar(paciente);
-        }
-
-        public void EliminarPaciente(int idPaciente)
-        {
-            
-            _pacienteDatos.Eliminar(idPaciente);
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("DELETE FROM Paciente WHERE Id = @Id");
+                datos.SetearParametro("@Id", id);
+                datos.EjecutarAccion();
+            }
         }
     }
 }

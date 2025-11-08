@@ -142,14 +142,17 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AccesoDatos\AccesoDatos.csproj">
-      <Project>{0a53753d-b752-4da7-82c0-c855488c4549}</Project>
-      <Name>AccesoDatos</Name>
-    </ProjectReference>
     <ProjectReference Include="..\dominio\Dominio.csproj">
       <Project>{73edd239-0471-4934-b658-c838252c506c}</Project>
       <Name>Dominio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\negocio\negocio.csproj">
+      <Project>{68b4cc14-28cf-4ee0-9fd1-b08a67f3e88a}</Project>
+      <Name>negocio</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

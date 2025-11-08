@@ -1,5 +1,4 @@
-﻿using AccesoDatos;
-using Dominio;
+﻿using Dominio;
 using System;
 using System.Collections.Generic;
 
@@ -7,34 +6,85 @@ namespace Negocio
 {
     public class EstadoTurnoNegocio
     {
-        private EstadoTurnoDatos _datos;
-
-        public EstadoTurnoNegocio()
-        {
-            _datos = new EstadoTurnoDatos();
-        }
-
         public List<EstadoTurno> Listar()
         {
-            return _datos.Listar();
+            List<EstadoTurno> lista = new List<EstadoTurno>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT Id, Descripcion FROM EstadoTurno");
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        EstadoTurno e = new EstadoTurno
+                        {
+                            Id = (int)datos.Lector["Id"],
+                            Descripcion = datos.Lector["Descripcion"].ToString()
+                        };
+                        lista.Add(e);
+                    }
+
+                    return lista;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al listar estados de turno: " + ex.Message);
+                }
+            }
         }
 
         public void Agregar(EstadoTurno estado)
         {
-            if (string.IsNullOrWhiteSpace(estado.Descripcion))
-                throw new Exception("La descripción del estado no puede estar vacía.");
-
-            _datos.Agregar(estado);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("INSERT INTO EstadoTurno (Descripcion) VALUES (@Descripcion)");
+                    datos.SetearParametro("@Descripcion", estado.Descripcion);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al agregar estado de turno: " + ex.Message);
+                }
+            }
         }
 
         public void Modificar(EstadoTurno estado)
         {
-            _datos.Modificar(estado);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("UPDATE EstadoTurno SET Descripcion = @Descripcion WHERE Id = @Id");
+                    datos.SetearParametro("@Descripcion", estado.Descripcion);
+                    datos.SetearParametro("@Id", estado.Id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al modificar estado de turno: " + ex.Message);
+                }
+            }
         }
 
         public void Eliminar(int id)
         {
-            _datos.Eliminar(id);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("DELETE FROM EstadoTurno WHERE Id = @Id");
+                    datos.SetearParametro("@Id", id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar estado de turno: " + ex.Message);
+                }
+            }
         }
     }
 }

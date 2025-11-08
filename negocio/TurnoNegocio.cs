@@ -1,13 +1,13 @@
-﻿using Dominio;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dominio;
 
-namespace AccesoDatos
+namespace Negocio
 {
-    public class TurnoDatos
+    public class TurnoNegocio
     {
         public List<Turno> ObtenerTodos()
         {
@@ -184,6 +184,42 @@ namespace AccesoDatos
                 catch (Exception ex)
                 {
                     throw new Exception("Error al obtener los turnos del médico", ex);
+                }
+            }
+        }
+
+        public List<VerTurno> spVerTurno()
+        {
+            List<VerTurno> lista = new List<VerTurno>();
+
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearSp("SpVerTurno");
+
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        VerTurno aux = new VerTurno();
+
+                        aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                        aux.Hora = (TimeSpan)datos.Lector["Hora"];
+                        aux.Paciente = (string)datos.Lector["Paciente"];
+                        aux.Medico = (string)datos.Lector["Medico"];
+                        aux.Especialidad = (string)datos.Lector["Especialidad"];
+                        aux.Estado = (string)datos.Lector["Estado"];
+
+                        lista.Add(aux);
+                    }
+
+                    return lista;
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
                 }
             }
         }

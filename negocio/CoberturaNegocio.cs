@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Dominio;
 
-namespace AccesoDatos
+namespace Negocio
 {
-    public class CoberturaDatos
+    public class CoberturaNegocio
     {
         // 🔹 Listar todas las coberturas (obra social o particular)
         public List<Cobertura> Listar()

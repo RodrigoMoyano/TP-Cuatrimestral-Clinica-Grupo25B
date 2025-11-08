@@ -1,10 +1,14 @@
-﻿using Dominio;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Dominio;
 
-namespace AccesoDatos
+
+namespace Negocio
 {
-    public class MedicoDatos
+    public class MedicoNegocio
     {
         public List<Medico> Listar()
         {

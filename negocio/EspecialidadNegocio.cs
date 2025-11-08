@@ -1,10 +1,13 @@
 ﻿using Dominio;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AccesoDatos
+namespace Negocio
 {
-    public class EspecialidadDatos : Datos
+    internal class EspecialidadNegocio : Datos
     {
         public List<Especialidad> Listar()
         {

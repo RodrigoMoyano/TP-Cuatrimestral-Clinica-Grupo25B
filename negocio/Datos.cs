@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccesoDatos
+namespace Negocio
 {
     public class Datos : IDisposable  
     {
@@ -34,6 +34,12 @@ namespace AccesoDatos
         public void SetearConsulta(string query)
         {
             comando = new SqlCommand(query, conexion);
+        }
+
+        public void SetearSp(string spNombre)
+        {
+            comando = new SqlCommand(spNombre, conexion);
+            comando.CommandType = System.Data.CommandType.StoredProcedure;
         }
 
         // Agregar parametros

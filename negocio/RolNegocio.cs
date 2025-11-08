@@ -1,5 +1,4 @@
-﻿using AccesoDatos;
-using Dominio;
+﻿using Dominio;
 using System;
 using System.Collections.Generic;
 
@@ -7,34 +6,85 @@ namespace Negocio
 {
     public class RolNegocio
     {
-        private RolDatos _datos;
-
-        public RolNegocio()
-        {
-            _datos = new RolDatos();
-        }
-
         public List<Rol> Listar()
         {
-            return _datos.Listar();
+            List<Rol> lista = new List<Rol>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT Id, Descripcion FROM Rol");
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        Rol r = new Rol
+                        {
+                            Id = (int)datos.Lector["Id"],
+                            Descripcion = datos.Lector["Descripcion"].ToString()
+                        };
+                        lista.Add(r);
+                    }
+
+                    return lista;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al listar roles: " + ex.Message);
+                }
+            }
         }
 
         public void Agregar(Rol rol)
         {
-            if (string.IsNullOrWhiteSpace(rol.Descripcion))
-                throw new Exception("La descripción del rol no puede estar vacía.");
-
-            _datos.Agregar(rol);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("INSERT INTO Rol (Descripcion) VALUES (@Descripcion)");
+                    datos.SetearParametro("@Descripcion", rol.Descripcion);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al agregar rol: " + ex.Message);
+                }
+            }
         }
 
         public void Modificar(Rol rol)
         {
-            _datos.Modificar(rol);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("UPDATE Rol SET Descripcion = @Descripcion WHERE Id = @Id");
+                    datos.SetearParametro("@Descripcion", rol.Descripcion);
+                    datos.SetearParametro("@Id", rol.Id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al modificar rol: " + ex.Message);
+                }
+            }
         }
 
         public void Eliminar(int id)
         {
-            _datos.Eliminar(id);
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("DELETE FROM Rol WHERE Id = @Id");
+                    datos.SetearParametro("@Id", id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar rol: " + ex.Message);
+                }
+            }
         }
     }
 }
