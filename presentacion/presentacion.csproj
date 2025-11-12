@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\misEstilos.css" />
+    <Content Include="GestionMedicos.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Imagenes\3662541.jpg" />
     <Content Include="Imagenes\calendario-menu.jpg" />
@@ -80,6 +81,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GestionMedicos.aspx.cs">
+      <DependentUpon>GestionMedicos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GestionMedicos.aspx.designer.cs">
+      <DependentUpon>GestionMedicos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
