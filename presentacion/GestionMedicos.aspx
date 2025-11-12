@@ -38,25 +38,27 @@
         <asp:GridView ID="gvMedicos" runat="server" CssClass="table table-striped table-bordered"
                       AutoGenerateColumns="False" GridLines="None">
             <Columns>
-                <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-                <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
-                <asp:BoundField DataField="DNI" HeaderText="DNI" />
-                <asp:BoundField DataField="Especialidad" HeaderText="Especialidad" />
-                <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
-                <asp:BoundField DataField="Email" HeaderText="Email" />
-                <asp:BoundField DataField="Estado" HeaderText="Estado" />
-                <asp:TemplateField HeaderText="Acciones">
-                    <ItemTemplate>
-                        <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-sm btn-outline-secondary me-1">
-                            <i class="bi bi-pencil-square"></i>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="btnDesactivar" runat="server" CssClass="btn btn-sm btn-outline-danger">
-                            <i class="bi bi-person-x"></i>
-                        </asp:LinkButton>
-                    </ItemTemplate>
-                </asp:TemplateField>
-            </Columns>
-        </asp:GridView>
+        <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+        <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
+        <asp:BoundField DataField="Matricula" HeaderText="Matrícula" />
+        <asp:BoundField DataField="Email" HeaderText="Email" />
+        <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
+        <asp:BoundField DataField="DescripcionEspecialidad" HeaderText="Especialidad" />
+        
+        <asp:TemplateField HeaderText="Acciones">
+            <ItemTemplate>
+                <asp:LinkButton ID="btnEditar" runat="server" CommandName="Editar" CommandArgument='<%# Eval("Id") %>'
+                                CssClass="btn btn-sm btn-outline-secondary me-1">
+                    <i class="bi bi-pencil-square"></i>
+                </asp:LinkButton>
+                <asp:LinkButton ID="btnDesactivar" runat="server" CommandName="Desactivar" CommandArgument='<%# Eval("Id") %>'
+                                CssClass="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-person-x"></i>
+                </asp:LinkButton>
+            </ItemTemplate>
+        </asp:TemplateField>
+    </Columns>
+</asp:GridView>
 
     </div>
     <!-- 🧾 Modal Alta / Edición -->
@@ -101,7 +103,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-success" />
+                    <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-success" OnClick="btnGuardar_Click" />
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
