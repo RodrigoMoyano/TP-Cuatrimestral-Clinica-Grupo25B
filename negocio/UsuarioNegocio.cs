@@ -14,7 +14,7 @@ namespace Negocio
                 try
                 {
                     datos.SetearConsulta(@"
-                        SELECT u.Id, u.NombreUsuario, u.Contrasenia, u.Activo,
+                        SELECT u.Id, u.NombreUsuario, u.Clave, u.Activo,
                                r.Id AS RolId, r.Nombre AS RolNombre
                         FROM Usuario u
                         INNER JOIN Rol r ON u.IdRol = r.Id
@@ -27,7 +27,7 @@ namespace Negocio
                         {
                             Id = (int)datos.Lector["Id"],
                             NombreUsuario = datos.Lector["NombreUsuario"].ToString(),
-                            Contrasenia = datos.Lector["Contrasenia"].ToString(),
+                            Clave = datos.Lector["Clave"].ToString(),
                             Activo = (bool)datos.Lector["Activo"],
                             Rol = new Rol
                             {
@@ -53,9 +53,9 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Usuario (NombreUsuario, Contrasenia, Activo, IdRol) VALUES (@NombreUsuario, @Contrasenia, @Activo, @IdRol)");
+                    datos.SetearConsulta("INSERT INTO Usuario (NombreUsuario, Clave, Activo, IdRol) VALUES (@NombreUsuario, @Contrasenia, @Activo, @IdRol)");
                     datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
-                    datos.SetearParametro("@Contrasenia", usuario.Contrasenia);
+                    datos.SetearParametro("@Clave", usuario.Clave);
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.SetearParametro("@IdRol", usuario.Rol.Id);
                     datos.EjecutarAccion();
@@ -73,9 +73,9 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Usuario SET NombreUsuario=@NombreUsuario, Contrasenia=@Contrasenia, Activo=@Activo, IdRol=@IdRol WHERE Id=@Id");
+                    datos.SetearConsulta("UPDATE Usuario SET NombreUsuario=@NombreUsuario, Clave=@Clave, Activo=@Activo, IdRol=@IdRol WHERE Id=@Id");
                     datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
-                    datos.SetearParametro("@Contrasenia", usuario.Contrasenia);
+                    datos.SetearParametro("@Clave", usuario.Clave);
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.SetearParametro("@IdRol", usuario.Rol.Id);
                     datos.SetearParametro("@Id", usuario.Id);
@@ -105,15 +105,15 @@ namespace Negocio
             }
         }
 
-        public bool ValidarUsuario(string nombreUsuario, string contrasenia)
+        public bool ValidarUsuario(string nombreUsuario, string clave)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE NombreUsuario=@NombreUsuario AND Contrasenia=@Contrasenia AND Activo=1");
+                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE NombreUsuario=@NombreUsuario AND Clave=@Clave AND Activo=1");
                     datos.SetearParametro("@NombreUsuario", nombreUsuario);
-                    datos.SetearParametro("@Contrasenia", contrasenia);
+                    datos.SetearParametro("@Clave", clave);
 
                     int count = datos.EjecutarAccionEscalar();
                     return count > 0;
@@ -121,6 +121,47 @@ namespace Negocio
                 catch (Exception ex)
                 {
                     throw new Exception("Error al validar usuario: " + ex.Message);
+                }
+            }
+        }
+        public Usuario ObtenerUsuario(string nombreUsuario, string clave)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"
+                        SELECT u.Id, u.NombreUsuario, u.Clave, u.Activo,
+                               r.Id AS RolId, r.Descripcion AS RolDescripcion
+                        FROM Usuario u
+                        INNER JOIN Rol r ON u.IdRol = r.Id
+                        WHERE u.NombreUsuario = @NombreUsuario AND u.Clave = @Clave AND u.Activo = 1
+            ");
+                    datos.SetearParametro("@NombreUsuario", nombreUsuario);
+                    datos.SetearParametro("@Clave", clave);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                        return new Usuario
+                        {
+                            Id = (int)datos.Lector["Id"],
+                            NombreUsuario = datos.Lector["NombreUsuario"].ToString(),
+                            Clave = datos.Lector["Clave"].ToString(),
+                            Activo = (bool)datos.Lector["Activo"],
+                            Rol = new Rol
+                            {
+                                Id = (int)datos.Lector["RolId"],
+                                Descripcion = datos.Lector["RolDescripcion"].ToString()
+                            }
+                        };
+                    }
+
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al obtener usuario: " + ex.Message);
                 }
             }
         }

@@ -30,6 +30,14 @@
                 <div class="text-center">
                     <asp:Button ID="btnIngresar" CssClass="btn btn-primary w-100" OnClick="btnIngresar_Click" runat="server" Text="Ingresar" />
                 </div>
+                 <!-- Corroborar usuario -->
+                <div class="text-center mt-3">
+                    <asp:Label ID="lblError" runat="server" 
+                        ForeColor="Red" 
+                        Visible="false" 
+                        Font-Bold="true">
+                    </asp:Label>
+                </div>
             </div>
         </div>
 

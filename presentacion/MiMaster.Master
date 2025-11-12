@@ -29,12 +29,16 @@
 
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link active" aria-current="page" href="Menu.aspx">Inicio</a>
-                            <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
-                            <a class="nav-link" href="Medicos.aspx">Médicos</a>
-                            <a class="nav-link" href="GestionMedicos.aspx">Gestión de Médicos</a>
-                            <a class="nav-link" href="Turnos.aspx">Turnos</a>
-                            <a class="nav-link" href="LogIn.aspx" aria-disabled="true">Salir</a>
+                            <a id="lnkInicio" runat="server" class="nav-link active" href="Menu.aspx">Inicio</a>
+
+                                
+                                <a id="lnkPacientes" runat="server" class="nav-link" href="Pacientes.aspx">Pacientes</a>
+                                <a id="lnkMedicos" runat="server" class="nav-link" href="Medicos.aspx">Médicos</a>
+                                <a id="lnkTurnos" runat="server" class="nav-link" href="Turnos.aspx">Turnos</a>
+                                <!-- NAVBAR PACIENTE -->
+                                <a id="lnkEspecialidades" class="nav-link" runat="server" href="Especialidades.aspx">Especialidades</a>
+                                <a id="lnkSobreNosotros" class="nav-link" runat="server" href="SobreNosotros.aspx">Sobre Nosotros</a>
+                                <a id="lnkSalir" runat="server" class="nav-link" href="LogIn.aspx" aria-disabled="true">Salir</a>
                         </div>
                     </div>
                 </div>

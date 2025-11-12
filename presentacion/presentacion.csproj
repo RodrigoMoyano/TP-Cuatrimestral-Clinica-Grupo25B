@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\misEstilos.css" />
+    <Content Include="Especialidades.aspx" />
     <Content Include="GestionMedicos.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Imagenes\3662541.jpg" />
@@ -76,11 +77,21 @@
     <Content Include="LogIn.aspx" />
     <Content Include="Medicos.aspx" />
     <Content Include="Menu.aspx" />
+    <Content Include="MenuPaciente.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="PedirTurno.aspx" />
+    <Content Include="SobreNosotros.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Especialidades.aspx.cs">
+      <DependentUpon>Especialidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Especialidades.aspx.designer.cs">
+      <DependentUpon>Especialidades.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GestionMedicos.aspx.cs">
       <DependentUpon>GestionMedicos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -112,6 +123,13 @@
     <Compile Include="Menu.aspx.designer.cs">
       <DependentUpon>Menu.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MenuPaciente.aspx.cs">
+      <DependentUpon>MenuPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MenuPaciente.aspx.designer.cs">
+      <DependentUpon>MenuPaciente.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MiMaster.Master.cs">
       <DependentUpon>MiMaster.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -126,7 +144,21 @@
     <Compile Include="Pacientes.aspx.designer.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PedirTurno.aspx.cs">
+      <DependentUpon>PedirTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PedirTurno.aspx.designer.cs">
+      <DependentUpon>PedirTurno.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SobreNosotros.aspx.cs">
+      <DependentUpon>SobreNosotros.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SobreNosotros.aspx.designer.cs">
+      <DependentUpon>SobreNosotros.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Turnos.aspx.cs">
       <DependentUpon>Turnos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    internal class EspecialidadNegocio : Datos
+    public class EspecialidadNegocio : Datos
     {
         public List<Especialidad> Listar()
         {
             List<Especialidad> lista = new List<Especialidad>();
+
             try
             {
-                SetearConsulta("SELECT IdEspecialidad, Nombre, Descripcion  FROM Especialidad");
+                SetearConsulta("SELECT Id, Descripcion FROM Especialidad");
                 EjecutarLectura();
 
                 while (Lector.Read())
                 {
                     Especialidad aux = new Especialidad
                     {
-                        IdEspecialidad = (int)Lector["IdEspecialidad"],
-                        Nombre = Lector["Nombre"].ToString(),
+                        Id = (int)Lector["Id"],
                         Descripcion = Lector["Descripcion"].ToString()
                     };
                     lista.Add(aux);
@@ -37,9 +37,9 @@ namespace Negocio
         {
             try
             {
-                SetearConsulta("INSERT INTO Especialidad (Nombre, Descripcion) VALUES (@Nombre, @Descripcion)");
-                SetearParametro("@Nombre", nueva.Nombre);
+                SetearConsulta("INSERT INTO Especialidad (Descripcion) VALUES (@Descripcion)");
                 SetearParametro("@Descripcion", nueva.Descripcion);
+                EjecutarAccion();
             }
             finally { CerrarConexion(); }
         }
@@ -48,10 +48,9 @@ namespace Negocio
         {
             try
             {
-                SetearConsulta("UPDATE Especialidad SET Nombre=@Nombre, Descripcion=@Descripcion WHERE IdEspecialidad=@IdEspecialidad");
-                SetearParametro("@IdEspecialidad", mod.IdEspecialidad);
-                SetearParametro("@Nombre", mod.Nombre);
+                SetearConsulta("UPDATE Especialidad SET Descripcion=@Descripcion WHERE Id=@Id");
                 SetearParametro("@Descripcion", mod.Descripcion);
+                SetearParametro("@Id", mod.Id);
                 EjecutarAccion();
             }
             finally { CerrarConexion(); }
@@ -61,8 +60,8 @@ namespace Negocio
         {
             try
             {
-                SetearConsulta("DELETE FROM Especialidad WHERE IdEspecialidad=@IdEspecialidad");
-                SetearParametro("@IdEspecialidad", id);
+                SetearConsulta("DELETE FROM Especialidad WHERE Id=@Id");
+                SetearParametro("@Id", id);
                 EjecutarAccion();
             }
             finally { CerrarConexion(); }
