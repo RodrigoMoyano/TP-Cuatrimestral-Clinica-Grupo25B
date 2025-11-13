@@ -20,21 +20,25 @@
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">Clínica Médica</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNavAltMarkup"
-                            aria-controls="navbarNavAltMarkup"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
+                        data-bs-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link active" aria-current="page" href="Menu.aspx">Inicio</a>
-                            <a class="nav-link" href="Pacientes.aspx">Pacientes</a>
-                            <a class="nav-link" href="Medicos.aspx">Médicos</a>
-                            <a class="nav-link" href="Turnos.aspx">Turnos</a>
-                            <a class="nav-link" href="LogIn.aspx" aria-disabled="true">Salir</a>
+                            <asp:HyperLink ID="lnkMenu" runat="server" CssClass="nav-link active" NavigateUrl="~/Menu.aspx">Inicio</asp:HyperLink>
+                            <asp:HyperLink ID="lnkPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/Pacientes.aspx" Visible="false">Pacientes</asp:HyperLink>
+                            <asp:HyperLink ID="lnkMedicos" runat="server" CssClass="nav-link" NavigateUrl="~/Medicos.aspx" Visible="false">Médicos</asp:HyperLink>
+                            <asp:HyperLink ID="lnkTurnos" runat="server" CssClass="nav-link" NavigateUrl="~/Turnos.aspx" Visible="false">Turnos</asp:HyperLink>
+                            <asp:HyperLink ID="lnkGestionMedicos" runat="server" CssClass="nav-link" NavigateUrl="~/GestionMedicos.aspx" Visible="false">Gestion de Medicos</asp:HyperLink>
+                            <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink>
                         </div>
+                    </div>
+                    <div class="navbar-nav ms-auto">
+                        <asp:LinkButton ID="btnSalir" runat="server" CssClass="nav-link" OnClick="btnSalir_Click" Visible="false">Salir</asp:LinkButton>
                     </div>
                 </div>
             </nav>

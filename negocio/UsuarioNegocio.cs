@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Negocio
 {
@@ -14,10 +15,11 @@ namespace Negocio
                 try
                 {
                     datos.SetearConsulta(@"
-                        SELECT u.Id, u.NombreUsuario, u.Contrasenia, u.Activo,
-                               r.Id AS RolId, r.Nombre AS RolNombre
+                        SELECT u.Id, u.NombreUsuario, u.Clave, u.Activo,
+                               r.Id AS RolId, r.Descripcion AS RolDescripcion
                         FROM Usuario u
-                        INNER JOIN Rol r ON u.IdRol = r.Id
+                        INNER JOIN Rol r 
+                        ON u.IdRol = r.Id
                     ");
                     datos.EjecutarLectura();
 
@@ -27,7 +29,7 @@ namespace Negocio
                         {
                             Id = (int)datos.Lector["Id"],
                             NombreUsuario = datos.Lector["NombreUsuario"].ToString(),
-                            Contrasenia = datos.Lector["Contrasenia"].ToString(),
+                            Clave = datos.Lector["Clave"].ToString(),
                             Activo = (bool)datos.Lector["Activo"],
                             Rol = new Rol
                             {
@@ -53,9 +55,9 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Usuario (NombreUsuario, Contrasenia, Activo, IdRol) VALUES (@NombreUsuario, @Contrasenia, @Activo, @IdRol)");
+                    datos.SetearConsulta("INSERT INTO Usuario (NombreUsuario, Clave, Activo, IdRol) VALUES (@NombreUsuario, @Clave, @Activo, @IdRol)");
                     datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
-                    datos.SetearParametro("@Contrasenia", usuario.Contrasenia);
+                    datos.SetearParametro("@Clave", usuario.Clave);
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.SetearParametro("@IdRol", usuario.Rol.Id);
                     datos.EjecutarAccion();
@@ -65,6 +67,40 @@ namespace Negocio
                     throw new Exception("Error al agregar usuario: " + ex.Message);
                 }
             }
+
+        }
+        public bool Login(Usuario usuario)
+        {
+            Datos datos = new Datos();
+
+            try
+            {
+                datos.SetearConsulta(@"SELECT u.Id, u.NombreUsuario, u.Clave, r.Id AS RolId, r.Descripcion AS RolDescripcion FROM Usuario u INNER JOIN Rol r ON u.IdRol = r.Id WHERE u.NombreUsuario = @NombreUsuario AND u.Clave = @Clave AND u.Activo = 1");
+                datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
+                datos.SetearParametro("@Clave", usuario.Clave);
+                
+                datos.EjecutarLectura();
+                
+                if (datos.Lector.Read())
+                {
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.Rol = new Rol();
+                    usuario.Rol.Id = (int)datos.Lector["RolId"];
+                    usuario.Rol.Descripcion = (string)datos.Lector["RolDescripcion"];
+
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
+            }
         }
 
         public void Modificar(Usuario usuario)
@@ -73,9 +109,9 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Usuario SET NombreUsuario=@NombreUsuario, Contrasenia=@Contrasenia, Activo=@Activo, IdRol=@IdRol WHERE Id=@Id");
+                    datos.SetearConsulta("UPDATE Usuario SET NombreUsuario=@NombreUsuario, Clave=@Clave, Activo=@Activo, IdRol=@IdRol WHERE Id=@Id");
                     datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
-                    datos.SetearParametro("@Contrasenia", usuario.Contrasenia);
+                    datos.SetearParametro("@Clave", usuario.Clave);
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.SetearParametro("@IdRol", usuario.Rol.Id);
                     datos.SetearParametro("@Id", usuario.Id);
@@ -105,15 +141,15 @@ namespace Negocio
             }
         }
 
-        public bool ValidarUsuario(string nombreUsuario, string contrasenia)
+        public bool ValidarUsuario(string nombreUsuario, string clave)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE NombreUsuario=@NombreUsuario AND Contrasenia=@Contrasenia AND Activo=1");
+                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE NombreUsuario=@NombreUsuario AND Clave=@Clave AND Activo=1");
                     datos.SetearParametro("@NombreUsuario", nombreUsuario);
-                    datos.SetearParametro("@Contrasenia", contrasenia);
+                    datos.SetearParametro("@Clave", clave);
 
                     int count = datos.EjecutarAccionEscalar();
                     return count > 0;

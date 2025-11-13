@@ -28,17 +28,22 @@
                     </li>
 
                 </ul>
-                <a class="btn btn-primary" href="#" role="button">+ Agregar</a>
-
+                <asp:Button ID="btnAgregar" runat="server" Text="Agregar" CssClass=" btn btn-primary" />
             </div>
         </div>
     </nav>
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+
+            <div class="d-flex gap-3" role="search">
+
+                <asp:TextBox ID="txtBuscar" type="buscar" placeholder="Buscar"
+                    CssClass="form-control" runat="server">
+                </asp:TextBox>
+
+                <asp:Button ID="btnBuscar" runat="server" Text="Buscar"
+                    CssClass="btn btn-primary" />
+            </div>
         </div>
     </nav>
     <div>

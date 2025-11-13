@@ -118,6 +118,15 @@
     <Compile Include="Pacientes.aspx.designer.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PaginaAdmin.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginaMedico.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaginaPaciente.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Turnos.aspx.cs">
       <DependentUpon>Turnos.aspx</DependentUpon>

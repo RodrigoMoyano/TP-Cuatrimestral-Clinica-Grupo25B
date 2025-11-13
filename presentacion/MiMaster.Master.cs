@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Negocio;
 
 namespace presentacion
 {
@@ -11,6 +13,14 @@ namespace presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            //Seguridad para que si no hay una sesion activa, no se pueda acceder a las demas paginas, obliga a loguearte
+            if(!(Page is LogIn)) 
+            {
+               if (!Seguridad.sessionActiva(Session["usuario"]))
+                {
+                    Response.Redirect("Login.aspx", false);
+                }
+            }
             //Oculto NavBar en LogIn.aspx
             string currentPage = System.IO.Path.GetFileName(Request.Path);
 
@@ -18,6 +28,36 @@ namespace presentacion
             {
                 pnlNavbar.Visible = false;
             }
+
+            if (Seguridad.sessionActiva(Session["usuario"]))
+            {
+                //lnkLogin.Visible = false;
+                btnSalir.Visible = true;
+                lnkMenu.Visible = true;
+
+                if (Seguridad.esAdmin(Session["usuario"]))
+                {
+                    lnkPacientes.Visible = true;
+                    lnkMedicos.Visible = true;
+                    lnkTurnos.Visible = true;
+                    lnkMenu.Visible = true;
+                    //lnkLogin.Visible = true;
+                }
+                else if (Seguridad.esMedico(Session["usuario"]))
+                {
+                    lnkTurnos.Visible = true;
+                }
+                else if (Seguridad.esPaciente(Session["usuario"]))
+                {
+                    lnkTurnos.Visible = true;
+                }
+            }
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Response.Redirect("Login.aspx", false);
         }
     }
 }

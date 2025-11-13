@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class Medico : System.Web.UI.Page
+    public partial class Medico : PaginaAdmin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
