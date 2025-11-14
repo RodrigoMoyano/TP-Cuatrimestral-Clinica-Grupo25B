@@ -14,9 +14,9 @@ namespace presentacion
         protected void Page_Load(object sender, EventArgs e)
         {
             //Seguridad para que si no hay una sesion activa, no se pueda acceder a las demas paginas, obliga a loguearte
-            if(!(Page is LogIn)) 
+            if (!(Page is LogIn) && !(Page is Registro))
             {
-               if (!Seguridad.sessionActiva(Session["usuario"]))
+                if (!Seguridad.sessionActiva(Session["usuario"]))
                 {
                     Response.Redirect("Login.aspx", false);
                 }
@@ -24,7 +24,7 @@ namespace presentacion
             //Oculto NavBar en LogIn.aspx
             string currentPage = System.IO.Path.GetFileName(Request.Path);
 
-            if(currentPage.Equals("LogIn.aspx", StringComparison.OrdinalIgnoreCase))
+            if (currentPage.Equals("LogIn.aspx", StringComparison.OrdinalIgnoreCase))
             {
                 pnlNavbar.Visible = false;
             }
@@ -34,6 +34,7 @@ namespace presentacion
                 //lnkLogin.Visible = false;
                 btnSalir.Visible = true;
                 lnkMenu.Visible = true;
+                lnkSobreNosotros.Visible = true;
 
                 if (Seguridad.esAdmin(Session["usuario"]))
                 {
@@ -41,7 +42,10 @@ namespace presentacion
                     lnkMedicos.Visible = true;
                     lnkTurnos.Visible = true;
                     lnkMenu.Visible = true;
-                    //lnkLogin.Visible = true;
+                    lnkEspecialidades.Visible = true;
+                    lnkGestionMedicos.Visible = true;
+                    lnkMenuPacientes.Visible = true;
+
                 }
                 else if (Seguridad.esMedico(Session["usuario"]))
                 {
@@ -50,6 +54,8 @@ namespace presentacion
                 else if (Seguridad.esPaciente(Session["usuario"]))
                 {
                     lnkTurnos.Visible = true;
+                    lnkEspecialidades.Visible = true;
+                    lnkMenuPacientes.Visible = true;
                 }
             }
         }
@@ -60,4 +66,5 @@ namespace presentacion
             Response.Redirect("Login.aspx", false);
         }
     }
+
 }

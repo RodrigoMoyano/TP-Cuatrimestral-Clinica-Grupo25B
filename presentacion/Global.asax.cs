@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
+using System.Web.Routing;
 
-namespace presentacion
+namespace presentacion // <--- ¿Dice 'presentacion'?
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication // <--- ¿La clase se llama 'Global'?
     {
-        protected void Application_Start(object sender, EventArgs e)
+        void Application_Start(object sender, EventArgs e)
         {
+            // Código de inicio de la aplicación
+            // RouteConfig.RegisterRoutes(RouteTable.Routes);
+            // BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }

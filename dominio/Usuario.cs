@@ -13,7 +13,6 @@ namespace Dominio
         public string NombreUsuario { get; set; }
         public string Clave { get; set; }
         public bool Activo { get; set; }
-
         public Rol Rol { get; set; }
     }
 }

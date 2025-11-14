@@ -35,6 +35,8 @@
                             <asp:HyperLink ID="lnkTurnos" runat="server" CssClass="nav-link" NavigateUrl="~/Turnos.aspx" Visible="false">Turnos</asp:HyperLink>
                             <asp:HyperLink ID="lnkGestionMedicos" runat="server" CssClass="nav-link" NavigateUrl="~/GestionMedicos.aspx" Visible="false">Gestion de Medicos</asp:HyperLink>
                             <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink>
+                            <asp:HyperLink ID="lnkMenuPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/MenuPaciente.aspx" Visible="false">Menu Pacientes</asp:HyperLink>
+                            <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>
                         </div>
                     </div>
                     <div class="navbar-nav ms-auto">

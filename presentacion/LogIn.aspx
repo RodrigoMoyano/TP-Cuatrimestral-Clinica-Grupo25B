@@ -30,9 +30,17 @@
                 <div class="text-center">
                     <asp:Button ID="btnIngresar" CssClass="btn btn-primary w-100" OnClick="btnIngresar_Click" runat="server" Text="Ingresar" />
                 </div>
-            </div>
-        </div>
-
+                 <!-- Corroborar usuario -->
+                <div class="text-center mt-3">
+                    <asp:Label ID="lblError" runat="server" 
+                        ForeColor="Red" 
+                        Visible="false" 
+                        Font-Bold="true">
+                    </asp:Label>
+                </div>
+            <asp:Button ID="btnRegistrarse" CausesValidation="false" CssClass="btn btn-outline-secondary w-100" OnClick="btnRegistrarse_Click" runat="server" Text="Registrarse" />
+            </div
+        </div
     </div>
 
 </asp:Content>

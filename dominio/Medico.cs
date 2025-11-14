@@ -14,6 +14,8 @@ namespace Dominio
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Matricula { get; set; }
+        public string Email { get; set; }
+        public string Telefono { get; set; }
 
         public List<Especialidad> Especialidad { get; set; }
         public List<TurnoTrabajo> TurnosTrabajo { get; set; }

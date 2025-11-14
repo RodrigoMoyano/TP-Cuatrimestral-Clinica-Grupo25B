@@ -160,5 +160,46 @@ namespace Negocio
                 }
             }
         }
+        public Usuario ObtenerUsuario(string nombreUsuario, string clave)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"
+                        SELECT u.Id, u.NombreUsuario, u.Clave, u.Activo,
+                               r.Id AS RolId, r.Descripcion AS RolDescripcion
+                        FROM Usuario u
+                        INNER JOIN Rol r ON u.IdRol = r.Id
+                        WHERE u.NombreUsuario = @NombreUsuario AND u.Clave = @Clave AND u.Activo = 1
+            ");
+                    datos.SetearParametro("@NombreUsuario", nombreUsuario);
+                    datos.SetearParametro("@Clave", clave);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                        return new Usuario
+                        {
+                            Id = (int)datos.Lector["Id"],
+                            NombreUsuario = datos.Lector["NombreUsuario"].ToString(),
+                            Clave = datos.Lector["Clave"].ToString(),
+                            Activo = (bool)datos.Lector["Activo"],
+                            Rol = new Rol
+                            {
+                                Id = (int)datos.Lector["RolId"],
+                                Descripcion = datos.Lector["RolDescripcion"].ToString()
+                            }
+                        };
+                    }
+
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al obtener usuario: " + ex.Message);
+                }
+            }
+        }
     }
 }
