@@ -84,6 +84,31 @@ namespace Negocio
                 datos.EjecutarAccion();
             }
         }
+        public int ObtenerIdPacientePorIdUsuario(int idUsuario)
+        {
+
+           
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT Id FROM Paciente WHERE IdUsuario = @idUsuario");
+                    datos.SetearParametro("@idUsuario", idUsuario);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read() && !Convert.IsDBNull(datos.Lector["Id"]))
+                        return Convert.ToInt32(datos.Lector["Id"]);
+
+                    return -1;
+                }
+                finally
+                {
+                    datos.CerrarConexion();
+                }
+            }
+        }
+
     }
+
 }
 

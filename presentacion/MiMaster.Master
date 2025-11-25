@@ -30,13 +30,25 @@
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <asp:HyperLink ID="lnkMenu" runat="server" CssClass="nav-link active" NavigateUrl="~/Menu.aspx">Inicio</asp:HyperLink>
+                            <asp:HyperLink ID="lnkMenuPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/MenuPaciente.aspx" Visible="false">Inicio</asp:HyperLink>
                             <asp:HyperLink ID="lnkPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/Pacientes.aspx" Visible="false">Pacientes</asp:HyperLink>
                             <asp:HyperLink ID="lnkMedicos" runat="server" CssClass="nav-link" NavigateUrl="~/Medicos.aspx" Visible="false">Médicos</asp:HyperLink>
                             <asp:HyperLink ID="lnkTurnos" runat="server" CssClass="nav-link" NavigateUrl="~/Turnos.aspx" Visible="false">Turnos</asp:HyperLink>
+                            <asp:HyperLink ID="lnkTurnoPaciente" runat="server" CssClass="nav-link" NavigateUrl="~/TurnoPaciente.aspx" Visible="false">Turnos</asp:HyperLink>
                             <asp:HyperLink ID="lnkGestionMedicos" runat="server" CssClass="nav-link" NavigateUrl="~/GestionMedicos.aspx" Visible="false">Gestion de Medicos</asp:HyperLink>
                             <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink>
-                            <asp:HyperLink ID="lnkMenuPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/MenuPaciente.aspx" Visible="false">Menu Pacientes</asp:HyperLink>
-                            <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>
+                            <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/SobreNosotros.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>
+                            <!-- Dropdown Turnos para Paciente -->
+<div class="nav-item dropdown" runat="server" id="pnlTurnosPaciente" visible="false">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+        Turnos
+    </a>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="TurnoPaciente.aspx">Ver Turnos</a></li>
+        <li><a class="dropdown-item" href="PedirTurno.aspx">Pedir Turno</a></li>
+    </ul>
+</div>
+                            
                         </div>
                     </div>
                     <div class="navbar-nav ms-auto">

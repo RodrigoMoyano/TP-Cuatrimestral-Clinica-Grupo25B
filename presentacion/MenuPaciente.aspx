@@ -62,13 +62,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <i class="bi bi-x-circle text-danger fs-1"></i>
-                    <h5 class="mt-3">Cancelar turno</h5>
-                    <asp:Button ID="btnCancelarTurno" runat="server" CssClass="btn btn-outline-danger mt-2" Text="Ingresar" OnClick="btnCancelarTurno_Click" />
-                </div>
-            </div>
+            
         </div>
     </div>
 

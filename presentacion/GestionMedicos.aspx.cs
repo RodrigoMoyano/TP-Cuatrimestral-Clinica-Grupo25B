@@ -65,7 +65,7 @@ namespace presentacion
                     Matricula = "", // campo opcional
                     Email = txtEmail.Text.Trim(),
                     Telefono = txtTelefono.Text.Trim(),
-                    IdEspecialidad = int.Parse(ddlEspecialidad.SelectedValue)
+                    IdUsuario = int.Parse(ddlEspecialidad.SelectedValue)
                 };
 
                 MedicoNegocio negocio = new MedicoNegocio();

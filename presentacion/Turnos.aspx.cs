@@ -9,17 +9,17 @@ using Negocio;
 
 namespace presentacion
 {
-    public partial class Turno : System.Web.UI.Page
+    public partial class Turnos : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if(!IsPostBack)
+            /*if(!IsPostBack)
             {
                 CargarListaTurnos();
-            }
+            }*/
         }
-        private void CargarListaTurnos()
+        /*private void CargarListaTurnos()
         {
             TurnoNegocio negocio = new TurnoNegocio();
 
@@ -27,8 +27,8 @@ namespace presentacion
             {
                 List<VerTurno> lista =  negocio.spVerTurno();
 
-                dgvVerTurnos.DataSource = lista;
-                dgvVerTurnos.DataBind();
+                dgvVerTurno.DataSource = lista;
+                dgvVerTurno.DataBind();
             }
             catch (Exception ex)
             {
@@ -37,6 +37,6 @@ namespace presentacion
             }
 
 
-        }
+        }*/
     }
 }

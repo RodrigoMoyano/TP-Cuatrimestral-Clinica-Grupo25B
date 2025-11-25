@@ -10,48 +10,44 @@ namespace Negocio
 {
     public class CoberturaNegocio
     {
-        // 🔹 Listar todas las coberturas (obra social o particular)
+       
         public List<Cobertura> Listar()
         {
             List<Cobertura> lista = new List<Cobertura>();
+
             using (Datos datos = new Datos())
             {
-                try
-                {
-                    datos.SetearConsulta("SELECT Id, Tipo, NombreObraSocial, Plan FROM Cobertura");
-                    datos.EjecutarLectura();
+                datos.SetearConsulta("SELECT Id, Tipo, NombreObraSocial, PlanCobertura FROM Cobertura");
+                datos.EjecutarLectura();
 
-                    while (datos.Lector.Read())
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new Cobertura
                     {
-                        Cobertura c = new Cobertura();
-                        c.Id = (int)datos.Lector["Id"];
-                        c.Tipo = datos.Lector["Tipo"].ToString();
-                        c.NombreObraSocial = datos.Lector["NombreObraSocial"] != DBNull.Value ? datos.Lector["NombreObraSocial"].ToString() : null;
-                        c.Plan = datos.Lector["Plan"] != DBNull.Value ? datos.Lector["Plan"].ToString() : null;
-
-                        lista.Add(c);
-                    }
-
-                    return lista;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error al listar coberturas: " + ex.Message);
+                        Id = (int)datos.Lector["Id"],
+                        Tipo = datos.Lector["Tipo"].ToString(),
+                        NombreObraSocial = datos.Lector["NombreObraSocial"].ToString(),
+                        PlanCobertura = datos.Lector["PlanCobertura"].ToString()
+                    });
                 }
             }
+
+            return lista;
         }
+    
+
 
         // 🔹 Agregar una cobertura nueva
-        public void Agregar(Cobertura nueva)
+       /* public void Agregar(Cobertura nueva)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, Plan) VALUES (@Tipo, @NombreObraSocial, @Plan)");
+                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, Plan) VALUES (@Tipo, @NombreObraSocial, @PlanCobertura)");
                     datos.SetearParametro("@Tipo", nueva.Tipo);
                     datos.SetearParametro("@NombreObraSocial", nueva.NombreObraSocial);
-                    datos.SetearParametro("@Plan", nueva.Plan);
+                    datos.SetearParametro("@PlanCobertura", nueva.PlanCobertura);
                     datos.EjecutarAccion();
                 }
                 catch (Exception ex)
@@ -68,11 +64,11 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, Plan = @Plan WHERE Id = @Id");
+                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, PlanCobertura = @Plan WHERE IdCobertura = @IdCobertura");
                     datos.SetearParametro("@Tipo", cobertura.Tipo);
                     datos.SetearParametro("@NombreObraSocial", cobertura.NombreObraSocial);
-                    datos.SetearParametro("@Plan", cobertura.Plan);
-                    datos.SetearParametro("@Id", cobertura.Id);
+                    datos.SetearParametro("@PlanCobertura", cobertura.PlanCobertura);
+                    datos.SetearParametro("@IdCobertura", cobertura.IdCobertura);
                     datos.EjecutarAccion();
                 }
                 catch (Exception ex)
@@ -83,14 +79,14 @@ namespace Negocio
         }
 
         // 🔹 Eliminar cobertura
-        public void Eliminar(int id)
+        public void Eliminar(int idCobertura)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM Cobertura WHERE Id = @Id");
-                    datos.SetearParametro("@Id", id);
+                    datos.SetearConsulta("DELETE FROM Cobertura WHERE IdCobertura = @IdCobertura");
+                    datos.SetearParametro("@IdCobertura", idCobertura);
                     datos.EjecutarAccion();
                 }
                 catch (Exception ex)
@@ -98,6 +94,6 @@ namespace Negocio
                     throw new Exception("Error al eliminar cobertura: " + ex.Message);
                 }
             }
-        }
+        }*/
     }
 }

@@ -18,36 +18,20 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta(@"
-                SELECT M.Id, M.Nombre, M.Apellido, M.Matricula, 
-                       M.Email, M.Telefono,
-                       E.Id AS IdEspecialidad, E.Descripcion AS Especialidad
-                FROM Medico M
-                LEFT JOIN MedicoEspecialidad ME ON M.Id = ME.IdMedico
-                LEFT JOIN Especialidad E ON ME.IdEspecialidad = E.Id
-            ");
+                    datos.SetearConsulta("SELECT Id, Nombre, Apellido, Matricula, IdUsuario FROM Medico");
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
                     {
                         Medico aux = new Medico
                         {
-                            IdMedico = (int)datos.Lector["Id"],
+                            Id = (int)datos.Lector["Id"],
                             Nombre = datos.Lector["Nombre"].ToString(),
                             Apellido = datos.Lector["Apellido"].ToString(),
                             Matricula = datos.Lector["Matricula"].ToString(),
-                            Email = datos.Lector["Email"].ToString(),
-                            Telefono = datos.Lector["Telefono"].ToString(),
-                            IdEspecialidad = datos.Lector["IdEspecialidad"] != DBNull.Value ? (int)datos.Lector["IdEspecialidad"] : 0,
-                            Especialidad = new List<Especialidad>
-                    {
-                        new Especialidad
-                        {
-                            Id = datos.Lector["IdEspecialidad"] != DBNull.Value ? (int)datos.Lector["IdEspecialidad"] : 0,
-                            Descripcion = datos.Lector["Especialidad"] != DBNull.Value ? datos.Lector["Especialidad"].ToString() : "Sin especialidad"
-                        }
-                    }
+                            IdUsuario = (int)datos.Lector["IdUsuario"]
                         };
+
                         lista.Add(aux);
                     }
                 }
@@ -66,28 +50,12 @@ namespace Negocio
             {
                 try
                 {
-                    // 1️⃣ Insertamos el médico y obtenemos el ID generado
-                    datos.SetearConsulta(@"
-                INSERT INTO Medico (Nombre, Apellido, Matricula, Email, Telefono)
-                VALUES (@Nombre, @Apellido, @Matricula, @Email, @Telefono);
-                SELECT SCOPE_IDENTITY();
-            ");
+                    datos.SetearConsulta("INSERT INTO Medico (Nombre, Apellido, Matricula, IdUsuario) VALUES (@Nombre, @Apellido, @Matricula, @IdUsuario)");
                     datos.SetearParametro("@Nombre", nuevo.Nombre);
                     datos.SetearParametro("@Apellido", nuevo.Apellido);
                     datos.SetearParametro("@Matricula", nuevo.Matricula);
-                    datos.SetearParametro("@Email", nuevo.Email);
-                    datos.SetearParametro("@Telefono", nuevo.Telefono);
-
-                    int nuevoId = datos.EjecutarAccionEscalar();
-
-                    // 2️⃣ Insertamos la relación con la especialidad (si hay una seleccionada)
-                    if (nuevo.IdEspecialidad > 0)
-                    {
-                        datos.SetearConsulta("INSERT INTO MedicoEspecialidad (IdMedico, IdEspecialidad) VALUES (@IdMedico, @IdEspecialidad)");
-                        datos.SetearParametro("@IdMedico", nuevoId);
-                        datos.SetearParametro("@IdEspecialidad", nuevo.IdEspecialidad);
-                        datos.EjecutarAccion();
-                    }
+                    datos.SetearParametro("@IdUsuario", nuevo.IdUsuario);
+                    datos.EjecutarAccion();
                 }
                 catch (Exception ex)
                 {
@@ -96,61 +64,34 @@ namespace Negocio
             }
         }
 
-        public void Modificar(Medico modificado)
+        /* public void Modificar(Medico modificado)
+         {
+             using (Datos datos = new Datos())
+             {
+                 try
+                 {
+                     datos.SetearConsulta("UPDATE Medico SET Nombre=@Nombre, Apellido=@Apellido, Matricula=@Matricula, IdEspecialidad=@IdUsuario WHERE Id=@Id");
+                     datos.SetearParametro("@Id", modificado.Id);
+                     datos.SetearParametro("@Nombre", modificado.Nombre);
+                     datos.SetearParametro("@Apellido", modificado.Apellido);
+                     datos.SetearParametro("@Matricula", modificado.Matricula);
+                     datos.SetearParametro("@IdUsuario", modificado.IdUsuario);
+                     datos.EjecutarAccion();
+                 }
+                 catch (Exception ex)
+                 {
+                     throw new Exception("Error al modificar médico: " + ex.Message);
+                 }
+             }
+         }*/
+
+        /*public void Eliminar(int id)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    datos.SetearConsulta(@"
-                        UPDATE Medico 
-                        SET Nombre = @Nombre, 
-                            Apellido = @Apellido, 
-                            Matricula = @Matricula, 
-                            Email = @Email, 
-                            Telefono = @Telefono
-                        WHERE Id = @Id
-                    ");
-
-                    datos.SetearParametro("@Id", modificado.IdMedico);
-                    datos.SetearParametro("@Nombre", modificado.Nombre);
-                    datos.SetearParametro("@Apellido", modificado.Apellido);
-                    datos.SetearParametro("@Matricula", modificado.Matricula);
-                    datos.SetearParametro("@Email", modificado.Email ?? (object)DBNull.Value);
-                    datos.SetearParametro("@Telefono", modificado.Telefono ?? (object)DBNull.Value);
-
-                    datos.EjecutarAccion();
-
-                    // Si se modificó la especialidad:
-                    if (modificado.IdEspecialidad > 0)
-                    {
-                        datos.SetearConsulta("UPDATE MedicoEspecialidad SET IdEspecialidad = @IdEspecialidad WHERE IdMedico = @IdMedico");
-                        datos.SetearParametro("@IdMedico", modificado.IdMedico);
-                        datos.SetearParametro("@IdEspecialidad", modificado.IdEspecialidad);
-                        datos.EjecutarAccion();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error al modificar médico: " + ex.Message);
-                }
-            }
-        }
-
-
-        public void Eliminar(int id)
-        {
-            using (Datos datos = new Datos())
-            {
-                try
-                {
-                    // Primero borro relaciones en MedicoEspecialidad
-                    datos.SetearConsulta("DELETE FROM MedicoEspecialidad WHERE IdMedico = @IdMedico");
-                    datos.SetearParametro("@IdMedico", id);
-                    datos.EjecutarAccion();
-
-                    // Luego borro el médico
-                    datos.SetearConsulta("DELETE FROM Medico WHERE Id = @Id");
+                    datos.SetearConsulta("DELETE FROM Medico WHERE Id=@Id");
                     datos.SetearParametro("@Id", id);
                     datos.EjecutarAccion();
                 }
@@ -159,6 +100,60 @@ namespace Negocio
                     throw new Exception("Error al eliminar médico: " + ex.Message);
                 }
             }
+        }*/
+        public List<Especialidad> ObtenerEspecialidadesDeMedico(int idMedico)
+        {
+            using (var datos = new Datos())
+            {
+                datos.SetearConsulta(@"
+            SELECT e.Id, e.Descripcion
+            FROM MedicoEspecialidad me
+            INNER JOIN Especialidad e ON e.Id = me.IdEspecialidad
+            WHERE me.IdMedico = @id");
+
+                datos.SetearParametro("@id", idMedico);
+                datos.EjecutarLectura();
+
+                List<Especialidad> lista = new List<Especialidad>();
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new Especialidad
+                    {
+                        Id = (int)datos.Lector["Id"],
+                        Descripcion = datos.Lector["Descripcion"].ToString()
+                    });
+                }
+
+                return lista;
+            }
         }
+        public List<Medico> ListarPorEspecialidad(int idEspecialidad)
+        {
+            List<Medico> lista = new List<Medico>();
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta(@"
+            SELECT M.Id, M.Nombre, M.Apellido
+            FROM Medico M
+            INNER JOIN MedicoEspecialidad ME ON M.Id = ME.IdMedico
+            WHERE ME.IdEspecialidad = @id");
+
+                datos.SetearParametro("@id", idEspecialidad);
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new Medico
+                    {
+                        Id = (int)datos.Lector["Id"],
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        Apellido = datos.Lector["Apellido"].ToString()
+                    });
+                }
+            }
+            return lista;
+        }
+
     }
 }

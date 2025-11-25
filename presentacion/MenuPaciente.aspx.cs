@@ -17,7 +17,7 @@ namespace presentacion
 
         protected void btnVerTurnos_Click(object sender, EventArgs e)
         {
-            Response.Redirect("TurnosPaciente.aspx");
+            Response.Redirect("TurnoPaciente.aspx");
         }
 
         protected void btnPedirTurno_Click(object sender, EventArgs e)
@@ -25,10 +25,6 @@ namespace presentacion
             Response.Redirect("PedirTurno.aspx");
         }
 
-        protected void btnCancelarTurno_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("CancelarTurno.aspx");
-        }
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
