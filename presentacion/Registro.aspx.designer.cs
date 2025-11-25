@@ -15,13 +15,13 @@ namespace presentacion
     {
 
         /// <summary>
-        /// txtEmail control.
+        /// txtNombreUsuario control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmail;
+        protected global::System.Web.UI.WebControls.TextBox txtNombreUsuario;
 
         /// <summary>
         /// txtPassword control.
@@ -51,6 +51,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.TextBox txtApellido;
 
         /// <summary>
+        /// txtEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEmail;
+
+        /// <summary>
         /// txtDni control.
         /// </summary>
         /// <remarks>
@@ -69,6 +78,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.TextBox txtTelefono;
 
         /// <summary>
+        /// ddlCobertura control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCobertura;
+
+        /// <summary>
         /// btnAceptarRegistro control.
         /// </summary>
         /// <remarks>
@@ -76,5 +94,14 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAceptarRegistro;
+
+        /// <summary>
+        /// lblMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
     }
 }

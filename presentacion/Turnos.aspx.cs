@@ -32,6 +32,7 @@ namespace presentacion
             }
             catch (Exception ex)
             {
+                Usuario usuario = new Usuario();
 
                 throw ex;
             }

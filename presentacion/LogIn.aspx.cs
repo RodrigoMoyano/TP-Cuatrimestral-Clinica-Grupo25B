@@ -15,13 +15,19 @@ namespace presentacion
         {
 
         }
-
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
+            Page.Validate();
+            if(!Page.IsValid)
+            {
+                return;
+            }
+
             Usuario usuario = new Usuario();
             UsuarioNegocio negocio = new UsuarioNegocio();
             try
             {
+
                 usuario.NombreUsuario = txtEmail.Text;
                 usuario.Clave = txtPassword.Text;
                 if (negocio.Login(usuario))
@@ -31,8 +37,8 @@ namespace presentacion
                 }
                 else
                 {
-                    Session.Add("error", "Usuario o Contraseña incorrectos");
-                    Response.Redirect("Error.aspx");
+                    lblError.Text= "Error: Usuario o Contraseña incorrectos";
+                    lblError.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -42,11 +48,9 @@ namespace presentacion
 
             }
         }
-
         protected void btnRegistrarse_Click(object sender, EventArgs e)
         {
             Response.Redirect("Registro.aspx", false);
-
         }
     }
 }

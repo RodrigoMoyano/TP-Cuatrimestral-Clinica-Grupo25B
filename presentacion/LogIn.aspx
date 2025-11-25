@@ -18,13 +18,15 @@
                 <h4 class="card-title text-center mb-4">Inicio de Sesión</h4>
 
                 <div class="mb-3">
-                    <label for="txtEmail" class="form-label">Correo electrónico</label>
+                    <label for="txtEmail" class="form-label">Usuario</label>
                     <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server"></asp:TextBox>
+                    <asp:RequiredFieldValidator CssClass="validacion" ValidationGroup="LoginGroup" ErrorMessage="Ingresa el usuario" ControlToValidate="txtEmail" runat="server" />
                 </div>
 
                 <div class="mb-3">
                     <label for="txtPassword" class="form-label">Contraseña</label>
                     <asp:TextBox ID="txtPassword" CssClass="form-control" TextMode="Password" runat="server"></asp:TextBox>
+                    <asp:RequiredFieldValidator CssClass="validacion" ValidationGroup="LoginGroup" ErrorMessage="Ingresa la contraseña" ControlToValidate="txtPassword" runat="server" />
                 </div>
 
                 <div class="text-center">
@@ -38,9 +40,9 @@
                         Font-Bold="true">
                     </asp:Label>
                 </div>
-            <asp:Button ID="btnRegistrarse" CausesValidation="false" CssClass="btn btn-outline-secondary w-100" OnClick="btnRegistrarse_Click" runat="server" Text="Registrarse" />
-            </div
-        </div
+            <asp:Button ID="btnRegistrarse" ValidationGroup="LoginGroup" CssClass="btn btn-outline-secondary w-100" OnClick="btnRegistrarse_Click" runat="server" Text="Registrarse" />
+            </div>
+        </div>
     </div>
 
 </asp:Content>

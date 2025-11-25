@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="Pacientes.aspx.cs" Inherits="presentacion.Paciente" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+﻿<%@ Page Title="" Language="C#" Masnd="Pacientes.aspx.cs" Inherits="presentacion.PacientesPage" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="seterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehirver">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">

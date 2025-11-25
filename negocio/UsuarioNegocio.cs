@@ -201,5 +201,26 @@ namespace Negocio
                 }
             }
         }
+        //Verificamos si el correo ya existe
+        public bool ExisteUsuario(string nombreUsuario)
+        {
+            using(Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("Select Count(*) From Usuario Where NombreUsuario = @NombreUsuario");
+                    datos.SetearParametro("@NombreUsuario", nombreUsuario);
+
+                    int count = datos.EjecutarAccionEscalar();
+
+                    return count > 0;
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("Usuario Existente.", ex);
+                }
+            }
+        }
     }
 }

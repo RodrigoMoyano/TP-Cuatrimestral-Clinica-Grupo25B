@@ -1,7 +1,8 @@
-﻿using Dominio;
+using Dominio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,6 @@ namespace Dominio
         public int IdUsuario { get; set; }
         public DateTime FechaNacimiento { get; set; }
 
-        public Cobertura Cobertura { get; set; }
+
     }
 }
