@@ -40,6 +40,8 @@
                         Font-Bold="true">
                     </asp:Label>
                 </div>
+
+
             <asp:Button ID="btnRegistrarse" ValidationGroup="LoginGroup" CssClass="btn btn-outline-secondary w-100" OnClick="btnRegistrarse_Click" runat="server" Text="Registrarse" />
             </div>
         </div>
