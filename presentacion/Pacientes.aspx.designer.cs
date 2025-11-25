@@ -11,7 +11,8 @@ namespace presentacion
 {
 
 
-    public partial class Paciente
+    public partial class PacientesPage : PaginaAdmin
+
     {
     }
 }

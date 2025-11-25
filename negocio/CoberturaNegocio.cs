@@ -10,7 +10,6 @@ namespace Negocio
 {
     public class CoberturaNegocio
     {
-        // 🔹 Listar todas las coberturas (obra social o particular)
         public List<Cobertura> Listar()
         {
             List<Cobertura> lista = new List<Cobertura>();
@@ -18,7 +17,7 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT Id, Tipo, NombreObraSocial, Plan FROM Cobertura");
+                    datos.SetearConsulta("SELECT Id, Tipo, NombreObraSocial, PlanCobertura FROM Cobertura");
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -27,7 +26,7 @@ namespace Negocio
                         c.Id = (int)datos.Lector["Id"];
                         c.Tipo = datos.Lector["Tipo"].ToString();
                         c.NombreObraSocial = datos.Lector["NombreObraSocial"] != DBNull.Value ? datos.Lector["NombreObraSocial"].ToString() : null;
-                        c.Plan = datos.Lector["Plan"] != DBNull.Value ? datos.Lector["Plan"].ToString() : null;
+                        c.PlanCoberura = datos.Lector["PlanCobertura"] != DBNull.Value ? datos.Lector["PlanCobertura"].ToString() : null;
 
                         lista.Add(c);
                     }
@@ -48,10 +47,10 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, Plan) VALUES (@Tipo, @NombreObraSocial, @Plan)");
+                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, PlanCobertura) VALUES (@Tipo, @NombreObraSocial, @PlanCobertura)");
                     datos.SetearParametro("@Tipo", nueva.Tipo);
                     datos.SetearParametro("@NombreObraSocial", nueva.NombreObraSocial);
-                    datos.SetearParametro("@Plan", nueva.Plan);
+                    datos.SetearParametro("@PlanCobertura", nueva.PlanCoberura);
                     datos.EjecutarAccion();
                 }
                 catch (Exception ex)
@@ -68,10 +67,10 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, Plan = @Plan WHERE Id = @Id");
+                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, PlanCobertura = @PlanCobertura WHERE Id = @Id");
                     datos.SetearParametro("@Tipo", cobertura.Tipo);
                     datos.SetearParametro("@NombreObraSocial", cobertura.NombreObraSocial);
-                    datos.SetearParametro("@Plan", cobertura.Plan);
+                    datos.SetearParametro("@PlanCobertura", cobertura.PlanCoberura);
                     datos.SetearParametro("@Id", cobertura.Id);
                     datos.EjecutarAccion();
                 }
