@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -173,8 +175,31 @@ namespace presentacion
                     "alert('Debe completar todos los campos');", true);
                 return;
             }
+            if (calFecha.SelectedDate == DateTime.MinValue)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert",
+                "alert('Debe seleccionar una fecha.');", true);
+                return;
+            }
 
             
+            if (ddlCobertura.SelectedValue == "")
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert",
+                "alert('Debe seleccionar una cobertura (Particular u Obra Social');",true);
+                return;
+            }
+
+            
+            if (ddlCobertura.SelectedValue == "Obra Social" &&
+                ddlObraSocial.SelectedValue == "")
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert",
+                "alert('Debe seleccionar una obra social.');", true);
+                return;
+            }
+
+
             Usuario usuario = (Usuario)Session["usuario"];
 
             //  Obtener el idPaciente real desde la base de datos
@@ -217,7 +242,7 @@ namespace presentacion
 
             int idMedico;
 
-            // Validar que el valor realmente sea un número
+            
             if (!int.TryParse(ddlMedico.SelectedValue, out idMedico))
                 return;
 
@@ -232,6 +257,7 @@ namespace presentacion
                 e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
         }
+        
     }
     
 }
