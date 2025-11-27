@@ -62,7 +62,7 @@ namespace Negocio
             }
         }
 
-        // ✅ Método para agregar un turno
+        //agregar un turno
         public void Agregar(Turno turno)
         {
             using (Datos datos = new Datos())
@@ -84,7 +84,7 @@ namespace Negocio
             }
         }
 
-        // ✅ Método para obtener turnos por paciente
+        //obetner turnos por paciente
         public List<Turno> ObtenerPorPaciente(int idPaciente)
         {
             List<Turno> lista = new List<Turno>();
@@ -136,7 +136,7 @@ namespace Negocio
             }
         }
 
-        // ✅ Método para obtener turnos por médico
+        //obtener turnos por médico
         public List<Turno> ObtenerPorMedico(int idMedico)
         {
             List<Turno> lista = new List<Turno>();
@@ -188,6 +188,7 @@ namespace Negocio
             }
         }
 
+        //sp Ver turnos
         public List<VerTurno> spVerTurno()
         {
             List<VerTurno> lista = new List<VerTurno>();
@@ -220,6 +221,27 @@ namespace Negocio
                 {
 
                     throw ex;
+                }
+            }
+        }
+        //Actualizar turno a cancelado
+        public void CancelarTurno(int idTurno)
+        {
+            const int ESTADO_CANCELADO = 3;
+
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("Update Turno Set IdEstadoTurno = @IdEstado Where Id = @IdTurno");
+                    datos.SetearParametro("@IdEstado", ESTADO_CANCELADO);
+                    datos.SetearParametro("@IdTurno", idTurno);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("Error al cancelar turno.", ex);
                 }
             }
         }

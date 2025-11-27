@@ -7,16 +7,10 @@
     <h1>Gestion de Turnos</h1>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TURNOS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Link
-                        </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Action</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -36,18 +30,50 @@
         <div class="container-fluid">
 
             <div class="d-flex gap-3" role="search">
-
-                <asp:TextBox ID="txtBuscar" type="buscar" placeholder="Buscar"
-                    CssClass="form-control" runat="server">
+                <asp:Label ID="lblfiltro" runat="server" Text="Filtrar"></asp:Label>
+                <asp:TextBox ID="txtfiltro" AutoPostBack="true" OnTextChanged="txtfiltro_TextChanged" CssClass="form-control" runat="server">
                 </asp:TextBox>
+                <div class="mb-3">
+                    <asp:CheckBox ID="chkAvanzado" Text="Filtro Avanzado" runat="server" AutoPostBack="true" OnCheckedChanged="chkAvanzado_CheckedChanged"/>
+                </div>--%>
+            
 
-                <asp:Button ID="btnBuscar" runat="server" Text="Buscar"
+               <%if (chkAvanzado.Checked)
+            {%>
+                <div class="row">
+                    <div class="col-3">
+                        <div class="mb-3">
+                            <asp:Label ID="lblCampo" runat="server"></asp:Label>
+                            <asp:DropDownList ID="ddlCampo" CssClass="form-control" runat="server" OnSelectedIndexChanged="ddlCampo_SelectedIndexChanged">
+                                <asp:ListItem Text="Paciente" />
+                                <asp:ListItem Text="Medico" />
+                                <asp:ListItem Text="Especialidad" />
+                            </asp:DropDownList>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="mb-3">
+                            <asp:Label ID="lblCriterio" runat="server" Text="Criterio"></asp:Label>
+                            <asp:DropDownList ID="ddlCriterio" CssClass="form-control" runat="server"></asp:DropDownList>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="mb-3">
+                            <asp:Label ID="lblFiltroAvanzado" runat="server" Text="Filtro"></asp:Label>
+                            <asp:TextBox ID="txtFiltroAvanzado" CssClass="form-control" runat="server"></asp:TextBox>
+                        </div>
+                    </div>
+
+                </div>
+           <%  } %>
+
+               <asp:Button ID="btnBuscar" runat="server" Text="Buscar"
                     CssClass="btn btn-primary" />
             </div>
         </div>
     </nav>
     <div>
-        <asp:GridView ID="dgvVerTurnos" runat="server" AutoGenerateColumns="false" CssClass="table table-striped" Width="100%">
+        <asp:GridView ID="dgvVerTurnos" runat="server" AutoGenerateColumns="false" OnRowCommand="dgvVerTurnos_RowCommand" CssClass="table table-striped" Width="100%">
             <Columns>
                 <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
                 <asp:TemplateField HeaderText="Hora">
@@ -59,6 +85,12 @@
                 <asp:BoundField DataField="Medico" HeaderText="Medico" />
                 <asp:BoundField DataField="Especialidad" HeaderText="Especialidad" />
                 <asp:BoundField DataField="Estado" HeaderText="Estado Turno" />
+
+                <asp:TemplateField HeaderText="Accion">
+                    <ItemTemplate>
+                        <asp:LinkButton ID="btnCancelarTurno" runat="server" CssClass="btn btn-sm btn-danger" Text="Cancelar" CommandName="Cancelar" CommandArgument='<%# Eval("Id") %>'></asp:LinkButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
             </Columns>
         </asp:GridView>
     </div>

@@ -11,9 +11,11 @@ namespace presentacion
 {
     public partial class Turno : System.Web.UI.Page
     {
+        public bool FiltroAvanzado { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            FiltroAvanzado = chkAvanzado.Checked;
             if(!IsPostBack)
             {
                 CargarListaTurnos();
@@ -27,7 +29,8 @@ namespace presentacion
             {
                 List<VerTurno> lista =  negocio.spVerTurno();
 
-                dgvVerTurnos.DataSource = lista;
+                Session.Add("SpVerTurno", lista);
+                dgvVerTurnos.DataSource = Session["SpVerTurno"];
                 dgvVerTurnos.DataBind();
             }
             catch (Exception ex)
@@ -35,9 +38,62 @@ namespace presentacion
                 Usuario usuario = new Usuario();
 
                 throw ex;
+           }
+
+
+        }
+
+        protected void txtfiltro_TextChanged(object sender, EventArgs e)
+        {
+            List<VerTurno> list = (List<VerTurno>)Session["SpVerTurno"];
+            List<VerTurno> listaFiltrada = list.FindAll(x => x.Paciente.ToUpper().Contains(txtfiltro.Text.ToUpper()));
+            dgvVerTurnos.DataSource = listaFiltrada;
+            dgvVerTurnos.DataBind();
+        }
+
+        protected void chkAvanzado_CheckedChanged(object sender, EventArgs e)
+        {
+            FiltroAvanzado = chkAvanzado.Checked;
+            txtfiltro.Enabled = !FiltroAvanzado;
+        }
+
+        protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ddlCriterio.Items.Clear();
+            if (ddlCampo.SelectedIndex.ToString() == "Numero") 
+            {
+                ddlCriterio.Items.Add("Igual a");
+                ddlCriterio.Items.Add("Mayor a");
+                ddlCriterio.Items.Add("Menor a");
             }
+            else
+            {
+                ddlCriterio.Items.Add("Contiene");
+                ddlCriterio.Items.Add("Comienza con");
+                ddlCriterio.Items.Add("Termina con");
+            }
+        }
 
+        protected void dgvVerTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int idTurno = Convert.ToInt32(e.CommandArgument);
 
+            if(e.CommandName == "Cancelar")
+            {
+                try
+                {
+                    TurnoNegocio negocio = new TurnoNegocio();
+
+                    negocio.CancelarTurno(idTurno);
+
+                    CargarListaTurnos();
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("Error al cancelar turno.", ex);
+                }
+            }
         }
     }
 }
