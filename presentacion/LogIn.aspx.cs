@@ -32,7 +32,7 @@ namespace presentacion
                 usuario.Clave = txtPassword.Text;
                 if (negocio.Login(usuario))
                 {
-                    Session.Add("usuario", usuario);
+                    Session.Add("Usuario", usuario);
                     Response.Redirect("Menu.aspx");
                 }
                 else

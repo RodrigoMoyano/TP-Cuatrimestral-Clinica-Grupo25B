@@ -19,7 +19,7 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta(@" Insert Into Usuario (NombreUsuario, Clave, IdRol, Activo) Values(@NombreUsuario, @Clave, 3, 1) Select Scope_Identity()");
+                    datos.SetearConsulta(@" Insert Into Usuario (NombreUsuario, Clave, IdRol, Activo) Values(@NombreUsuario, @Clave, 2, 1) Select Scope_Identity()");
 
                     datos.SetearParametro("@NombreUsuario", nuevo.Usuario.NombreUsuario);
                     datos.SetearParametro("@Clave", nuevo.Usuario.Clave);
@@ -154,7 +154,6 @@ namespace Negocio
             {
                 try
                 {
-
                     datos.SetearConsulta("SELECT Id FROM Paciente WHERE IdUsuario = @idUsuario");
                     datos.SetearParametro("@idUsuario", idUsuario);
                     datos.EjecutarLectura();
@@ -164,9 +163,9 @@ namespace Negocio
 
                     return -1;
                 }
-                finally
+                catch (Exception ex)
                 {
-                    datos.CerrarConexion();
+                    throw new Exception("Error al obtener ID del paciente.", ex);
                 }
             }
         }

@@ -13,7 +13,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class PedirTurno : System.Web.UI.Page
+    public partial class PedirTurno : PaginaPaciente
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -104,8 +104,6 @@ namespace presentacion
 
             CoberturaNegocio negocio = new CoberturaNegocio();
             var cobertura = negocio.Listar().First(x => x.Id == id);
-
-            
         }
 
 
@@ -200,7 +198,7 @@ namespace presentacion
             }
 
 
-            Usuario usuario = (Usuario)Session["usuario"];
+            Usuario usuario = (Usuario)Session["Usuario"];
 
             //  Obtener el idPaciente real desde la base de datos
             PacienteNegocio pacNeg = new PacienteNegocio();

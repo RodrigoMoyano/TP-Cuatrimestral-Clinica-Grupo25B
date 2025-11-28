@@ -9,7 +9,7 @@ using Negocio;
 
 namespace presentacion
 {
-    public partial class Turnos : System.Web.UI.Page
+    public partial class Turnos : PaginaAdmin
     {
         public bool FiltroAvanzado { get; set; }
         protected void Page_Load(object sender, EventArgs e)
@@ -35,8 +35,8 @@ namespace presentacion
                 dgvVerTurnos.DataSource = Session["SpVerTurno"];
                 dgvVerTurnos.DataBind();
 
-                dgvVerTurno.DataSource = lista;
-                dgvVerTurno.DataBind();
+                dgvVerTurnos.DataSource = lista;
+                dgvVerTurnos.DataBind();
             }
             catch (Exception ex)
             {

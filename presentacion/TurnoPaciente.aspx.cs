@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class TurnoPaciente : System.Web.UI.Page
+    public partial class TurnoPaciente : PaginaPaciente
     {
         protected void Page_Load(object sender, EventArgs e)
         {

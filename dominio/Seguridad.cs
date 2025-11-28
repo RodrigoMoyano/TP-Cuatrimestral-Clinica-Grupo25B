@@ -11,8 +11,8 @@ namespace Dominio
     {
         //Creo constantes para compararlas con el idrol que se recibio
         private const int ID_Administrador = 1;
-        private const int ID_Medico = 2;
-        private const int ID_Paciente = 3;
+        private const int ID_Paciente = 2;
+        private const int ID_Medico = 3;
 
         //Chequeo que se haya iniciado sesion para poder navegar entre paginas, si no que obligue a loguearse
         public static bool sessionActiva(object user)
@@ -67,7 +67,7 @@ namespace Dominio
         public static bool esAdmin(object user)
         {
             Usuario usuario = (Usuario)user;
-            return usuario.Rol.Descripcion == "Admin";
+            return usuario.Rol.Descripcion == "Administrador";
         }
     }
 

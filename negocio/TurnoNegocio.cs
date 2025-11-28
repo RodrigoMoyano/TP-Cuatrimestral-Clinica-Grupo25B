@@ -87,27 +87,26 @@ namespace Negocio
             }
         }
         //agregar un turno
-        // public void Agregar(Turno turno)
-        // {
-        //     try
-        //     {
-        //         datos.SetearConsulta("SELECT Hora FROM Turno WHERE IdMedico = @idMedico AND Fecha = @fecha");
-        //         datos.SetearParametro("@idMedico", idMedico);
-        //         datos.SetearParametro("@fecha", fecha);
-        //         datos.EjecutarLectura();
+        public void Agregar(Turno turno)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("INSERT INTO Turno (Fecha, Hora, IdPaciente, IdMedico) VALUES (@Fecha, @Hora, @IdPaciente, @IdMedico)");
+                    datos.SetearParametro("@Fecha", turno.Fecha);
+                    datos.SetearParametro("@Hora", turno.Hora);
+                    datos.SetearParametro("@IdPaciente", turno.Paciente.Id);
+                    datos.SetearParametro("@IdMedico", turno.Medico.Id);
 
-        //         while (datos.Lector.Read())
-        //         {
-        //             lista.Add((TimeSpan)datos.Lector["Hora"]);
-        //         }
-
-        //         return lista;
-        //     }
-        //     finally
-        //     {
-        //         datos.CerrarConexion();
-        //     }
-        // }
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al agregar el turno", ex);
+                }
+            }
+        }
 
 
         public void Agregar(int idPaciente, int idMedico, int idEspecialidad, DateTime fecha, TimeSpan hora, string observaciones)
@@ -383,7 +382,7 @@ namespace Negocio
                     throw new Exception("Error al listar turnos del paciente: " + ex.Message);
                 }
             }
-
+            return lista;
         }
         public bool TurnoDisponible(int idMedico, DateTime fecha, TimeSpan hora)
         {
@@ -418,7 +417,7 @@ namespace Negocio
                 datos.SetearConsulta(@"SELECT t.Id, t.Fecha, t.Hora, t.Observaciones, t.IdPaciente, t.IdMedico, t.IdEspecialidad, t.IdEstadoTurno
                 FROM Turno t
                 WHERE t.Id = @id
-                ")
+                ");
 
                 datos.SetearParametro("@id", idTurno);
                 datos.EjecutarLectura();
@@ -511,7 +510,7 @@ namespace Negocio
                         Estado = new EstadoTurno { Descripcion = datos.Lector["Estado"].ToString() },
                         Especialidad = new Especialidad { Descripcion = datos.Lector["Especialidad"].ToString() },
                         Medico = new Medico { Nombre = datos.Lector["Medico"].ToString() }
-                    }
+                    };
 
                     lista.Add(aux);
                 }

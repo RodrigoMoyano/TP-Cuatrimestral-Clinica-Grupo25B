@@ -36,7 +36,7 @@
             <div class="mb-3">
                 <label>Correo Electronico</label>
                 <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server"></asp:TextBox>
-                <asp:RequiredFieldValidator ErrorMessage="Ingresa su correo electronico." Display="Dynamic" ControlToValidate="txtEmail" runat="server" />
+                <asp:RequiredFieldValidator ErrorMessage="Ingresa su correo electronico." Display="Dynamic" CssClass="validacion" ControlToValidate="txtEmail" runat="server" />
                 <asp:RegularExpressionValidator CssClass="validacion" ErrorMessage="Formato de email, invalido." Display="Dynamic" ControlToValidate="txtEmail" ValidationExpression="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$" runat="server" />
             </div>
 
@@ -50,7 +50,7 @@
             <div class="mb-3">
                 <label>Telefono</label>
                 <asp:TextBox ID="txtTelefono" CssClass="form-control" runat="server"></asp:TextBox>
-                <asp:RequiredFieldValidator ErrorMessage="Ingrese su numero de telefono." Display="Dynamic" ControlToValidate="txtTelefono" runat="server" />
+                <asp:RequiredFieldValidator ErrorMessage="Ingrese su numero de telefono." CssClass="validacion" Display="Dynamic" ControlToValidate="txtTelefono" runat="server" />
                 <asp:RegularExpressionValidator CssClass="validacion" ErrorMessage="Ingrese un numero de telefono valido." ValidationExpression="^\d{8,10}$" ControlToValidate="txtTelefono" runat="server" />
             </div>
 
