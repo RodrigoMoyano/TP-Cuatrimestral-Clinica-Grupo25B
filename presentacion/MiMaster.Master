@@ -45,7 +45,6 @@
                                     <li>
                                         <asp:HyperLink ID="lnkGestionMedicos" runat="server" CssClass="dropdown-item" NavigateUrl="~/GestionMedicos.aspx" Visible="false">Gestion de Medicos</asp:HyperLink></li>
                                     <li>
-                                        <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="dropdown-item" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink></li>
                                 </ul>
                             </li>
                             
@@ -64,6 +63,7 @@
                                 </ul>
                             </li>
 
+                            <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink></li>
                             <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/SobreNosotros.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>
 
                         </div>
