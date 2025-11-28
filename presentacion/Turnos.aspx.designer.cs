@@ -11,7 +11,7 @@ namespace presentacion
 {
 
 
-    public partial class Turno
+    public partial class Turnos
     {
 
         /// <summary>

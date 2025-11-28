@@ -94,7 +94,7 @@ namespace presentacion
                 }
 
                 
-                paciente.IdUsuario = user;
+                paciente.Usuario = user;
 
                 //llamado al metodo con todos los objetos
                 negocioPaciente.RegistrarPaciente(paciente);

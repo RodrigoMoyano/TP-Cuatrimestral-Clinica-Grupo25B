@@ -16,7 +16,7 @@ namespace presentacion
             //Seguridad para que si no hay una sesion activa, no se pueda acceder a las demas paginas, obliga a loguearte
             if (!(Page is LogIn) && !(Page is Registro))
             {
-                if (!Seguridad.sessionActiva(Session["usuario"]))
+                if (!Seguridad.sessionActiva(Session["Usuario"]))
                 {
                     Response.Redirect("Login.aspx", false);
                 }
@@ -29,14 +29,14 @@ namespace presentacion
                 pnlNavbar.Visible = false;
             }
 
-            if (Seguridad.sessionActiva(Session["usuario"]))
+            if (Seguridad.sessionActiva(Session["Usuario"]))
             {
                 //lnkLogin.Visible = false;
                 btnSalir.Visible = true;
-                lnkMenu.Visible = true;
+                /*lnkMenu.Visible = true;*/
                 lnkSobreNosotros.Visible = true;
 
-                if (Seguridad.esAdmin(Session["usuario"]))
+                if (Seguridad.esAdmin(Session["Usuario"]))
                 {
                     lnkPacientes.Visible = true;
                     lnkMedicos.Visible = true;
@@ -47,15 +47,19 @@ namespace presentacion
                     lnkMenuPacientes.Visible = true;
 
                 }
-                else if (Seguridad.esMedico(Session["usuario"]))
+                else if (Seguridad.esMedico(Session["Usuario"]))
                 {
                     lnkTurnos.Visible = true;
                 }
-                else if (Seguridad.esPaciente(Session["usuario"]))
+                else if (Seguridad.esPaciente(Session["Usuario"]))
                 {
-                    lnkTurnos.Visible = true;
+                    lnkMenu.Visible = false;
+                    lnkTurnos.Visible = false;
+                    lnkTurnoPaciente.Visible = false;
                     lnkEspecialidades.Visible = true;
                     lnkMenuPacientes.Visible = true;
+                    pnlTurnosPaciente.Visible = true;
+
                 }
             }
         }

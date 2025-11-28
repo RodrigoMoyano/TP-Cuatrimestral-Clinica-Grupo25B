@@ -33,16 +33,43 @@
                 OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged"></asp:DropDownList>
         </div>
 
+        <!-- Cobertura -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Cobertura</label>
+            <asp:DropDownList 
+                ID="ddlCobertura" 
+                runat="server" 
+                CssClass="form-select"
+                AutoPostBack="true"
+                OnSelectedIndexChanged="ddlCobertura_SelectedIndexChanged">
+            </asp:DropDownList>
+
+            <asp:DropDownList 
+                ID="ddlObraSocial" 
+                runat="server" 
+                CssClass="form-select">
+            </asp:DropDownList>
+        </div>
+
         <!-- Fecha -->
         <div class="mb-3">
             <label class="form-label fw-bold">Fecha</label>
-            <asp:Calendar ID="calFecha" runat="server" CssClass="border rounded p-2" OnSelectionChanged="calFecha_SelectionChanged"></asp:Calendar>
+            <asp:Calendar ID="calFecha" runat="server" CssClass="border rounded p-2"
+                OnSelectionChanged="calFecha_SelectionChanged"
+                OnDayRender="calFecha_DayRender">
+            </asp:Calendar>
         </div>
 
         <!-- Horarios -->
         <div class="mb-3">
             <label class="form-label fw-bold">Horario disponible</label>
             <asp:DropDownList ID="ddlHorario" runat="server" CssClass="form-select"></asp:DropDownList>
+        </div>
+        <!-- Observaciones -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Motivo / Observaciones</label>
+            <asp:TextBox ID="txtObservaciones" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+            
         </div>
 
         <!-- Confirmar -->

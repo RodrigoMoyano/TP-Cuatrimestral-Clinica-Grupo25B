@@ -9,13 +9,15 @@ using Negocio;
 
 namespace presentacion
 {
-    public partial class Turno : System.Web.UI.Page
+    public partial class Turnos : System.Web.UI.Page
     {
         public bool FiltroAvanzado { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
 
             FiltroAvanzado = chkAvanzado.Checked;
+            if(!IsPostBack)
+
             if(!IsPostBack)
             {
                 CargarListaTurnos();
@@ -32,6 +34,9 @@ namespace presentacion
                 Session.Add("SpVerTurno", lista);
                 dgvVerTurnos.DataSource = Session["SpVerTurno"];
                 dgvVerTurnos.DataBind();
+
+                dgvVerTurno.DataSource = lista;
+                dgvVerTurno.DataBind();
             }
             catch (Exception ex)
             {

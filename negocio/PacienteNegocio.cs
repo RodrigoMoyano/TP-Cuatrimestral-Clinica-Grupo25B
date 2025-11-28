@@ -21,8 +21,8 @@ namespace Negocio
                 {
                     datos.SetearConsulta(@" Insert Into Usuario (NombreUsuario, Clave, IdRol, Activo) Values(@NombreUsuario, @Clave, 3, 1) Select Scope_Identity()");
 
-                    datos.SetearParametro("@NombreUsuario", nuevo.IdUsuario.NombreUsuario);
-                    datos.SetearParametro("@Clave", nuevo.IdUsuario.Clave);
+                    datos.SetearParametro("@NombreUsuario", nuevo.Usuario.NombreUsuario);
+                    datos.SetearParametro("@Clave", nuevo.Usuario.Clave);
 
                     int IdUsuarioCreado = datos.EjecutarAccionEscalar();
 
@@ -71,7 +71,7 @@ namespace Negocio
                     };
                     if (datos.Lector["IdUsuario"] != DBNull.Value)
                     {
-                        p.IdUsuario = new Usuario
+                        p.Usuario = new Usuario
                         {
                             Id = (int)datos.Lector["IdUsuario"],
                             NombreUsuario = datos.Lector["NombreUsuario"].ToString()
@@ -89,7 +89,7 @@ namespace Negocio
         {
             using (Datos datos = new Datos())
             {
-                datos.SetearConsulta("INSERT INTO Paciente (Nombre, Apellido, Dni, Email, Telefono, IdUsuario) " +
+                /*datos.SetearConsulta("INSERT INTO Paciente (Nombre, Apellido, Dni, Email, Telefono, IdUsuario) " +
                                      "VALUES (@Nombre, @Apellido, @Dni, @Email, @Telefono, @IdUsuario");
 
                 datos.SetearParametro("@Nombre", paciente.Nombre);
@@ -98,7 +98,18 @@ namespace Negocio
                 datos.SetearParametro("@Email", paciente.Email);
                 datos.SetearParametro("@Telefono", paciente.Telefono);
 
-                datos.SetearParametro("@IdUsuario", paciente.IdUsuario.Id);
+                datos.SetearParametro("@IdUsuario", paciente.IdUsuario.IdUsuario);
+
+                datos.EjecutarAccion();*/
+                datos.SetearConsulta("INSERT INTO Paciente (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono) " +
+                                     "VALUES (@Nombre, @Apellido, @Dni, @FechaNacimiento, @Email, @Telefono)");
+
+                datos.SetearParametro("@Nombre", paciente.Nombre);
+                datos.SetearParametro("@Apellido", paciente.Apellido);
+                datos.SetearParametro("@Dni", paciente.Dni);
+                datos.SetearParametro("@FechaNacimiento", paciente.FechaNacimiento);
+                datos.SetearParametro("@Email", paciente.Email);
+                datos.SetearParametro("@Telefono", paciente.Telefono);
 
                 datos.EjecutarAccion();
             }
@@ -136,6 +147,30 @@ namespace Negocio
                 datos.EjecutarAccion();
             }
         }
+
+        public int ObtenerIdPacientePorIdUsuario(int idUsuario)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+
+                    datos.SetearConsulta("SELECT Id FROM Paciente WHERE IdUsuario = @idUsuario");
+                    datos.SetearParametro("@idUsuario", idUsuario);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read() && !Convert.IsDBNull(datos.Lector["Id"]))
+                        return Convert.ToInt32(datos.Lector["Id"]);
+
+                    return -1;
+                }
+                finally
+                {
+                    datos.CerrarConexion();
+                }
+            }
+        }
+
         public bool ExisteCorreo(string emailExistente)
         {
             using (Datos datos = new Datos())
@@ -155,6 +190,8 @@ namespace Negocio
                 }
             }
         }
+
     }
+
 }
 

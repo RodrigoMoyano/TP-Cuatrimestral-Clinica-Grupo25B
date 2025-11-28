@@ -11,25 +11,25 @@ namespace presentacion
 {
 
 
-    public partial class MenuPaciente
+    public partial class TurnoPaciente
     {
 
         /// <summary>
-        /// Control btnVerTurnos.
+        /// Control ddlFiltroEstado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerTurnos;
+        protected global::System.Web.UI.WebControls.DropDownList ddlFiltroEstado;
 
         /// <summary>
-        /// Control btnPedirTurno.
+        /// Control gvTurnos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPedirTurno;
+        protected global::System.Web.UI.WebControls.GridView gvTurnos;
     }
 }

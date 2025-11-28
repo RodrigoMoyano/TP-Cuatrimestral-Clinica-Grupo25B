@@ -33,7 +33,7 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Cobertura (
-    IdCobertura INT IDENTITY(1,1) PRIMARY KEY,
+    Id INT IDENTITY(1,1) PRIMARY KEY,
     Tipo NVARCHAR(50) NOT NULL,
     NombreObraSocial NVARCHAR(100) NULL,
     PlanCobertura NVARCHAR(100) NULL
@@ -51,13 +51,12 @@ CREATE TABLE Paciente (
 );
 
 CREATE TABLE Especialidad (
-    IdEspecialidad INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre NVARCHAR(100)NOT NULL,
+    Id INT IDENTITY(1,1) PRIMARY KEY,
     Descripcion NVARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Medico (
-    IdMedico INT IDENTITY(1,1) PRIMARY KEY,
+    Id INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,
     Apellido NVARCHAR(100) NOT NULL,
     Matricula NVARCHAR(50),
