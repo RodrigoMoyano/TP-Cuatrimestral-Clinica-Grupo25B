@@ -71,12 +71,12 @@ namespace presentacion
                 else if (Seguridad.esPaciente(Session["Usuario"]))
                 {
                     lnkMenu.Visible = true;
-                    lnkMenuPacientes.Visible = false;
+                    lnkMenuPacientes.Visible = true;
 
                     liAdmin.Visible = false;
 
                     liTurnos.Visible = false;
-                    lnkGestionTurnos.Visible = false;
+                    lnkGestionTurnos.Visible = true;
 
                     lnkMisTurnos.Visible = true;
                     lnkPedirTurno.Visible = true;
