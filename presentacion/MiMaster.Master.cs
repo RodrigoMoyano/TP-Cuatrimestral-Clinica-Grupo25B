@@ -76,7 +76,7 @@ namespace presentacion
                     liAdmin.Visible = false;
 
                     liTurnos.Visible = false;
-                    lnkGestionTurnos.Visible = true;
+                    lnkGestionTurnos.Visible = false;
 
                     lnkMisTurnos.Visible = true;
                     lnkPedirTurno.Visible = true;

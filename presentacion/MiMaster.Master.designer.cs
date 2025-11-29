@@ -87,15 +87,6 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.HyperLink lnkGestionMedicos;
 
         /// <summary>
-        /// lnkMenuPacientes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkMenuPacientes;
-
-        /// <summary>
         /// liTurnos control.
         /// </summary>
         /// <remarks>
@@ -130,6 +121,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkPedirTurno;
+
+        /// <summary>
+        /// lnkMenuPacientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkMenuPacientes;
 
         /// <summary>
         /// lnkEspecialidades control.
