@@ -1,25 +1,70 @@
-# Visual Studio
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+Bin/
+Obj/
+
+# Visual Studio cache folders
 .vs/
-*.suo
+*.vscode/
 *.user
 *.userosscache
-*.sln.docstates
+*.suo
+*.cache/
+*.dbmdl
 
-# Build results
-bin/
-obj/
+# IIS Express
+/IISExpress/
+/applicationhost.config
 
-# Rider
+# NuGet packages
+*.nupkg
+packages/
+!packages/repositories.config
+
+# Backup and logs
+*.log
+*.bak
+*.Backup
+*.tmp
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# JetBrains Rider
 .idea/
 
-# Otros archivos temporales
-*.cache
-*.pdb
-*.dll
-*.exe
-*.log
+# Web Essentials cache
+*.wepkg
+*.wepkey
 
-# Archivos generados por Visual Studio / GitHub Copilot
-**/CopilotIndices/
-*.vsidx
-*.backup.json
+# Publish output
+publish/
+wwwroot/
+
+# SQL localdb
+*.mdf
+*.ldf
+
+# Windows thumbnails
+Thumbs.db
+ehthumbs.db
+
+# Mac junk
+.DS_Store
+
+# Temp ASP.NET files
+Temporary ASP.NET Files/
+
+# Test Results
+TestResults/
+
+# Entity Framework Migrations backups
+*Migrations/*.Designer.cs
+*Migrations/*.resx
