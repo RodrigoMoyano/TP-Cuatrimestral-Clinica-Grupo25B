@@ -16,7 +16,7 @@ namespace presentacion
             //Seguridad para que si no hay una sesion activa, no se pueda acceder a las demas paginas, obliga a loguearte
             if (!(Page is LogIn) && !(Page is Registro))
             {
-                if (!Seguridad.sessionActiva(Session["Usuario"]))
+                if (!Seguridad.sessionActiva(Session["usuario"]))
                 {
                     Response.Redirect("Login.aspx", false);
                 }
@@ -29,12 +29,12 @@ namespace presentacion
                 pnlNavbar.Visible = false;
             }
 
-            if (Seguridad.sessionActiva(Session["Usuario"]))
+            if (Seguridad.sessionActiva(Session["usuario"]))
             {
                 //lnkLogin.Visible = false;
                 btnSalir.Visible = true;
 
-                if (Seguridad.esAdmin(Session["Usuario"]))
+                if (Seguridad.esAdmin(Session["usuario"]))
                 {
                     lnkMenu.Visible = true;
                     lnkMenuPacientes.Visible = false;
@@ -53,8 +53,9 @@ namespace presentacion
 
 
                 }
-                else if (Seguridad.esMedico(Session["Usuario"]))
+                else if (Seguridad.esMedico(Session["usuario"]))
                 {
+
                     lnkMenu.Visible = true;
                     lnkMenuPacientes.Visible = false;
 
@@ -63,12 +64,14 @@ namespace presentacion
                     liTurnos.Visible = true;
                     lnkGestionTurnos.Visible = true;
 
+                    lnkPanelMedico.Visible = true;
+
                     lnkMisTurnos.Visible = false;
                     lnkPedirTurno.Visible = false;
 
                     lnkSobreNosotros.Visible = false;
                 }
-                else if (Seguridad.esPaciente(Session["Usuario"]))
+                else if (Seguridad.esPaciente(Session["usuario"]))
                 {
                     lnkMenu.Visible = true;
                     lnkMenuPacientes.Visible = true;

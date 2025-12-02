@@ -1,11 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace presentacion
 {
@@ -15,29 +11,46 @@ namespace presentacion
         {
 
         }
+
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
             Page.Validate();
-            if(!Page.IsValid)
-            {
+            if (!Page.IsValid)
                 return;
-            }
 
             Usuario usuario = new Usuario();
             UsuarioNegocio negocio = new UsuarioNegocio();
+
             try
             {
-
+                // Estos controles siguen igual
                 usuario.NombreUsuario = txtEmail.Text;
                 usuario.Clave = txtPassword.Text;
+
                 if (negocio.Login(usuario))
                 {
+                    // ✅ 1) guardo el usuario en sesión (lo que ya tenías)
                     Session.Add("Usuario", usuario);
-                    Response.Redirect("Menu.aspx");
+
+                    // ✅ 2) si el usuario es MÉDICO, obtengo su IdMedico y lo guardo en sesión
+                    if (usuario.Rol != null && usuario.Rol.Id == 3)   // 3 = Médico en tu tabla Rol
+                    {
+                        MedicoNegocio medNeg = new MedicoNegocio();
+                        // Uso Listar() y busco el médico cuyo IdUsuario coincida
+                        var medico = medNeg.Listar().Find(m => m.IdUsuario == usuario.Id);
+
+                        if (medico != null)
+                        {
+                            Session["IdMedico"] = medico.Id;
+                        }
+                    }
+
+                    // ✅ 3) redirección como antes (luego desde el menú vas a PanelMedico)
+                    Response.Redirect("Menu.aspx", false);
                 }
                 else
                 {
-                    lblError.Text= "Error: Usuario o Contraseña incorrectos";
+                    lblError.Text = "Error: Usuario o Contraseña incorrectos";
                     lblError.Visible = true;
                 }
             }
@@ -45,16 +58,15 @@ namespace presentacion
             {
                 Session.Add("error", ex);
                 throw;
-
             }
         }
+
         protected void btnRegistrarse_Click(object sender, EventArgs e)
         {
             Response.Redirect("Registro.aspx", false);
         }
     }
 }
-
 /*namespace presentacion
 {
     public partial class LogIn : System.Web.UI.Page

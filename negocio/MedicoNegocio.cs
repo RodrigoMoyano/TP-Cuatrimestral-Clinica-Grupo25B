@@ -18,7 +18,11 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("SELECT Id, Nombre, Apellido, Matricula, IdUsuario FROM Medico");
+                    datos.SetearConsulta(@"
+                SELECT Id, Nombre, Apellido, Matricula, Telefono, Email, IdUsuario
+                FROM Medico
+                WHERE Activo = 1");
+
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -29,8 +33,15 @@ namespace Negocio
                             Nombre = datos.Lector["Nombre"].ToString(),
                             Apellido = datos.Lector["Apellido"].ToString(),
                             Matricula = datos.Lector["Matricula"].ToString(),
-                            IdUsuario = (int)datos.Lector["IdUsuario"]
+                            Telefono = datos.Lector["Telefono"].ToString(),
+                            Email = datos.Lector["Email"].ToString(),
+                            IdUsuario = datos.Lector["IdUsuario"] != DBNull.Value
+                                ? Convert.ToInt32(datos.Lector["IdUsuario"])
+                                : 0
                         };
+
+                        // Cargar especialidades
+                        aux.Especialidad = ObtenerEspecialidadesDeMedico(aux.Id);
 
                         lista.Add(aux);
                     }
@@ -128,6 +139,53 @@ namespace Negocio
                 return lista;
             }
         }
+        public Dominio.Medico BuscarPorId(int idMedico)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"
+                SELECT Id, Nombre, Apellido, Matricula, Telefono, Email, IdUsuario
+                FROM Medico
+                WHERE Id = @Id AND Activo = 1"); // ✅ solo médicos activos
+
+                    datos.SetearParametro("@Id", idMedico);
+                    datos.EjecutarLectura();
+
+                    Dominio.Medico medico = null; // ✅ tipo explícito para evitar conflictos
+
+                    if (datos.Lector.Read())
+                    {
+                        medico = new Dominio.Medico
+                        {
+                            Id = (int)datos.Lector["Id"],
+                            Nombre = datos.Lector["Nombre"].ToString(),
+                            Apellido = datos.Lector["Apellido"].ToString(),
+                            Matricula = datos.Lector["Matricula"].ToString(),
+                            Telefono = datos.Lector["Telefono"].ToString(),
+                            Email = datos.Lector["Email"].ToString(),
+                            IdUsuario = datos.Lector["IdUsuario"] != DBNull.Value
+                                ? Convert.ToInt32(datos.Lector["IdUsuario"])
+                                : 0
+                        };
+                    }
+
+                    datos.CerrarConexion();
+
+                    // ✅ Cargar especialidades desde tabla intermedia
+                    if (medico != null)
+                        medico.Especialidad = ObtenerEspecialidadesDeMedico(medico.Id);
+
+                    return medico;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al buscar médico: " + ex.Message);
+                }
+            }
+        }
+
         public List<Medico> ListarPorEspecialidad(int idEspecialidad)
         {
             List<Medico> lista = new List<Medico>();
@@ -153,6 +211,68 @@ namespace Negocio
                 }
             }
             return lista;
+        }
+        public void Modificar(Medico modificado)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    // 1) Actualizar datos básicos del médico
+                    datos.SetearConsulta(@"
+                UPDATE Medico 
+                SET Nombre=@Nombre, Apellido=@Apellido, Matricula=@Matricula, Telefono=@Telefono, Email=@Email
+                WHERE Id=@Id");
+
+                    datos.SetearParametro("@Id", modificado.Id);
+                    datos.SetearParametro("@Nombre", modificado.Nombre);
+                    datos.SetearParametro("@Apellido", modificado.Apellido);
+                    datos.SetearParametro("@Matricula", modificado.Matricula);
+                    datos.SetearParametro("@Telefono", modificado.Telefono);
+                    datos.SetearParametro("@Email", modificado.Email);
+                    datos.EjecutarAccion();
+
+                    // 2) Actualizar especialidades en tabla intermedia
+                    // Primero eliminamos las existentes
+                    datos.SetearConsulta("DELETE FROM MedicoEspecialidad WHERE IdMedico=@IdMedico");
+                    datos.SetearParametro("@IdMedico", modificado.Id);
+                    datos.EjecutarAccion();
+
+                    // Luego insertamos las nuevas
+                    if (modificado.Especialidad != null)
+                    {
+                        foreach (var esp in modificado.Especialidad)
+                        {
+                            datos.SetearConsulta("INSERT INTO MedicoEspecialidad (IdMedico, IdEspecialidad) VALUES (@IdMedico, @IdEspecialidad)");
+                            datos.SetearParametro("@IdMedico", modificado.Id);
+                            datos.SetearParametro("@IdEspecialidad", esp.Id);
+                            datos.EjecutarAccion();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al modificar médico: " + ex.Message);
+                }
+            }
+        }
+
+        public void Eliminar(int idMedico)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    // ✅ Eliminación lógica: marcamos como inactivo
+                    datos.SetearConsulta("UPDATE Medico SET Activo = 0 WHERE Id = @Id");
+                    datos.SetearParametro("@Id", idMedico);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar médico: " + ex.Message);
+                }
+            }
         }
 
     }

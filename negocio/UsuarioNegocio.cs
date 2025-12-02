@@ -222,5 +222,34 @@ namespace Negocio
                 }
             }
         }
+
+        public int AgregarYObtenerId(Usuario usuario)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"
+                INSERT INTO Usuario (NombreUsuario, Clave, Activo, IdRol)
+                OUTPUT INSERTED.Id
+                VALUES (@NombreUsuario, @Clave, @Activo, @IdRol)");
+
+                    datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
+                    datos.SetearParametro("@Clave", usuario.Clave);
+                    datos.SetearParametro("@Activo", usuario.Activo);
+                    datos.SetearParametro("@IdRol", usuario.Rol.Id);
+
+                    int idGenerado = datos.EjecutarAccionEscalar(); // ✅ devuelve el identity
+                    usuario.Id = idGenerado;
+                    return idGenerado;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al agregar usuario: " + ex.Message);
+                }
+            }
+        }
+
+
     }
 }

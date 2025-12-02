@@ -58,7 +58,7 @@
                                         <asp:HyperLink ID="lnkPedirTurno" runat="server" CssClass="dropdown-item" NavigateUrl="~/PedirTurno.aspx" Visible="false">Solicitar Turno</asp:HyperLink></li>
                                 </ul>
                             </li>
-
+                            <li><asp:HyperLink ID="lnkPanelMedico" runat="server" CssClass="nav-link" NavigateUrl="~/PanelMedico.aspx" Visible="false">Panel Medico</asp:HyperLink></li>
                             <asp:HyperLink ID="lnkMenuPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/MenuPaciente.aspx" Visible="false">Turnos</asp:HyperLink>
                             <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink>
                             <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/SobreNosotros.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>
