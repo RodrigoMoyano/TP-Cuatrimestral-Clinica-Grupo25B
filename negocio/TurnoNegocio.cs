@@ -398,7 +398,7 @@ namespace Negocio
                 FROM Turno t
                 INNER JOIN EstadoTurno e ON t.IdEstadoTurno = e.Id
                 INNER JOIN Especialidad esp ON t.IdEspecialidad = esp.Id
-                INNER JOIN Medico m ON t.IdMedico = m.IdMedico
+                INNER JOIN Medico m ON t.IdMedico = m.Id
                 WHERE t.IdPaciente = @IdPaciente
                 ORDER BY t.Fecha ASC, t.Hora ASC");
 

@@ -11,6 +11,7 @@
                 <asp:ListItem Value="Reprogramado">Reprogramado</asp:ListItem>
                 <asp:ListItem Value="Cancelado">Cancelado</asp:ListItem>
                 <asp:ListItem Value="No Asistió">No Asistió</asp:ListItem>
+                <asp:ListItem Value="Cerrado">Cerrado  </asp:ListItem>
             </asp:DropDownList>
         </div>
             <asp:GridView 
