@@ -40,13 +40,13 @@ namespace presentacion
                     lnkMenuPacientes.Visible = false;
 
                     liAdmin.Visible = true;
-                    lnkPacientes.Visible = true;
-                    lnkMedicos.Visible = true;
+                    lnkPacientes.Visible = false;
+                    lnkMedicos.Visible = false;
                     lnkGestionMedicos.Visible = true;
                     lnkEspecialidades.Visible = true;
 
-                    liTurnos.Visible = true;
-                    lnkGestionTurnos.Visible= true;
+                    liTurnos.Visible = false;
+                    lnkGestionTurnos.Visible= false;
                     
                     lnkMisTurnos.Visible = false;
                     lnkPedirTurno.Visible = false;

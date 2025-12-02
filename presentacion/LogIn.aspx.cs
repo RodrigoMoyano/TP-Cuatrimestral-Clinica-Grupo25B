@@ -23,20 +23,20 @@ namespace presentacion
 
             try
             {
-                // Estos controles siguen igual
+                
                 usuario.NombreUsuario = txtEmail.Text;
                 usuario.Clave = txtPassword.Text;
 
                 if (negocio.Login(usuario))
                 {
-                    // ✅ 1) guardo el usuario en sesión (lo que ya tenías)
+                   
                     Session.Add("Usuario", usuario);
 
-                    // ✅ 2) si el usuario es MÉDICO, obtengo su IdMedico y lo guardo en sesión
-                    if (usuario.Rol != null && usuario.Rol.Id == 3)   // 3 = Médico en tu tabla Rol
+                    
+                    if (usuario.Rol != null && usuario.Rol.Id == 3)   // 3 = Médico 
                     {
                         MedicoNegocio medNeg = new MedicoNegocio();
-                        // Uso Listar() y busco el médico cuyo IdUsuario coincida
+                 
                         var medico = medNeg.Listar().Find(m => m.IdUsuario == usuario.Id);
 
                         if (medico != null)
@@ -45,7 +45,7 @@ namespace presentacion
                         }
                     }
 
-                    // ✅ 3) redirección como antes (luego desde el menú vas a PanelMedico)
+                   
                     Response.Redirect("Menu.aspx", false);
                 }
                 else
