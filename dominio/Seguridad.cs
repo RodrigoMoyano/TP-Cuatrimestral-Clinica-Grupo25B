@@ -33,42 +33,22 @@ namespace Dominio
         {
             Usuario usuario = user as Usuario;
 
-            return usuario  != null ? usuario.Rol : null;
+            return usuario != null ? usuario.Rol : null;
         }
-        /*public static bool esAdmin(object user)
-        {
-            Rol rol = obtenerRol(user);
-
-            return rol != null && rol.Id == ID_Administrador;
-        }
-        public static bool esMedico(object user)
-        {
-            Rol rol = obtenerRol(user);
-
-            return rol != null && rol.Id == ID_Medico;
-        }*/
-
-        /*public static bool esPaciente(object user)
-        {
-            Rol rol = obtenerRol(user);
-
-            return rol != null & rol.Id == ID_Paciente;
-        }*/
         public static bool esPaciente(object user)
         {
             Usuario usuario = (Usuario)user;
-            return usuario.Rol.Descripcion == "Paciente";
+            return usuario != null && usuario.Rol != null && usuario.Rol.Id == ID_Paciente;
         }
         public static bool esMedico(object user)
         {
             Usuario usuario = (Usuario)user;
-            return usuario.Rol.Descripcion == "Medico";
+            return usuario != null && usuario.Rol != null && usuario.Rol.Id == ID_Medico;
         }
         public static bool esAdmin(object user)
         {
             Usuario usuario = (Usuario)user;
-            return usuario.Rol.Descripcion == "Administrador";
+            return usuario != null && usuario.Rol != null && usuario.Rol.Id == ID_Administrador;
         }
     }
-
 }

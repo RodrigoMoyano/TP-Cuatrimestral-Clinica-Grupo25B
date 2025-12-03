@@ -9,7 +9,7 @@ using Negocio;
 
 namespace presentacion
 {
-    public partial class GestionMedicos : System.Web.UI.Page
+    public partial class GestionMedicos : PaginaAdmin
     {
         protected void Page_Load(object sender, EventArgs e)
         {

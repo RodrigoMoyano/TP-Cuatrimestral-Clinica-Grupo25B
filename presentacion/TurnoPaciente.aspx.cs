@@ -15,15 +15,37 @@ namespace presentacion
         {
             if (!IsPostBack)
             {
+                if (!VerificarSession())
+                {
+                    return;
+                }
+
                 CargarTurnos();
             }
+        }
+
+        private bool VerificarSession()
+        {
+            Usuario usuario = Session["usuario"] as Usuario;
+            if(usuario == null)
+            {
+                Response.Redirect("Login.aspx", false);
+                return false;
+            }
+            return true;
         }
 
         private void CargarTurnos()
         {
             try
             {
-                Usuario usuario = (Usuario)Session["Usuario"];
+                Usuario usuario = (Usuario)Session["usuario"];
+
+                if(usuario == null)
+                {
+                    Response.Redirect("Login.aspx", false);
+                    return;
+                }
 
                 PacienteNegocio pacNeg = new PacienteNegocio();
                 int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
