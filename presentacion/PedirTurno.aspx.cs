@@ -57,11 +57,7 @@ namespace presentacion
         }
         private void CargarCoberturas()
         {
-            /*CoberturaNegocio negocio = new CoberturaNegocio();
-            ddlCobertura.DataSource = negocio.Listar();
-            ddlCobertura.DataTextField = "Tipo";
-            ddlCobertura.DataValueField = "Id";
-            ddlCobertura.DataBind();*/
+           
             CoberturaNegocio negocio = new CoberturaNegocio();
 
             var lista = negocio.Listar()
@@ -78,14 +74,14 @@ namespace presentacion
         {
             ddlObraSocial.Items.Clear();
 
-            // Si es Particular, no mostrar nada
+            
             if (ddlCobertura.SelectedValue == "Particular")
             {
                 ddlObraSocial.Enabled = false;
                 return;
             }
 
-            // Si es Obra Social, cargar OSDE, Swiss, etc
+            
             CoberturaNegocio negocio = new CoberturaNegocio();
             var lista = negocio.Listar()
                                .Where(x => x.Tipo == "Obra Social")
@@ -117,14 +113,15 @@ namespace presentacion
             
             if (fechaSeleccionada.Date < DateTime.Now.Date)
             {
-                ClientScript.RegisterStartupScript(
-                    this.GetType(),
-                    "alert",
-                    "alert('No se puede seleccionar una fecha pasada.');",
-                    true);
+                lblErrorFecha.Text = "No se puede seleccionar una fecha pasada.";
+                lblErrorFecha.Visible = true;
 
                 calFecha.SelectedDates.Clear();
                 return;
+            }
+            else
+            {
+                lblErrorFecha.Visible = false;
             }
 
             if (ddlMedico.SelectedValue == "0")
@@ -165,42 +162,61 @@ namespace presentacion
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
         {
-            if (ddlEspecialidad.SelectedValue == "0" ||
-                ddlMedico.SelectedValue == "0" ||
-                ddlHorario.SelectedValue == "")
+
+            LimpiarErrores();
+
+            bool hayError = false;
+
+            if (ddlEspecialidad.SelectedValue == "0")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                    "alert('Debe completar todos los campos');", true);
-                return;
+                lblErrorEspecialidad.Text = "Debe seleccionar una especialidad.";
+                lblErrorEspecialidad.Visible = true;
+                hayError = true;
             }
+
+            if (ddlMedico.SelectedValue == "0")
+            {
+                lblErrorMedico.Text = "Debe seleccionar un médico.";
+                lblErrorMedico.Visible = true;
+                hayError = true;
+            }
+
             if (calFecha.SelectedDate == DateTime.MinValue)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Debe seleccionar una fecha.');", true);
-                return;
+                lblErrorFecha.Text = "Debe seleccionar una fecha.";
+                lblErrorFecha.Visible = true;
+                hayError = true;
             }
 
-            
+            if (ddlHorario.SelectedValue == "")
+            {
+                lblErrorHorario.Text = "Debe seleccionar un horario.";
+                lblErrorHorario.Visible = true;
+                hayError = true;
+            }
+
             if (ddlCobertura.SelectedValue == "")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Debe seleccionar una cobertura (Particular u Obra Social');",true);
-                return;
+                lblErrorCobertura.Text = "Debe seleccionar una cobertura.";
+                lblErrorCobertura.Visible = true;
+                hayError = true;
             }
 
-            
             if (ddlCobertura.SelectedValue == "Obra Social" &&
                 ddlObraSocial.SelectedValue == "")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Debe seleccionar una obra social.');", true);
-                return;
+                lblErrorObraSocial.Text = "Debe seleccionar una obra social.";
+                lblErrorObraSocial.Visible = true;
+                hayError = true;
             }
+
+            if (hayError) return;
+
 
 
             Usuario usuario = (Usuario)Session["Usuario"];
 
-            //  Obtener el idPaciente real desde la base de datos
+            
             PacienteNegocio pacNeg = new PacienteNegocio();
             int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
 
@@ -211,28 +227,26 @@ namespace presentacion
 
             string observaciones = txtObservaciones.Text.Trim();
 
+            
             if (fecha.Date < DateTime.Now.Date)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                    "alert('No se puede sacar un turno para una fecha pasada.');", true);
+                MostrarError("No se puede seleccionar una fecha pasada.");
                 return;
             }
 
-            
             if (fecha.Date == DateTime.Now.Date && hora <= DateTime.Now.TimeOfDay)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                    "alert('No se puede sacar un turno en una hora que ya pasó.');", true);
+                MostrarError("No se puede seleccionar una hora que ya pasó.");
                 return;
             }
 
             TurnoNegocio negocio = new TurnoNegocio();
             negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
 
-            ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Turno reservado con éxito'); window.location='MenuPaciente.aspx';", true);
+            
+            Response.Redirect("MenuPaciente.aspx");
         }
-        //PARA QUE SE NOTEN LOS DIAS EN QUE TRABAJA CADA MEDICO
+        
         protected void calFecha_DayRender(object sender, DayRenderEventArgs e)
         {
             if (string.IsNullOrEmpty(ddlMedico.SelectedValue) || ddlMedico.SelectedValue == "0")
@@ -255,7 +269,32 @@ namespace presentacion
                 e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
         }
-        
+        private void MostrarError(string mensaje)
+        {
+            lblError.Text = mensaje;
+            lblError.Visible = true;
+        }
+        private void LimpiarErrores()
+        {
+            lblErrorEspecialidad.Text = "";
+            lblErrorEspecialidad.Visible = false;
+
+            lblErrorMedico.Text = "";
+            lblErrorMedico.Visible = false;
+
+            lblErrorFecha.Text = "";
+            lblErrorFecha.Visible = false;
+
+            lblErrorHorario.Text = "";
+            lblErrorHorario.Visible = false;
+
+            lblErrorCobertura.Text = "";
+            lblErrorCobertura.Visible = false;
+
+            lblErrorObraSocial.Text = "";
+            lblErrorObraSocial.Visible = false;
+        }
+
     }
     
 }
