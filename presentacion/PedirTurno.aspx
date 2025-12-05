@@ -25,12 +25,20 @@
             <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select" AutoPostBack="true"
                 OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged"></asp:DropDownList>
         </div>
+        <div>
+            
+            <asp:Label ID="lblErrorEspecialidad" runat="server" ForeColor="Red" Visible="false"></asp:Label>
+        </div>
 
         <!-- Médico -->
         <div class="mb-3">
             <label class="form-label fw-bold">Médico</label>
             <asp:DropDownList ID="ddlMedico" runat="server" CssClass="form-select" AutoPostBack="true"
                 OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged"></asp:DropDownList>
+        </div>
+        <div>
+            
+            <asp:Label ID="lblErrorMedico" runat="server" ForeColor="Red" Visible="false"></asp:Label>
         </div>
 
         <!-- Cobertura -->
@@ -43,6 +51,10 @@
                 AutoPostBack="true"
                 OnSelectedIndexChanged="ddlCobertura_SelectedIndexChanged">
             </asp:DropDownList>
+            <div>
+               
+                <asp:Label ID="lblErrorCobertura" runat="server" ForeColor="Red" Visible="false"></asp:Label>
+            </div>
 
             <asp:DropDownList 
                 ID="ddlObraSocial" 
@@ -50,7 +62,10 @@
                 CssClass="form-select">
             </asp:DropDownList>
         </div>
-
+        <div>
+            
+            <asp:Label ID="lblErrorObraSocial" runat="server" ForeColor="Red" Visible="false"></asp:Label>
+        </div>
         <!-- Fecha -->
         <div class="mb-3">
             <label class="form-label fw-bold">Fecha</label>
@@ -59,17 +74,28 @@
                 OnDayRender="calFecha_DayRender">
             </asp:Calendar>
         </div>
+        <div>
+           
+            <asp:Label ID="lblErrorFecha" runat="server" ForeColor="Red" Visible="false"></asp:Label>
+        </div>
 
         <!-- Horarios -->
         <div class="mb-3">
             <label class="form-label fw-bold">Horario disponible</label>
             <asp:DropDownList ID="ddlHorario" runat="server" CssClass="form-select"></asp:DropDownList>
         </div>
+        <div>
+            
+            <asp:Label ID="lblErrorHorario" runat="server" ForeColor="Red" Visible="false"></asp:Label>
+        </div>
         <!-- Observaciones -->
         <div class="mb-3">
             <label class="form-label fw-bold">Motivo / Observaciones</label>
             <asp:TextBox ID="txtObservaciones" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
             
+        </div>
+        <div>
+            <asp:Label ID="lblError" runat="server" ForeColor="Red" Visible="false"></asp:Label>
         </div>
 
         <!-- Confirmar -->

@@ -55,20 +55,41 @@ namespace Negocio
             return lista;
         }
 
-        public void Agregar(Medico nuevo)
+
+        public int Agregar(Medico nuevo)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    datos.SetearConsulta("INSERT INTO Medico (Nombre, Apellido, Matricula, Email, Telefono, IdUsuario) VALUES (@Nombre, @Apellido, @Matricula, @Email, @Matricula, @IdUsuario)");
+
+                    datos.SetearConsulta(@"
+        INSERT INTO Medico (Nombre, Apellido, Matricula, Telefono, Email, IdUsuario)
+        OUTPUT INSERTED.Id
+        VALUES (@Nombre, @Apellido, @Matricula, @Telefono, @Email, @IdUsuario)");
+
                     datos.SetearParametro("@Nombre", nuevo.Nombre);
                     datos.SetearParametro("@Apellido", nuevo.Apellido);
                     datos.SetearParametro("@Matricula", nuevo.Matricula);
-                    datos.SetearParametro("@Email", nuevo.Email);
                     datos.SetearParametro("@Telefono", nuevo.Telefono);
+                    datos.SetearParametro("@Email", nuevo.Email);
                     datos.SetearParametro("@IdUsuario", nuevo.IdUsuario);
-                    datos.EjecutarAccion();
+
+                    int idMedico = datos.EjecutarAccionEscalar();
+
+
+                    if (nuevo.Especialidad != null)
+                    {
+                        foreach (var esp in nuevo.Especialidad)
+                        {
+                            datos.SetearConsulta("INSERT INTO MedicoEspecialidad (IdMedico, IdEspecialidad) VALUES (@IdMedico, @IdEspecialidad)");
+                            datos.SetearParametro("@IdMedico", idMedico);
+                            datos.SetearParametro("@IdEspecialidad", esp.Id);
+                            datos.EjecutarAccion();
+                        }
+                    }
+
+                    return idMedico;
                 }
                 catch (Exception ex)
                 {
@@ -240,7 +261,7 @@ namespace Negocio
                     datos.SetearParametro("@IdMedico", modificado.Id);
                     datos.EjecutarAccion();
 
-                    // Luego insertamos las nuevas
+
                     if (modificado.Especialidad != null)
                     {
                         foreach (var esp in modificado.Especialidad)
@@ -265,7 +286,7 @@ namespace Negocio
             {
                 try
                 {
-                    // ✅ Eliminación lógica: marcamos como inactivo
+
                     datos.SetearConsulta("UPDATE Medico SET Activo = 0 WHERE Id = @Id");
                     datos.SetearParametro("@Id", idMedico);
                     datos.EjecutarAccion();

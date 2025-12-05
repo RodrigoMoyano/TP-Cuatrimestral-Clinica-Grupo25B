@@ -61,8 +61,8 @@ namespace presentacion
 
                     liAdmin.Visible= false;
 
-                    liTurnos.Visible = true;
-                    lnkGestionTurnos.Visible = true;
+                    liTurnos.Visible = false;
+                    lnkGestionTurnos.Visible = false;
 
                     lnkPanelMedico.Visible = true;
 
