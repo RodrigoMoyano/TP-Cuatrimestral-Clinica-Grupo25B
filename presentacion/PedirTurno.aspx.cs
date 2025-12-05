@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Principal;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -17,10 +18,41 @@ namespace presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esAdmin(Session["usuario"]))
+            {
+                Session.Add("error", "No tienes permisos para esta pantalla.");
+                Response.Redirect("Error.aspx", true);
+            }
+
             if (!IsPostBack)
             {
                 CargarEspecialidades();
                 CargarCoberturas();
+
+                if (Request.QueryString["id"] != null)
+                {
+                    if (!Seguridad.esAdmin(Session["usuario"]))
+                    {
+                        Session.Add("error", "No tiene permiso para reprogramar turnos.");
+                        Response.Redirect("Error.aspx", true);
+                    }
+                    int idTurno = int.Parse(Request.QueryString["id"]);
+
+                    ViewState["IdTurnoEditar"] = idTurno;
+                    btnConfirmar.Text = "Reprogramar Turno #" + idTurno;
+
+                    lblTitulo.Text = "Reprogramar Turno #" + idTurno;
+
+                    CargarDatosDelTurno(idTurno);
+                }
+                else
+                {
+                    if (Seguridad.esAdmin(Session["usuario"]))
+                    {
+                        Session.Add("error", "Los administradores solo reprograman turnos");
+                        Response.Redirect("Turnos.aspx", true);
+                    }
+                }
             }
         }
 
@@ -114,7 +146,7 @@ namespace presentacion
 
             DateTime fechaSeleccionada = calFecha.SelectedDate;
 
-            
+
             if (fechaSeleccionada.Date < DateTime.Now.Date)
             {
                 ClientScript.RegisterStartupScript(
@@ -131,7 +163,7 @@ namespace presentacion
                 return;
 
             int idMedico = int.Parse(ddlMedico.SelectedValue);
-            
+
 
             string diaSemana = fechaSeleccionada.ToString("dddd", new CultureInfo("es-ES"));
 
@@ -141,96 +173,107 @@ namespace presentacion
             if (turno == null)
                 return;
 
-            
+
             TurnoNegocio turnoNeg = new TurnoNegocio();
             List<TimeSpan> horariosOcupados = turnoNeg.ObtenerHorariosOcupados(idMedico, fechaSeleccionada);
 
-           
+
             TimeSpan inicio = turno.HoraInicio;
             TimeSpan fin = turno.HoraFin;
 
             for (TimeSpan hora = inicio; hora < fin; hora = hora.Add(TimeSpan.FromMinutes(30)))
-            {       
-                    if (fechaSeleccionada.Date == DateTime.Now.Date &&
-                        hora <= DateTime.Now.TimeOfDay)
-                        continue;
+            {
+                if (fechaSeleccionada.Date == DateTime.Now.Date &&
+                    hora <= DateTime.Now.TimeOfDay)
+                    continue;
 
-                    if (!horariosOcupados.Contains(hora))
-                    {
-                        ddlHorario.Items.Add(hora.ToString(@"hh\:mm"));
-                    }
-                
+                if (!horariosOcupados.Contains(hora))
+                {
+                    ddlHorario.Items.Add(hora.ToString(@"hh\:mm"));
+                }
+
             }
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
         {
-            if (ddlEspecialidad.SelectedValue == "0" ||
-                ddlMedico.SelectedValue == "0" ||
-                ddlHorario.SelectedValue == "")
+            try
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                    "alert('Debe completar todos los campos');", true);
-                return;
+                //Validaciones
+                if (ddlEspecialidad.SelectedValue == "0" || ddlMedico.SelectedValue == "0" || ddlHorario.SelectedValue == "")
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe completar todos los campos');", true);
+                    return;
+                }
+                if (calFecha.SelectedDate == DateTime.MinValue)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe seleccionar una fecha.');", true);
+                    return;
+                }
+                if (ddlCobertura.SelectedValue == "")
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe seleccionar una cobertura.');", true);
+                    return;
+                }
+                if (ddlCobertura.SelectedValue == "Obra Social" && ddlObraSocial.SelectedValue == "")
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe seleccionar una obra social.');", true);
+                    return;
+                }
+
+                int idMedico = int.Parse(ddlMedico.SelectedValue);
+                int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
+                DateTime fecha = calFecha.SelectedDate;
+                TimeSpan hora = TimeSpan.Parse(ddlHorario.SelectedValue);
+                string observaciones = txtObservaciones.Text.Trim();
+
+                // Validación de fecha 
+                if (fecha.Date < DateTime.Now.Date)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Fecha inválida.');", true);
+                    return;
+                }
+
+                TurnoNegocio negocio = new TurnoNegocio();
+
+                if (ViewState["IdTurnoEditar"] != null)
+                {
+                    //Con Admin
+                    int idTurno = (int)ViewState["IdTurnoEditar"];
+
+                    negocio.Modificar(idTurno, idMedico, idEspecialidad, fecha, hora, observaciones);
+
+                    //Limpiamos el estado
+                    ViewState["IdTurnoEditar"] = null;
+                    btnConfirmar.Text = "Confirmar Turno";
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert",
+                        "alert('Turno reprogramado con éxito'); window.location='Turnos.aspx';", true);
+                }
+                else
+                {
+                    // Obtenemos el ID del Paciente para crear
+                    Usuario usuario = (Usuario)Session["usuario"];
+                    PacienteNegocio pacNeg = new PacienteNegocio();
+                    int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
+
+                    if (idPaciente == 0)
+                    {
+                        throw new Exception("Error: No se encontró el perfil del paciente.");
+                    }
+
+                    negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
+
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert",
+                        "alert('Turno reservado con éxito'); window.location='MenuPaciente.aspx';", true);
+                }
             }
-            if (calFecha.SelectedDate == DateTime.MinValue)
+            catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Debe seleccionar una fecha.');", true);
-                return;
+                // Manejo de errores
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
             }
-
-            
-            if (ddlCobertura.SelectedValue == "")
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Debe seleccionar una cobertura (Particular u Obra Social');",true);
-                return;
-            }
-
-            
-            if (ddlCobertura.SelectedValue == "Obra Social" &&
-                ddlObraSocial.SelectedValue == "")
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Debe seleccionar una obra social.');", true);
-                return;
-            }
-
-
-            Usuario usuario = (Usuario)Session["Usuario"];
-
-            //  Obtener el idPaciente real desde la base de datos
-            PacienteNegocio pacNeg = new PacienteNegocio();
-            int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
-
-            int idMedico = int.Parse(ddlMedico.SelectedValue);
-            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
-            DateTime fecha = calFecha.SelectedDate;
-            TimeSpan hora = TimeSpan.Parse(ddlHorario.SelectedValue);
-
-            string observaciones = txtObservaciones.Text.Trim();
-
-            if (fecha.Date < DateTime.Now.Date)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                    "alert('No se puede sacar un turno para una fecha pasada.');", true);
-                return;
-            }
-
-            
-            if (fecha.Date == DateTime.Now.Date && hora <= DateTime.Now.TimeOfDay)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                    "alert('No se puede sacar un turno en una hora que ya pasó.');", true);
-                return;
-            }
-
-            TurnoNegocio negocio = new TurnoNegocio();
-            negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
-
-            ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                "alert('Turno reservado con éxito'); window.location='MenuPaciente.aspx';", true);
         }
         //PARA QUE SE NOTEN LOS DIAS EN QUE TRABAJA CADA MEDICO
         protected void calFecha_DayRender(object sender, DayRenderEventArgs e)
@@ -240,7 +283,7 @@ namespace presentacion
 
             int idMedico;
 
-            
+
             if (!int.TryParse(ddlMedico.SelectedValue, out idMedico))
                 return;
 
@@ -255,7 +298,100 @@ namespace presentacion
                 e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
         }
-        
+
+        private void CargarDatosDelTurno(int idTurno)
+        {
+            TurnoNegocio negocio = new TurnoNegocio();
+            Turno turno = negocio.BuscarPorId(idTurno);
+
+            if (turno == null)
+                return;
+
+            //ESPECIALIDAD
+            ddlEspecialidad.SelectedValue = turno.Especialidad.Id.ToString();
+
+            //Cargar médicos filtrados por especialidad
+            MedicoNegocio mNeg = new MedicoNegocio();
+            var medicos = mNeg.ListarPorEspecialidad(turno.Especialidad.Id);
+
+            ddlMedico.DataSource = medicos;
+            ddlMedico.DataTextField = "NombreCompleto";
+            ddlMedico.DataValueField = "Id";
+            ddlMedico.DataBind();
+            ddlMedico.Items.Insert(0, new ListItem("-- Seleccione --", "0"));
+            ddlMedico.SelectedValue = turno.Medico.Id.ToString();
+
+            //fecha
+            calFecha.SelectedDate = turno.Fecha;
+            calFecha.VisibleDate = turno.Fecha;
+
+            //HORArios
+            ddlHorario.Items.Clear();
+
+            if (ddlMedico.SelectedValue != "0")
+            {
+                int idMedico = turno.Medico.Id;
+                DateTime fecha = turno.Fecha;
+
+                string diaSemana = fecha.ToString("dddd", new System.Globalization.CultureInfo("es-ES"));
+                diaSemana = char.ToUpper(diaSemana[0]) + diaSemana.Substring(1);
+
+                TurnoTrabajoNegocio trabNeg = new TurnoTrabajoNegocio();
+                var horarioTrabajo = trabNeg.ObtenerHorario(idMedico, diaSemana);
+
+                if (horarioTrabajo != null)
+                {
+                    List<TimeSpan> ocupados = negocio.ObtenerHorariosOcupados(idMedico, fecha);
+
+                    TimeSpan inicio = horarioTrabajo.HoraInicio;
+                    TimeSpan fin = horarioTrabajo.HoraFin;
+
+                    for (TimeSpan h = inicio; h < fin; h = h.Add(TimeSpan.FromMinutes(30)))
+                    {
+                        if (!ocupados.Contains(h) || h == turno.Hora)
+                            ddlHorario.Items.Add(h.ToString(@"hh\:mm"));
+                    }
+
+                    ddlHorario.SelectedValue = turno.Hora.ToString(@"hh\:mm");
+                }
+            }
+
+            // Cobertura paciente
+            if (turno.Paciente != null && turno.Paciente.Cobertura != null)
+            {
+                //Selecciona el tipo de cobertura
+                ddlCobertura.SelectedValue = turno.Paciente.Cobertura.Tipo;
+
+                if (turno.Paciente.Cobertura.Tipo == "Obra Social")
+                {
+                    //Cargar obras sociales disponibles
+                    CoberturaNegocio negocioCobertura = new CoberturaNegocio();
+                    var listaOS = negocioCobertura.Listar().Where(x => x.Tipo == "Obra Social").ToList();
+
+                    ddlObraSocial.DataSource = listaOS;
+                    ddlObraSocial.DataTextField = "NombreObraSocial";
+                    ddlObraSocial.DataValueField = "Id";
+                    ddlObraSocial.DataBind();
+                    ddlObraSocial.Items.Insert(0, new ListItem("-- Seleccione Obra Social --", ""));
+
+                    //Selecciona la obra social del paciente
+                    ddlObraSocial.SelectedValue = turno.Paciente.Cobertura.Id.ToString();
+                    ddlObraSocial.Enabled = true;
+                }
+                else
+                {
+                    ddlObraSocial.Items.Clear();
+                    ddlObraSocial.Enabled = false;
+                }
+            }
+
+            // --- E. Observaciones ---
+            txtObservaciones.Text = turno.Observaciones;
+        }
+
+
+
+
     }
-    
+
 }

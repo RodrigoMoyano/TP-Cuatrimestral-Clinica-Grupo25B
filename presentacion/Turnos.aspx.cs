@@ -11,14 +11,15 @@ namespace presentacion
 {
     public partial class Turnos : PaginaAdmin
     {
-        public bool FiltroAvanzado { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Seguridad.sessionActiva(Session["usuario"]))
+            {
+                Response.Redirect("Login.aspx", true);
+            }
 
-            FiltroAvanzado = chkAvanzado.Checked;
-            if(!IsPostBack)
-
-            if(!IsPostBack)
+            if (!IsPostBack)
             {
                 CargarListaTurnos();
             }
@@ -29,21 +30,21 @@ namespace presentacion
 
             try
             {
-                List<VerTurno> lista =  negocio.spVerTurno();
+                List<VerTurno> lista = negocio.spVerTurno();
 
                 Session.Add("SpVerTurno", lista);
                 dgvVerTurnos.DataSource = Session["SpVerTurno"];
                 dgvVerTurnos.DataBind();
 
-                dgvVerTurnos.DataSource = lista;
-                dgvVerTurnos.DataBind();
+                //dgvVerTurnos.DataSource = lista;
+                //dgvVerTurnos.DataBind();
             }
             catch (Exception ex)
             {
                 Usuario usuario = new Usuario();
 
                 throw ex;
-           }
+            }
 
 
         }
@@ -56,49 +57,31 @@ namespace presentacion
             dgvVerTurnos.DataBind();
         }
 
-        protected void chkAvanzado_CheckedChanged(object sender, EventArgs e)
-        {
-            FiltroAvanzado = chkAvanzado.Checked;
-            txtfiltro.Enabled = !FiltroAvanzado;
-        }
-
-        protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ddlCriterio.Items.Clear();
-            if (ddlCampo.SelectedIndex.ToString() == "Numero") 
-            {
-                ddlCriterio.Items.Add("Igual a");
-                ddlCriterio.Items.Add("Mayor a");
-                ddlCriterio.Items.Add("Menor a");
-            }
-            else
-            {
-                ddlCriterio.Items.Add("Contiene");
-                ddlCriterio.Items.Add("Comienza con");
-                ddlCriterio.Items.Add("Termina con");
-            }
-        }
-
         protected void dgvVerTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int idTurno = Convert.ToInt32(e.CommandArgument);
-
-            if(e.CommandName == "Cancelar")
+            if (e.CommandName == "Reprogramar")
             {
-                try
-                {
-                    TurnoNegocio negocio = new TurnoNegocio();
+                int idTurno = Convert.ToInt32(e.CommandArgument);
+                Response.Redirect("PedirTurno.aspx?id=" + idTurno);
 
-                    negocio.CancelarTurno(idTurno);
-
-                    CargarListaTurnos();
-                }
-                catch (Exception ex)
-                {
-
-                    throw new Exception("Error al cancelar turno.", ex);
-                }
             }
         }
+
+        //protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    ddlCriterio.Items.Clear();
+        //    if (ddlCampo.SelectedIndex.ToString() == "Numero") 
+        //    {
+        //        ddlCriterio.Items.Add("Igual a");
+        //        ddlCriterio.Items.Add("Mayor a");
+        //        ddlCriterio.Items.Add("Menor a");
+        //    }
+        //    else
+        //    {
+        //        ddlCriterio.Items.Add("Contiene");
+        //        ddlCriterio.Items.Add("Comienza con");
+        //        ddlCriterio.Items.Add("Termina con");
+        //    }
+        //}
     }
 }

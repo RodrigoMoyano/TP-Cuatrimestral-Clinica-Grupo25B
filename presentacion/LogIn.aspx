@@ -16,7 +16,8 @@
             <!-- Login -->
             <div class="card-body">
                 <h4 class="card-title text-center mb-4">Inicio de Sesión</h4>
-
+                <div id="mensajeRegistro" runat="server" visible="false" class="msjRegistro"></div>
+        
                 <div class="mb-3">
                     <label for="txtEmail" class="form-label">Usuario</label>
                     <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server"></asp:TextBox>
