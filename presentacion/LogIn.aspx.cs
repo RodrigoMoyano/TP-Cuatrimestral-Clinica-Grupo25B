@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
+using System.Web.Hosting;
 using System.Web.UI;
 
 namespace presentacion
@@ -9,7 +10,16 @@ namespace presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                string msg = Request.QueryString["mensaje"];
 
+                if(msg == "registrado")
+                {
+                    mensajeRegistro.Visible = true;
+                    mensajeRegistro.InnerHtml = "✓ Paciente registrado exitosamente.";
+                }
+            }
         }
 
         protected void btnIngresar_Click(object sender, EventArgs e)

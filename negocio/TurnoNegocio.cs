@@ -9,7 +9,7 @@ namespace Negocio
 {
     public class TurnoNegocio
     {
-        // 🔹 CORREGIDO: joins y columnas de Paciente/Medico
+        //CORREGIDO joins y columnas de Paciente/Medico
         public List<Turno> ObtenerTodos()
         {
             List<Turno> lista = new List<Turno>();
@@ -162,6 +162,32 @@ namespace Negocio
                 catch (Exception ex)
                 {
                     throw new Exception("Error al agregar el turno", ex);
+                }
+            }
+        }
+
+        //Metodo para Modificar o Reprogramar turno
+        public void Modificar(int idTurno, int idMedico, int IdEspecialidad, DateTime fecha, TimeSpan hora, string observaciones)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"Update Turno Set IdMedico = @IdMedico, IdEspecialidad = @IdEspecialidad, Fecha = @Fecha, Hora = @Hora, Observaciones = @Observaciones, IdEstadoTurno = 2 Where Id = @Id");
+
+                    datos.SetearParametro("@Id", idTurno);
+                    datos.SetearParametro("@IdMedico", idMedico);
+                    datos.SetearParametro("@IdEspecialidad", IdEspecialidad);
+                    datos.SetearParametro("@Fecha", fecha);
+                    datos.SetearParametro("@Hora", hora);
+                    datos.SetearParametro("@Observaciones", observaciones);
+
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("Error al modificar el turno", ex);
                 }
             }
         }
@@ -336,11 +362,14 @@ namespace Negocio
                     {
                         VerTurno aux = new VerTurno();
 
+                        aux.IdTurno = (int)datos.Lector["IdTurno"];
                         aux.Fecha = (DateTime)datos.Lector["Fecha"];
                         aux.Hora = (TimeSpan)datos.Lector["Hora"];
                         aux.Paciente = (string)datos.Lector["Paciente"];
                         aux.Medico = (string)datos.Lector["Medico"];
                         aux.Especialidad = (string)datos.Lector["Especialidad"];
+                        aux.TipoCobertura = datos.Lector["Cobertura"] is DBNull ? "" : (string)datos.Lector["Cobertura"];
+                        aux.NombreObraSocial = datos.Lector["NombreObraSocial"] is DBNull ? "" : (string)datos.Lector["NombreObraSocial"];
                         aux.Estado = (string)datos.Lector["Estado"];
 
                         lista.Add(aux);
@@ -473,28 +502,35 @@ namespace Negocio
 
             try
             {
-                datos.SetearConsulta(@"SELECT t.Id, t.Fecha, t.Hora, t.Observaciones, t.IdPaciente, t.IdMedico, t.IdEspecialidad, t.IdEstadoTurno
-                FROM Turno t
-                WHERE t.Id = @id
-                ");
+                datos.SetearConsulta(@"SELECT t.Id As IdTurno, t.Fecha, t.Hora, t.Observaciones, p.Id AS IdPaciente,p.IdCobertura,c.Tipo AS TipoCobertura,c.NombreObraSocial,t.IdMedico,t.IdEspecialidad,t.IdEstadoTurno
+                                        FROM Turno t
+                                        INNER JOIN Paciente p ON p.Id = t.IdPaciente
+                                        INNER JOIN Cobertura c ON c.Id = p.IdCobertura
+                                        WHERE t.Id = @idTurno");
 
-                datos.SetearParametro("@id", idTurno);
+
+                datos.SetearParametro("@IdTurno", idTurno);
                 datos.EjecutarLectura();
 
                 if (datos.Lector.Read())
                 {
                     Turno turno = new Turno();
-                    turno.Id = (int)datos.Lector["Id"];
+
+                    turno.Id = (int)datos.Lector["IdTurno"];
                     turno.Fecha = (DateTime)datos.Lector["Fecha"];
-                    turno.Hora = datos.Lector["Hora"] != DBNull.Value &&
-                                 TimeSpan.TryParse(datos.Lector["Hora"].ToString(), out var ts)
-                                     ? ts
-                                     : TimeSpan.Zero;
+                    turno.Hora = (TimeSpan)datos.Lector["Hora"];
                     turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value
                                           ? datos.Lector["Observaciones"].ToString()
                                           : "";
 
+
                     turno.Paciente = new Paciente { Id = (int)datos.Lector["IdPaciente"] };
+                    turno.Paciente.Cobertura = new Cobertura()
+                    {
+                        Id = (int)datos.Lector["IdCobertura"],
+                        Tipo = datos.Lector["TipoCobertura"].ToString(),
+                        NombreObraSocial = datos.Lector["NombreObrasocial"].ToString()
+                    };
                     turno.Medico = new Medico { Id = (int)datos.Lector["IdMedico"] };
                     turno.Especialidad = new Especialidad { Id = (int)datos.Lector["IdEspecialidad"] };
                     turno.Estado = new EstadoTurno { Id = (int)datos.Lector["IdEstadoTurno"] };
@@ -603,6 +639,70 @@ namespace Negocio
             }
         }
 
+        public Turno ObtenerTurnoParaEditar(int idTurno)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta(@"
+            SELECT 
+                T.Id,
+                T.Fecha,
+                T.Hora,
+                T.Observaciones,
+                T.IdPaciente,
+                T.IdMedico,
+                T.IdEspecialidad,
+                T.IdEstadoTurno,
+                C.Id AS IdCobertura,
+                C.Tipo AS TipoCobertura,
+                C.NombreObraSocial
+            FROM Turno T
+            INNER JOIN Paciente P ON P.Id = T.IdPaciente
+            INNER JOIN Cobertura C ON C.Id = P.IdCobertura
+            WHERE T.Id = @id");
+
+                    datos.SetearParametro("@id", idTurno);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                        Turno turno = new Turno();
+
+                        turno.Id = (int)datos.Lector["Id"];
+                        turno.Fecha = (DateTime)datos.Lector["Fecha"];
+                        turno.Hora = (TimeSpan)datos.Lector["Hora"];
+                        turno.Observaciones = datos.Lector["Observaciones"] is DBNull
+                                              ? ""
+                                              : (string)datos.Lector["Observaciones"];
+
+                        // ----- PACIENTE + COBERTURA -----
+                        turno.Paciente = new Paciente();
+                        turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
+
+                        turno.Paciente.Cobertura = new Cobertura();
+                        turno.Paciente.Cobertura.Id = (int)datos.Lector["IdCobertura"];
+                        turno.Paciente.Cobertura.Tipo = datos.Lector["TipoCobertura"].ToString();
+                        turno.Paciente.Cobertura.NombreObraSocial = datos.Lector["NombreObraSocial"].ToString();
+
+                        // ----- MÉDICO / ESP / ESTADO -----
+                        turno.Medico = new Medico { Id = (int)datos.Lector["IdMedico"] };
+                        turno.Especialidad = new Especialidad { Id = (int)datos.Lector["IdEspecialidad"] };
+                        turno.Estado = new EstadoTurno { Id = (int)datos.Lector["IdEstadoTurno"] };
+
+                        return turno;
+                    }
+
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al obtener el turno para editar", ex);
+                }
+            }
+        }
+
         public List<VerTurno> ListarVerTurnos()
         {
             List<VerTurno> lista = new List<VerTurno>();
@@ -633,7 +733,7 @@ namespace Negocio
                     {
                         VerTurno aux = new VerTurno
                         {
-                            Id = (int)datos.Lector["Id"],
+                            IdTurno = (int)datos.Lector["Id"],
                             Fecha = (DateTime)datos.Lector["Fecha"],
                             Hora = datos.Lector["Hora"] != DBNull.Value &&
                                    TimeSpan.TryParse(datos.Lector["Hora"].ToString(), out var ts)

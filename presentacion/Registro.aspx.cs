@@ -63,6 +63,7 @@ namespace presentacion
                 user.NombreUsuario = txtNombreUsuario.Text;
                 user.Clave = txtPassword.Text;
                 user.Activo = true;
+
                 //Instancia Pacientes
                 Paciente paciente = new Paciente();
                 paciente.Nombre = txtNombre.Text;
@@ -115,6 +116,7 @@ namespace presentacion
             }
             catch (Exception ex)
             {
+                string msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 lblMensaje.Text = "Error al registrar paciente: " + ex.InnerException.Message;
             }
         }

@@ -55,27 +55,7 @@ namespace Negocio
             return lista;
         }
 
-        /*public void Agregar(Medico nuevo)
-        {
-            using (Datos datos = new Datos())
-            {
-                try
-                {
-                    datos.SetearConsulta("INSERT INTO Medico (Nombre, Apellido, Matricula, Email, Telefono, IdUsuario) VALUES (@Nombre, @Apellido, @Matricula, @Email, @Matricula, @IdUsuario)");
-                    datos.SetearParametro("@Nombre", nuevo.Nombre);
-                    datos.SetearParametro("@Apellido", nuevo.Apellido);
-                    datos.SetearParametro("@Matricula", nuevo.Matricula);
-                    datos.SetearParametro("@Email", nuevo.Email);
-                    datos.SetearParametro("@Telefono", nuevo.Telefono);
-                    datos.SetearParametro("@IdUsuario", nuevo.IdUsuario);
-                    datos.EjecutarAccion();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error al agregar médico: " + ex.Message);
-                }
-            }
-        }*/
+
         public int Agregar(Medico nuevo)
         {
             using (Datos datos = new Datos())

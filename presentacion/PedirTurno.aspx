@@ -17,7 +17,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="turno-container">
-        <h2 class="text-center mb-4">📅 Pedir nuevo turno</h2>
+        <asp:Label ID="lblTitulo" runat="server" Text="📅 Pedir nuevo turno"></asp:Label>
 
         <!-- Especialidad -->
         <div class="mb-3">

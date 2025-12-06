@@ -21,12 +21,14 @@ namespace Dominio
 
     public class VerTurno
     {
-        public int Id { get; set; }
+        public int IdTurno { get; set; }
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }
         public string Paciente { get; set; }
         public string Medico { get; set; }
         public string Especialidad { get; set; }
+        public string TipoCobertura { get; set; }
+        public string NombreObraSocial { get; set; }
         public string Estado { get; set; }
     }
 }
