@@ -43,6 +43,7 @@ namespace presentacion
                     lnkPacientes.Visible = false;
                     lnkMedicos.Visible = false;
                     lnkGestionMedicos.Visible = true;
+                    lnkGestionPaciente.Visible = true;
                     lnkEspecialidades.Visible = true;
 
                     liTurnos.Visible = false;

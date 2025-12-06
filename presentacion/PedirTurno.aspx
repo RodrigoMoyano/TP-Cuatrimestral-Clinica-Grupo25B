@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="PedirTurno.aspx.cs" Inherits="presentacion.PedirTurno" %>
+﻿<%@ Page Title="Pedir Turno" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="PedirTurno.aspx.cs" Inherits="presentacion.PedirTurno" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         .turno-container {

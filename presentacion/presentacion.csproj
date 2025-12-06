@@ -32,6 +32,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,9 +71,11 @@
     <Content Include="css\misEstilos.css" />
     <Content Include="DetalleMedico.aspx" />
     <Content Include="EditarMedico.aspx" />
+    <Content Include="EditarPaciente.aspx" />
     <Content Include="EliminarMedico.aspx" />
     <Content Include="Especialidades.aspx" />
     <Content Include="GestionMedicos.aspx" />
+    <Content Include="GestionPaciente.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Imagenes\3662541.jpg" />
     <Content Include="Imagenes\calendario-menu.jpg" />
@@ -111,6 +115,13 @@
     <Compile Include="EditarMedico.aspx.designer.cs">
       <DependentUpon>EditarMedico.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EditarPaciente.aspx.cs">
+      <DependentUpon>EditarPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditarPaciente.aspx.designer.cs">
+      <DependentUpon>EditarPaciente.aspx</DependentUpon>
+    </Compile>
     <Compile Include="EliminarMedico.aspx.cs">
       <DependentUpon>EliminarMedico.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -131,6 +142,13 @@
     </Compile>
     <Compile Include="GestionMedicos.aspx.designer.cs">
       <DependentUpon>GestionMedicos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionPaciente.aspx.cs">
+      <DependentUpon>GestionPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GestionPaciente.aspx.designer.cs">
+      <DependentUpon>GestionPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

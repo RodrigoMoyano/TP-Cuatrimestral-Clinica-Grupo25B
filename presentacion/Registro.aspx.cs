@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.DynamicData;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Dominio;
-using Negocio;
 
 namespace presentacion
 {
@@ -18,6 +19,7 @@ namespace presentacion
             {
                 CargarDesplegables();
             }
+            bool esAdmin = Request.QueryString["admin"] == "1";
         }
 
         private void CargarDesplegables()
@@ -46,12 +48,15 @@ namespace presentacion
 
             try
             {
+                
+
                 //Validacion de errores de Pagina
                 Page.Validate();
                 if (!Page.IsValid)
                 {
                     return;
                 }
+                bool esAdmin = Request.QueryString["admin"] == "1";
 
                 //Instancia Usuario
                 Usuario user = new Usuario();
@@ -99,7 +104,14 @@ namespace presentacion
                 //llamado al metodo con todos los objetos
                 negocioPaciente.RegistrarPaciente(paciente);
 
-                Response.Redirect("Login.aspx?mensaje=registrado", false);
+                if (esAdmin)
+                {
+                    Response.Redirect("GestionPaciente.aspx?msg=agregado", false);
+                }
+                else
+                {
+                    Response.Redirect("Login.aspx?mensaje=registrado", false);
+                }
             }
             catch (Exception ex)
             {
