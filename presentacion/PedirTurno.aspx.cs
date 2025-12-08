@@ -196,164 +196,95 @@ namespace presentacion
         {
             try
             {
-                //Validaciones
-                if (ddlEspecialidad.SelectedValue == "0" || ddlMedico.SelectedValue == "0" || ddlHorario.SelectedValue == "")
+
+                LimpiarErrores();
+
+                bool hayError = false;
+
+                if (ddlEspecialidad.SelectedValue == "0")
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe completar todos los campos');", true);
-                    return;
+                    lblErrorEspecialidad.Text = "Debe seleccionar una especialidad.";
+                    lblErrorEspecialidad.Visible = true;
+                    hayError = true;
                 }
+
+                if (ddlMedico.SelectedValue == "0")
+                {
+                    lblErrorMedico.Text = "Debe seleccionar un médico.";
+                    lblErrorMedico.Visible = true;
+                    hayError = true;
+                }
+
                 if (calFecha.SelectedDate == DateTime.MinValue)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe seleccionar una fecha.');", true);
-                    return;
+                    lblErrorFecha.Text = "Debe seleccionar una fecha.";
+                    lblErrorFecha.Visible = true;
+                    hayError = true;
                 }
+
+                if (ddlHorario.SelectedValue == "")
+                {
+                    lblErrorHorario.Text = "Debe seleccionar un horario.";
+                    lblErrorHorario.Visible = true;
+                    hayError = true;
+                }
+
                 if (ddlCobertura.SelectedValue == "")
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe seleccionar una cobertura.');", true);
-                    return;
+                    lblErrorCobertura.Text = "Debe seleccionar una cobertura.";
+                    lblErrorCobertura.Visible = true;
+                    hayError = true;
                 }
-                if (ddlCobertura.SelectedValue == "Obra Social" && ddlObraSocial.SelectedValue == "")
+
+                if (ddlCobertura.SelectedValue == "Obra Social" &&
+                    ddlObraSocial.SelectedValue == "")
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Debe seleccionar una obra social.');", true);
-                    return;
+                    lblErrorObraSocial.Text = "Debe seleccionar una obra social.";
+                    lblErrorObraSocial.Visible = true;
+                    hayError = true;
                 }
+
+                if (hayError) return;
+
+
+
+                Usuario usuario = (Usuario)Session["Usuario"];
+
+
+                PacienteNegocio pacNeg = new PacienteNegocio();
+                int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
 
                 int idMedico = int.Parse(ddlMedico.SelectedValue);
                 int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
                 DateTime fecha = calFecha.SelectedDate;
                 TimeSpan hora = TimeSpan.Parse(ddlHorario.SelectedValue);
+
                 string observaciones = txtObservaciones.Text.Trim();
 
-                // Validación de fecha 
+
                 if (fecha.Date < DateTime.Now.Date)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Fecha inválida.');", true);
+                    MostrarError("No se puede seleccionar una fecha pasada.");
+                    return;
+                }
+
+                if (fecha.Date == DateTime.Now.Date && hora <= DateTime.Now.TimeOfDay)
+                {
+                    MostrarError("No se puede seleccionar una hora que ya pasó.");
                     return;
                 }
 
                 TurnoNegocio negocio = new TurnoNegocio();
-
-                if (ViewState["IdTurnoEditar"] != null)
-                {
-                    //Con Admin
-                    int idTurno = (int)ViewState["IdTurnoEditar"];
-
-                    negocio.Modificar(idTurno, idMedico, idEspecialidad, fecha, hora, observaciones);
-
-                    //Limpiamos el estado
-                    ViewState["IdTurnoEditar"] = null;
-                    btnConfirmar.Text = "Confirmar Turno";
-
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                        "alert('Turno reprogramado con éxito'); window.location='Turnos.aspx';", true);
-                }
-                else
-                {
-                    // Obtenemos el ID del Paciente para crear
-                    Usuario usuario = (Usuario)Session["usuario"];
-                    PacienteNegocio pacNeg = new PacienteNegocio();
-                    int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
-
-                    if (idPaciente == 0)
-                    {
-                        throw new Exception("Error: No se encontró el perfil del paciente.");
-                    }
-
-                    negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
+                negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
 
 
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert",
-                        "alert('Turno reservado con éxito'); window.location='MenuPaciente.aspx';", true);
-                }
+                Response.Redirect("MenuPaciente.aspx");
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
-                // Manejo de errores
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
+                MostrarError("Error al confirmar el turno: " + ex.Message);
             }
 
-            LimpiarErrores();
-
-            bool hayError = false;
-
-            if (ddlEspecialidad.SelectedValue == "0")
-            {
-                lblErrorEspecialidad.Text = "Debe seleccionar una especialidad.";
-                lblErrorEspecialidad.Visible = true;
-                hayError = true;
-            }
-
-            if (ddlMedico.SelectedValue == "0")
-            {
-                lblErrorMedico.Text = "Debe seleccionar un médico.";
-                lblErrorMedico.Visible = true;
-                hayError = true;
-            }
-
-            if (calFecha.SelectedDate == DateTime.MinValue)
-            {
-                lblErrorFecha.Text = "Debe seleccionar una fecha.";
-                lblErrorFecha.Visible = true;
-                hayError = true;
-            }
-
-            if (ddlHorario.SelectedValue == "")
-            {
-                lblErrorHorario.Text = "Debe seleccionar un horario.";
-                lblErrorHorario.Visible = true;
-                hayError = true;
-            }
-
-            if (ddlCobertura.SelectedValue == "")
-            {
-                lblErrorCobertura.Text = "Debe seleccionar una cobertura.";
-                lblErrorCobertura.Visible = true;
-                hayError = true;
-            }
-
-            if (ddlCobertura.SelectedValue == "Obra Social" &&
-                ddlObraSocial.SelectedValue == "")
-            {
-                lblErrorObraSocial.Text = "Debe seleccionar una obra social.";
-                lblErrorObraSocial.Visible = true;
-                hayError = true;
-            }
-
-            if (hayError) return;
-
-
-
-            Usuario usuario = (Usuario)Session["Usuario"];
-
-            
-            PacienteNegocio pacNeg = new PacienteNegocio();
-            int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
-
-            int idMedico = int.Parse(ddlMedico.SelectedValue);
-            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
-            DateTime fecha = calFecha.SelectedDate;
-            TimeSpan hora = TimeSpan.Parse(ddlHorario.SelectedValue);
-
-            string observaciones = txtObservaciones.Text.Trim();
-
-            
-            if (fecha.Date < DateTime.Now.Date)
-            {
-                MostrarError("No se puede seleccionar una fecha pasada.");
-                return;
-            }
-
-            if (fecha.Date == DateTime.Now.Date && hora <= DateTime.Now.TimeOfDay)
-            {
-                MostrarError("No se puede seleccionar una hora que ya pasó.");
-                return;
-            }
-
-            TurnoNegocio negocio = new TurnoNegocio();
-            negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
-
-            
-            Response.Redirect("MenuPaciente.aspx");
         }
         
         protected void calFecha_DayRender(object sender, DayRenderEventArgs e)

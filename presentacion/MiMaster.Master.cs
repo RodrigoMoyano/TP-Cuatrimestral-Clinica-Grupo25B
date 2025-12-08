@@ -81,6 +81,7 @@ namespace presentacion
 
                     liTurnos.Visible = false;
                     lnkGestionTurnos.Visible = false;
+                    lnkEspecialidades.Visible = true;
 
                     lnkMisTurnos.Visible = true;
                     lnkPedirTurno.Visible = true;

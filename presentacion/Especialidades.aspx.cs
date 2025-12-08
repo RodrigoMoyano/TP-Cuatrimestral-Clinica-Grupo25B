@@ -13,6 +13,7 @@ namespace presentacion
 {
     public partial class Especialidades : System.Web.UI.Page
     {
+       
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["usuario"] == null)
@@ -21,12 +22,18 @@ namespace presentacion
                 return;
             }
 
-            Usuario usuario = (Usuario)Session["Usuario"];
+             Usuario usuario = (Usuario)Session["Usuario"];
 
+            if (usuario.Rol != null && usuario.Rol.Id == 1)
+            {
+                btnAgregarEspecialidad.Visible = true;
+                repEspecialidades.Visible = true;
+
+            }
             if (!IsPostBack)
                 CargarEspecialidades();
+            
         }
-
 
         private void CargarEspecialidades()
         {
@@ -34,26 +41,30 @@ namespace presentacion
             repEspecialidades.DataSource = negocio.Listar();
             repEspecialidades.DataBind();
         }
-
-
-        public string GetImagenPorEspecialidad(string descripcion)
+        protected void btnAgregarEspecialidad_Click(object sender, EventArgs e)
         {
-            descripcion = descripcion.ToLower();
+            Response.Redirect("AgregarEspecialidad.aspx");
+        }
 
-            if (descripcion.Contains("clínica") || descripcion.Contains("clinica"))
-                return "https://clinicajaimeicatarroja.com/sites/default/files/imagen-servicio-principal/medicina-general.jpg";
+        protected void repEspecialidades_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item ||
+                e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                Usuario usuario = (Usuario)Session["Usuario"];
+                Button btnEditar = (Button)e.Item.FindControl("btnEditar");
 
-            if (descripcion.Contains("odont"))
-                return "https://tse4.mm.bing.net/th/id/OIP.447fweDx0FOExM1rLHPbIwHaE8?cb=ucfimg2ucfimg=1&w=950&h=634&rs=1&pid=ImgDetMain&o=7&rm=3";
+                btnEditar.Visible = (usuario.Rol.Id == 1);
+            }
+        }
 
-            if (descripcion.Contains("dermat"))
-                return "https://media.istockphoto.com/id/1152216276/es/foto/dermat%C3%B3logo-en-guantes-de-l%C3%A1tex-que-sostienen-dermatoscopio-mientras-examina-a-un-paciente.jpg?s=612x612&w=0&k=20&c=gnfv_Mns1FFwSOJaTvHC3OwKeTa6Du0s-SrNrzzWy6k=";
-
-            if (descripcion.Contains("cardio"))
-                return "https://tse1.explicit.bing.net/th/id/OIP.JTs0bo1Z1cElFZ5kdnmiQAHaFB?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3";
-
-            // Imagen por defecto
-            return "https://www.versatilis.com.br/wp-content/uploads/2023/04/patient-nurse-sitting-reception-desk-talking-female-receptionist-about-disease-diagnosis-healthcare-support-diverse-people-working-health-center-registration-counter-2-scaled.jpg";
+        protected void repEspecialidades_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "Editar")
+            {
+                int id = int.Parse(e.CommandArgument.ToString());
+                Response.Redirect($"EditarEspecialidad.aspx?Id={id}");
+            }
         }
 
     }

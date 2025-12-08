@@ -4,9 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     
-
-    
-   <asp:Button ID="btnIrRegistro" CssClass="btn btn-success mb-3"
+   <asp:Button ID="btnIrRegistro" CssClass="btn btn-primary mb-3"
     runat="server" Text="Agregar Paciente"
     OnClick="btnIrRegistro_Click" />
 

@@ -67,9 +67,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AgregarEspecialidad.aspx" />
     <Content Include="AgregarMedico.aspx" />
     <Content Include="css\misEstilos.css" />
     <Content Include="DetalleMedico.aspx" />
+    <Content Include="EditarEspecialidad.aspx" />
     <Content Include="EditarMedico.aspx" />
     <Content Include="EditarPaciente.aspx" />
     <Content Include="EliminarMedico.aspx" />
@@ -94,6 +96,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgregarEspecialidad.aspx.cs">
+      <DependentUpon>AgregarEspecialidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AgregarEspecialidad.aspx.designer.cs">
+      <DependentUpon>AgregarEspecialidad.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AgregarMedico.aspx.cs">
       <DependentUpon>AgregarMedico.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -107,6 +116,13 @@
     </Compile>
     <Compile Include="DetalleMedico.aspx.designer.cs">
       <DependentUpon>DetalleMedico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditarEspecialidad.aspx.cs">
+      <DependentUpon>EditarEspecialidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditarEspecialidad.aspx.designer.cs">
+      <DependentUpon>EditarEspecialidad.aspx</DependentUpon>
     </Compile>
     <Compile Include="EditarMedico.aspx.cs">
       <DependentUpon>EditarMedico.aspx</DependentUpon>
