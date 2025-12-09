@@ -12,13 +12,13 @@
     <link href="css/misEstilos.css" rel="stylesheet" />
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server">S
 
         <!-- NAVBAR GENERAL -->
         <asp:Panel ID="pnlNavbar" runat="server">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#/Menu.aspx">Clínica Médica</a>
+                    <a class="navbar-brand" href="/Menu.aspx">Clínica Médica</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNavAltMarkup"
                         aria-controls="navbarNavAltMarkup"
@@ -35,8 +35,7 @@
                             <li class="nav-item dropdown" id="liAdmin" runat="server" visible="false">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Administracion</a>
                                 <ul class="dropdown-menu">
-                                    <li> <asp:HyperLink ID="lnkPacientes" runat="server" CssClass="dropdown-item" NavigateUrl="~/Pacientes.aspx" Visible="false">Pacientes</asp:HyperLink></li>
-                                    <li><asp:HyperLink ID="lnkMedicos" runat="server" CssClass="dropdown-item" NavigateUrl="~/Medicos.aspx" Visible="false">Médicos</asp:HyperLink></li>
+                                    <li><asp:HyperLink ID="lnkGestionTurnos" runat="server" CssClass="dropdown-item" NavigateUrl="~/Turnos.aspx" Visible="false">Gestion de Turnos</asp:HyperLink></li>
                                     <li>
                                         <hr class="dropdown-divider" />
                                     </li>
@@ -49,8 +48,6 @@
                             <li class="nav-item dropdown" id="liTurnos" runat="server" visible="false">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Turnos</a>
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <asp:HyperLink ID="lnkGestionTurnos" runat="server" CssClass="dropdown-item" NavigateUrl="~/Turnos.aspx" Visible="false">Gestion de Turnos</asp:HyperLink></li>
 
                                     <li>
                                         <asp:HyperLink ID="lnkMisTurnos" runat="server" CssClass="dropdown-item" NavigateUrl="~/TurnoPaciente.aspx" Visible="false">Mis Turnos</asp:HyperLink></li>
@@ -58,7 +55,8 @@
                                         <asp:HyperLink ID="lnkPedirTurno" runat="server" CssClass="dropdown-item" NavigateUrl="~/PedirTurno.aspx" Visible="false">Solicitar Turno</asp:HyperLink></li>
                                 </ul>
                             </li>
-                            <li><asp:HyperLink ID="lnkPanelMedico" runat="server" CssClass="nav-link" NavigateUrl="~/PanelMedico.aspx" Visible="false">Panel Medico</asp:HyperLink></li>
+                            
+                            <asp:HyperLink ID="lnkPanelMedico" runat="server" CssClass="nav-link" NavigateUrl="~/PanelMedico.aspx" Visible="false">Panel Medico</asp:HyperLink>
                             <asp:HyperLink ID="lnkMenuPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/MenuPaciente.aspx" Visible="false">Turnos</asp:HyperLink>
                             <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink>
                             <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/SobreNosotros.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>

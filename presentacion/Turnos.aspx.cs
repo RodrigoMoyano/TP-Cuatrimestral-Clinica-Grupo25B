@@ -56,7 +56,7 @@ namespace presentacion
             dgvVerTurnos.DataSource = listaFiltrada;
             dgvVerTurnos.DataBind();
         }
-
+        //Repogramar y cancelar turno
         protected void dgvVerTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "Reprogramar")
@@ -65,23 +65,35 @@ namespace presentacion
                 Response.Redirect("PedirTurno.aspx?id=" + idTurno);
 
             }
-        }
+            if(e.CommandName == "Cancelar")
+            {
+                int idTurno = Convert.ToInt32(e.CommandArgument);
 
-        //protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    ddlCriterio.Items.Clear();
-        //    if (ddlCampo.SelectedIndex.ToString() == "Numero") 
-        //    {
-        //        ddlCriterio.Items.Add("Igual a");
-        //        ddlCriterio.Items.Add("Mayor a");
-        //        ddlCriterio.Items.Add("Menor a");
-        //    }
-        //    else
-        //    {
-        //        ddlCriterio.Items.Add("Contiene");
-        //        ddlCriterio.Items.Add("Comienza con");
-        //        ddlCriterio.Items.Add("Termina con");
-        //    }
-        //}
+                TurnoNegocio negocio = new TurnoNegocio();
+                negocio.CancelarTurno(idTurno);
+
+                CargarListaTurnos();
+            }
+        }
+        protected void dgvVerTurnos_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                VerTurno turno = (VerTurno)e.Row.DataItem;
+
+                LinkButton btnCancelar = (LinkButton)e.Row.FindControl("btnCancelar");
+                LinkButton btnReprogramar = (LinkButton)e.Row.FindControl("btnReprogramar");
+
+                if (turno.Estado == "Cancelado" ||
+                    turno.Estado == "No Asistió")
+                {
+                    btnCancelar.Visible = false;
+                }
+                if(turno.Estado == "Reprogramado")
+                {
+                    btnReprogramar.Visible = false;
+                }
+            }
+        }
     }
 }

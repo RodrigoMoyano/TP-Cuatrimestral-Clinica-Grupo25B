@@ -40,7 +40,8 @@
             CssClass="table table-striped table-hover"
             Width="100%"
             DataKeyNames="IdTurno"
-            OnRowCommand="dgvVerTurnos_RowCommand">
+            OnRowCommand="dgvVerTurnos_RowCommand"
+            OnRowDataBound="dgvVerTurnos_RowDataBound">
 
             <Columns>
                 <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
@@ -58,17 +59,11 @@
 
                 <asp:TemplateField HeaderText="Acción">
                     <ItemTemplate>
-                        <asp:LinkButton ID="btnReprogramar" runat="server"
-                            CssClass="btn btn-sm btn-warning"
-                            Text="Reprogramar"
-                            CausesValidation="false"
-                            CommandName="Reprogramar"
-                            CommandArgument='<%# Eval("IdTurno") %>'> 
-                        </asp:LinkButton>
+                        <asp:LinkButton ID="btnReprogramar" runat="server" CssClass="btn btn-sm btn-warning" Text="Reprogramar" CausesValidation="false" CommandName="Reprogramar" CommandArgument='<%# Eval("IdTurno") %>'></asp:LinkButton>
+                        <asp:LinkButton ID="btnCancelar" runat="server" Text="Cancelar" CommandName="Cancelar" CommandArgument='<%#Eval("IdTurno")%>' CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('Seguro que desea cancelar este turno?');"></asp:LinkButton>
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
         </asp:GridView>
     </div>
-
 </asp:Content>
