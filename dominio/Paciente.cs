@@ -16,12 +16,14 @@ namespace Dominio
         public string Dni { get; set; }
         public string Email { get; set; }
         public string Telefono { get; set; }
-       /* public int IdCobertura { get; set; }
-        public int IdUsuario { get; set; }*/
         public DateTime FechaNacimiento { get; set; }
 
         public Cobertura Cobertura { get; set; }
         public Usuario Usuario { get; set; }
+        public string ApellidoNombre
+        {
+            get { return $"{Apellido} {Nombre}"; }
+        }
 
 
     }

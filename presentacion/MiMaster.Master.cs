@@ -18,7 +18,7 @@ namespace presentacion
             {
                 if (!Seguridad.sessionActiva(Session["usuario"]))
                 {
-                    Response.Redirect("Login.aspx", false);
+                    Response.Redirect("LogIn.aspx", false);
                 }
             }
             //Oculto NavBar en LogIn.aspx

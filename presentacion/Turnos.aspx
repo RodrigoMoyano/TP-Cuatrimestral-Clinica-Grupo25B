@@ -25,16 +25,55 @@
         </div>
     </nav>
     <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
+    <div class="container-fluid">
 
-            <div class="d-flex gap-3" role="search">
-                <asp:Label ID="lblfiltro" runat="server" Text="Filtrar"></asp:Label>
-                <asp:TextBox ID="txtfiltro" AutoPostBack="true" OnTextChanged="txtfiltro_TextChanged" CssClass="form-control" runat="server">
-                </asp:TextBox>
+        <div class="d-flex justify-content-between align-items-center w-100">
+
+            <div class="d-flex align-items-center gap-4">
+
+                <!--Filtro Paciente -->
+                <div class="d-flex align-items-center gap-2">
+                    <asp:Label ID="lblfiltro" runat="server" Text="Paciente:"></asp:Label>
+                    <asp:TextBox ID="txtfiltro" runat="server"
+                        AutoPostBack="true"
+                        CssClass="form-control"
+                        OnTextChanged="txtfiltro_TextChanged"
+                        Style="width: 200px;">
+                    </asp:TextBox>
+                </div>
+
+                <!--Filtro Estado -->
+                <div class="d-flex align-items-center gap-2">
+                    <asp:Label ID="lblFitroEstado" runat="server" Text="Estado:"></asp:Label>
+                    <asp:DropDownList ID="ddlFiltroEstado" runat="server"
+                        AutoPostBack="true"
+                        CssClass="form-select"
+                        OnSelectedIndexChanged="ddlFiltroEstado_SelectedIndexChanged"
+                        Style="width: 200px;">
+                        <asp:ListItem Value="">Todos</asp:ListItem>
+                        <asp:ListItem Value="Nuevo">Nuevo</asp:ListItem>
+                        <asp:ListItem Value="Reprogramado">Reprogramado</asp:ListItem>
+                        <asp:ListItem Value="Cancelado">Cancelado</asp:ListItem>
+                        <asp:ListItem Value="No Asistió">No Asistió</asp:ListItem>
+                        <asp:ListItem Value="Cerrado">Cerrado</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+
             </div>
+
+            <div>
+                <asp:Button ID="btnAgregarTurno" runat="server"
+                    Text="Agregar Turno"
+                    CssClass="btn btn-primary"
+                    OnClick="btnAgregarTurno_Click" />
+            </div>
+
         </div>
-    </nav>
-    <div class="container mt-4">
+
+    </div>
+</nav>
+    <!--DGV-->
+    <div class="mb-3">
         <asp:GridView ID="dgvVerTurnos" runat="server"
             AutoGenerateColumns="false"
             CssClass="table table-striped table-hover"

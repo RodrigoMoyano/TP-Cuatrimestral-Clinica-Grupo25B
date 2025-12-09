@@ -529,7 +529,7 @@ namespace Negocio
                     {
                         Id = (int)datos.Lector["IdCobertura"],
                         Tipo = datos.Lector["TipoCobertura"].ToString(),
-                        NombreObraSocial = datos.Lector["NombreObrasocial"].ToString()
+                        NombreObraSocial = datos.Lector["NombreObraSocial"].ToString()
                     };
                     turno.Medico = new Medico { Id = (int)datos.Lector["IdMedico"] };
                     turno.Especialidad = new Especialidad { Id = (int)datos.Lector["IdEspecialidad"] };

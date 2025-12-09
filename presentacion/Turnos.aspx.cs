@@ -38,6 +38,7 @@ namespace presentacion
 
                 //dgvVerTurnos.DataSource = lista;
                 //dgvVerTurnos.DataBind();
+
             }
             catch (Exception ex)
             {
@@ -94,6 +95,33 @@ namespace presentacion
                     btnReprogramar.Visible = false;
                 }
             }
+        }
+
+        //Filtro desplegable por estado del turno
+        protected void ddlFiltroEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string estadoSeleccionado = ddlFiltroEstado.SelectedValue;
+
+            List<VerTurno> lista = (List<VerTurno>)Session["SpVerTurno"];
+
+            //Si no es nulo muestra por estado
+            if (!string.IsNullOrEmpty(estadoSeleccionado))
+            {
+                List<VerTurno> listaFiltrada = lista.FindAll(x => x.Estado.Equals(estadoSeleccionado, StringComparison.OrdinalIgnoreCase));
+
+                dgvVerTurnos.DataSource = listaFiltrada;
+            }
+            else
+            { 
+                //Me va a mostrar todo
+                dgvVerTurnos.DataSource = lista;
+            }
+            dgvVerTurnos.DataBind();
+        }
+
+        protected void btnAgregarTurno_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("AgregarTurno.aspx");
         }
     }
 }

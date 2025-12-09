@@ -175,7 +175,7 @@ namespace Negocio
                 catch (Exception ex)
                 {
 
-                    throw new Exception("Correo existente");
+                    throw new Exception("Correo existente", ex);
                 }
             }
         }

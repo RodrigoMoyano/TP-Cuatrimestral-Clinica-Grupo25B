@@ -12,13 +12,13 @@
     <link href="css/misEstilos.css" rel="stylesheet" />
 </head>
 <body>
-    <form id="form1" runat="server">S
+    <form id="form1" runat="server">
 
         <!-- NAVBAR GENERAL -->
         <asp:Panel ID="pnlNavbar" runat="server">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="/Menu.aspx">Clínica Médica</a>
+                    <a class="navbar-brand" href="/Menu.aspx">Clinica Medica</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNavAltMarkup"
                         aria-controls="navbarNavAltMarkup"
@@ -39,8 +39,11 @@
                                     <li>
                                         <hr class="dropdown-divider" />
                                     </li>
+                                    <li><asp:HyperLink ID="lnkGestionPaciente" runat="server" CssClass="dropdown-item" NavigateUrl="~/GestionPaciente.aspx" Visible="false">Gestion de Pacientes</asp:HyperLink></li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li> 
                                     <li><asp:HyperLink ID="lnkGestionMedicos" runat="server" CssClass="dropdown-item" NavigateUrl="~/GestionMedicos.aspx" Visible="false">Gestion de Medicos</asp:HyperLink></li>
-                                    
                                 </ul>
                             </li>
                             

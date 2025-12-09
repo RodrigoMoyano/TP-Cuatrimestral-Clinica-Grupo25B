@@ -21,7 +21,7 @@ namespace presentacion
             if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esAdmin(Session["usuario"]))
             {
                 Session.Add("error", "No tienes permisos para esta pantalla.");
-                Response.Redirect("Error.aspx", true);
+                Response.Redirect("LogIn.aspx", true);
             }
 
             if (!IsPostBack)

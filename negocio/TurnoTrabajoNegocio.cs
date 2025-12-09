@@ -61,8 +61,6 @@ namespace Negocio
             }
         }
 
-
-
      
         public List<TurnoTrabajo> ListarPorMedico(int idMedico)
         {
