@@ -292,6 +292,19 @@ namespace presentacion
                     return;
                 }
 
+                if (ViewState["IdTurnoEditar"] != null)
+                {
+                    int idTurno = (int)ViewState["IdTurnoEditar"];
+
+                    negocio.Modificar(idTurno, idMedico, idEspecialidad, fecha, hora, observaciones);
+
+                    ViewState["IdTurnoEditar"] = null;
+
+                    Response.Redirect("Turnos.aspx");
+                    return;
+                    
+                }
+
                 negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
 
                 Response.Redirect("MenuPaciente.aspx");

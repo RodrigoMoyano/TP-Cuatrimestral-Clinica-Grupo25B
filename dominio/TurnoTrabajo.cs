@@ -9,6 +9,8 @@ namespace Dominio
     public class TurnoTrabajo
     {
         public int Id { get; set; }
+
+        public int IdMedico { get; set; }
         public DayOfWeek DiaSemana { get; set; }
         public TimeSpan HoraInicio { get; set; }
         public TimeSpan HoraFin { get; set; }

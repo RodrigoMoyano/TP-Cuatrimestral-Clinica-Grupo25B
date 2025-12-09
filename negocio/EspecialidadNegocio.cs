@@ -15,7 +15,7 @@ namespace Negocio
 
             try
             {
-                SetearConsulta("SELECT Id, Descripcion FROM Especialidad");
+                SetearConsulta("SELECT Id, Descripcion , Imagen FROM Especialidad");
                 EjecutarLectura();
 
                 while (Lector.Read())
@@ -23,7 +23,8 @@ namespace Negocio
                     Especialidad aux = new Especialidad
                     {
                         Id = (int)Lector["Id"],
-                        Descripcion = Lector["Descripcion"].ToString()
+                        Descripcion = Lector["Descripcion"].ToString(),
+                        Imagen = Lector["Imagen"] == DBNull.Value ? null : Lector["Imagen"].ToString()
                     };
                     lista.Add(aux);
                 }
@@ -37,19 +38,42 @@ namespace Negocio
         {
             try
             {
-                SetearConsulta("INSERT INTO Especialidad (Descripcion) VALUES (@Descripcion)");
+                SetearConsulta("INSERT INTO Especialidad (Descripcion, Imagen) VALUES (@Descripcion, @Imagen)");
                 SetearParametro("@Descripcion", nueva.Descripcion);
+                SetearParametro("@Imagen", (object)nueva.Imagen ?? DBNull.Value);
                 EjecutarAccion();
             }
             finally { CerrarConexion(); }
+        }
+        public Especialidad BuscarPorId(int id)
+        {
+            Especialidad esp = null;
+            try
+            {
+                SetearConsulta("SELECT Id, Descripcion, Imagen FROM Especialidad WHERE Id = @Id");
+                SetearParametro("@Id", id);
+                EjecutarLectura();
+
+                if (Lector.Read())
+                {
+                    esp = new Especialidad();
+                    esp.Id = (int)Lector["Id"];
+                    esp.Descripcion = (string)Lector["Descripcion"];
+                    esp.Imagen = Lector["Imagen"] != DBNull.Value ? (string)Lector["Imagen"] : "";
+                }
+            }
+            finally { CerrarConexion(); }
+
+            return esp;
         }
 
         public void Modificar(Especialidad mod)
         {
             try
             {
-                SetearConsulta("UPDATE Especialidad SET Descripcion=@Descripcion WHERE Id=@Id");
+                SetearConsulta("UPDATE Especialidad SET Descripcion=@Descripcion, Imagen=@Imagen WHERE Id=@Id");
                 SetearParametro("@Descripcion", mod.Descripcion);
+                SetearParametro("@Imagen", mod.Imagen);
                 SetearParametro("@Id", mod.Id);
                 EjecutarAccion();
             }

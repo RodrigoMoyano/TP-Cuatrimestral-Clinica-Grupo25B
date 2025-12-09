@@ -40,18 +40,38 @@
     <div class="container mt-5">
         <h2 class="text-center text-primary mb-4">Especialidades de la Clínica</h2>
 
+        <div class="mb-4 text d-flex justify-content gap-2">
+            <asp:Button ID="btnAgregarEspecialidad" 
+                runat="server" 
+                Text="Agregar Especialidad" 
+                CssClass="btn btn-primary"
+                OnClick="btnAgregarEspecialidad_Click"
+                Visible="false" />
+
+            
+        </div>
+
         <div class="row row-cols-1 row-cols-md-2 g-4">
-            <asp:Repeater ID="repEspecialidades" runat="server">
+            <asp:Repeater ID="repEspecialidades" runat="server" OnItemCommand="repEspecialidades_ItemCommand">
                 <ItemTemplate>
                     <div class="col">
                         <div class="card h-100 card-especialidad">
-                            <img src='<%# GetImagenPorEspecialidad(Eval("Descripcion").ToString()) %>' 
-                                 class="card-img-top" alt='<%# Eval("Descripcion") %>' />
+                            <img src='<%# Eval("Imagen") %>' 
+                             class="card-img-top" 
+                             alt='<%# Eval("Descripcion") %>' />
                             <div class="card-body">
                                 <h5 class="card-title"><%# Eval("Descripcion") %></h5>
+                                <asp:Button ID="btnEditar"
+                                    runat="server"
+                                    Text="Editar"
+                                    CssClass="btn btn-primary btn-sm"
+                                    CommandName="Editar"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    Visible='<%# ((Dominio.Usuario)Session["Usuario"]).Rol.Id == 1 %>' />
                             </div>
                         </div>
                     </div>
+                   
                 </ItemTemplate>
             </asp:Repeater>
         </div>

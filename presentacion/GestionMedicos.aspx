@@ -17,7 +17,9 @@
         OnPageIndexChanging="gvMedicos_PageIndexChanging"
         OnRowCommand="gvMedicos_RowCommand"
         DataKeyNames="Id" CssClass="table table-striped">
+
         <Columns>
+
             <asp:BoundField DataField="Id" HeaderText="ID" />
             <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
             <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
@@ -25,16 +27,25 @@
             <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
             <asp:BoundField DataField="Email" HeaderText="Email" />
 
-            <asp:TemplateField HeaderText="Especialidad">
-    <ItemTemplate>
-        <%# FormatearEspecialidad(Eval("Especialidad")) %>
-    </ItemTemplate>
-</asp:TemplateField>
+
+            <asp:BoundField DataField="EspecialidadesTexto" HeaderText="Especialidades" />
+
+            <%--
+            <asp:TemplateField HeaderText="Disponibilidad">
+                <ItemTemplate>
+                    <asp:Label ID="lblDisponibilidad" runat="server"
+                        Text='<%# Eval("DisponibilidadTexto") %>'
+                        Style="white-space: pre-line;" />
+                </ItemTemplate>
+            </asp:TemplateField>
+            --%>
 
             <asp:ButtonField CommandName="Editar" Text="Editar" ButtonType="Button" />
             <asp:ButtonField CommandName="Eliminar" Text="Eliminar" ButtonType="Button" />
             <asp:ButtonField CommandName="Detalle" Text="Ver" ButtonType="Button" />
+
         </Columns>
+
     </asp:GridView>
 
 </asp:Content>

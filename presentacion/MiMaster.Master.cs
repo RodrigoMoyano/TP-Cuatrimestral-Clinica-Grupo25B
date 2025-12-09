@@ -41,6 +41,7 @@ namespace presentacion
 
                     liAdmin.Visible = true;
                     lnkGestionMedicos.Visible = true;
+                    lnkGestionPaciente.Visible = true;
                     lnkEspecialidades.Visible = true;
 
                     liTurnos.Visible = false;
@@ -78,6 +79,7 @@ namespace presentacion
 
                     liTurnos.Visible = false;
                     lnkGestionTurnos.Visible = false;
+                    lnkEspecialidades.Visible = true;
 
                     lnkMisTurnos.Visible = true;
                     lnkPedirTurno.Visible = true;
