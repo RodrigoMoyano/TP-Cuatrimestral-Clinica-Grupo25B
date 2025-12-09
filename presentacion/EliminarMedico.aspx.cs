@@ -8,6 +8,8 @@ namespace presentacion
 {
     public partial class EliminarMedico : System.Web.UI.Page
     {
+        private int idMedico;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -18,10 +20,9 @@ namespace presentacion
                     return;
                 }
 
-                int idMedico = (int)Session["IdMedicoEliminar"];
+                idMedico = (int)Session["IdMedicoEliminar"];
 
                 MedicoNegocio negocio = new MedicoNegocio();
-                // ✅ Forzamos el tipo del dominio para evitar el conflicto de namespace
                 Dominio.Medico medico = negocio.BuscarPorId(idMedico);
 
                 if (medico == null)
@@ -31,15 +32,19 @@ namespace presentacion
                     return;
                 }
 
+                
                 lblNombre.Text = medico.Nombre;
                 lblApellido.Text = medico.Apellido;
-                // ✅ Especialidad es lista: mostramos la primera si existe
-                lblEspecialidad.Text = (medico.Especialidad != null && medico.Especialidad.Any())
-                    ? medico.Especialidad.First().Descripcion
-                    : "Sin especialidad";
+
+                //  MOSTRAR TODAS LAS ESPECIALIDADES
+                if (medico.Especialidad != null && medico.Especialidad.Any())
+                    lblEspecialidad.Text = string.Join(", ", medico.Especialidad.Select(x => x.Descripcion));
+                else
+                    lblEspecialidad.Text = "Sin especialidad";
             }
         }
 
+       
         protected void btnConfirmar_Click(object sender, EventArgs e)
         {
             if (Session["IdMedicoEliminar"] == null)
@@ -48,22 +53,28 @@ namespace presentacion
                 return;
             }
 
-            int idMedico = (int)Session["IdMedicoEliminar"];
-            MedicoNegocio negocio = new MedicoNegocio();
+            idMedico = (int)Session["IdMedicoEliminar"];
 
             try
             {
-                negocio.Eliminar(idMedico); // ahora será eliminación lógica
+                MedicoNegocio negocio = new MedicoNegocio();
+
+                //  ELIMINACIÓN SEGURA (lógica)
+                negocio.Eliminar(idMedico);
+
                 Session.Remove("IdMedicoEliminar");
                 Response.Redirect("GestionMedicos.aspx");
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "error",
-                    $"alert('Error al eliminar: {ex.Message}');", true);
+                ScriptManager.RegisterStartupScript(
+                    this, GetType(), "error",
+                    $"alert('Error al eliminar: {ex.Message}');", true
+                );
             }
         }
 
+        
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
             Session.Remove("IdMedicoEliminar");

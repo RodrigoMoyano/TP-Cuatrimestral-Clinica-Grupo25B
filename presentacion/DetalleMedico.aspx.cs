@@ -12,6 +12,7 @@ namespace presentacion
         {
             if (!IsPostBack)
             {
+                // Validación de sesión
                 if (Session["IdMedicoDetalle"] == null)
                 {
                     Response.Redirect("GestionMedicos.aspx");
@@ -20,8 +21,9 @@ namespace presentacion
 
                 int idMedico = (int)Session["IdMedicoDetalle"];
 
+                // Buscar datos del médico
                 MedicoNegocio negocio = new MedicoNegocio();
-                Dominio.Medico medico = negocio.BuscarPorId(idMedico); // ✅ usamos Dominio.Medico
+                Dominio.Medico medico = negocio.BuscarPorId(idMedico);
 
                 if (medico == null)
                 {
@@ -30,6 +32,7 @@ namespace presentacion
                     return;
                 }
 
+                
                 lblId.Text = medico.Id.ToString();
                 lblNombre.Text = medico.Nombre;
                 lblApellido.Text = medico.Apellido;
@@ -37,14 +40,48 @@ namespace presentacion
                 lblEmail.Text = medico.Email;
                 lblTelefono.Text = medico.Telefono;
 
-                // ✅ Mostrar todas las especialidades separadas por coma
+               
                 if (medico.Especialidad != null && medico.Especialidad.Any())
                     lblEspecialidad.Text = string.Join(", ", medico.Especialidad.Select(esp => esp.Descripcion));
                 else
                     lblEspecialidad.Text = "Sin especialidades registradas";
+
+             
+                TurnoTrabajoNegocio turnoNegocio = new TurnoTrabajoNegocio();
+                var turnos = turnoNegocio.ListarPorMedico(idMedico);
+
+                if (turnos != null && turnos.Count > 0)
+                {
+                    lblDisponibilidad.Text = string.Join("<br/>",
+                        turnos.Select(t =>
+                            $"{TraducirDia(t.DiaSemana)} {t.HoraInicio:hh\\:mm} - {t.HoraFin:hh\\:mm}"
+                        )
+                    );
+                }
+                else
+                {
+                    lblDisponibilidad.Text = "Sin horarios cargados";
+                }
             }
         }
 
+        
+        private string TraducirDia(DayOfWeek dia)
+        {
+            switch (dia)
+            {
+                case DayOfWeek.Monday: return "Lunes";
+                case DayOfWeek.Tuesday: return "Martes";
+                case DayOfWeek.Wednesday: return "Miércoles";
+                case DayOfWeek.Thursday: return "Jueves";
+                case DayOfWeek.Friday: return "Viernes";
+                case DayOfWeek.Saturday: return "Sábado";
+                case DayOfWeek.Sunday: return "Domingo";
+                default: return dia.ToString();
+            }
+        }
+
+        
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Session.Remove("IdMedicoDetalle");

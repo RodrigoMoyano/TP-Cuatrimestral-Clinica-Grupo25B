@@ -1,52 +1,67 @@
 ﻿using Dominio;
 using Negocio;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace presentacion
 {
     public partial class EditarMedico : System.Web.UI.Page
     {
         private int idMedico;
+        private List<TurnoTrabajo> turnosTemp
+        {
+            get { return Session["TurnosTemp"] as List<TurnoTrabajo>; }
+            set { Session["TurnosTemp"] = value; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Page.UnobtrusiveValidationMode = System.Web.UI.UnobtrusiveValidationMode.None;
-
             if (Session["IdMedicoEditar"] == null)
-            {
                 Response.Redirect("GestionMedicos.aspx");
-                return;
-            }
 
             idMedico = (int)Session["IdMedicoEditar"];
 
             if (!IsPostBack)
             {
+                CargarHorarios();
                 CargarEspecialidades();
                 CargarMedico();
+            }
+        }
+
+        private void CargarHorarios()
+        {
+            TimeSpan h = TimeSpan.FromHours(8);
+            TimeSpan fin = TimeSpan.FromHours(20);
+
+            while (h <= fin)
+            {
+                string txt = h.ToString(@"hh\:mm");
+                ddlHoraInicio.Items.Add(new ListItem(txt, txt));
+                ddlHoraFin.Items.Add(new ListItem(txt, txt));
+                h = h.Add(TimeSpan.FromMinutes(30));
             }
         }
 
         private void CargarEspecialidades()
         {
             EspecialidadNegocio negocio = new EspecialidadNegocio();
-            ddlEspecialidad.DataSource = negocio.Listar();
-            ddlEspecialidad.DataValueField = "Id";
-            ddlEspecialidad.DataTextField = "Descripcion";
-            ddlEspecialidad.DataBind();
+            chkEspecialidades.DataSource = negocio.Listar();
+            chkEspecialidades.DataValueField = "Id";
+            chkEspecialidades.DataTextField = "Descripcion";
+            chkEspecialidades.DataBind();
         }
 
         private void CargarMedico()
         {
             MedicoNegocio negocio = new MedicoNegocio();
-            Dominio.Medico med = negocio.BuscarPorId(idMedico);
+            Medico med = negocio.BuscarPorId(idMedico);
 
             if (med == null)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                    "alert('El médico no existe.');", true);
                 Response.Redirect("GestionMedicos.aspx");
                 return;
             }
@@ -57,45 +72,134 @@ namespace presentacion
             txtTelefono.Text = med.Telefono;
             txtEmail.Text = med.Email;
 
-            // ✅ Seleccionamos la primera especialidad si existe
-            if (med.Especialidad != null && med.Especialidad.Any())
-                ddlEspecialidad.SelectedValue = med.Especialidad.First().Id.ToString();
+            // Marcar especialidades
+            foreach (var esp in med.Especialidad)
+            {
+                var item = chkEspecialidades.Items.FindByValue(esp.Id.ToString());
+                if (item != null)
+                    item.Selected = true;
+            }
+
+            // Cargar turnos al Session
+            turnosTemp = med.TurnosTrabajo ?? new List<TurnoTrabajo>();
+            gvTurnos.DataSource = turnosTemp;
+            gvTurnos.DataBind();
+
+            // Deshabilitar días ya ocupados
+            foreach (var t in turnosTemp)
+            {
+                var item = ddlDiaSemana.Items.FindByValue(((int)t.DiaSemana).ToString());
+                if (item != null) item.Enabled = false;
+            }
+        }
+
+        protected void btnAgregarTurno_Click(object sender, EventArgs e)
+        {
+            Page.Validate("Turno");
+            if (!Page.IsValid) return;
+
+            TimeSpan inicio = TimeSpan.Parse(ddlHoraInicio.SelectedValue);
+            TimeSpan fin = TimeSpan.Parse(ddlHoraFin.SelectedValue);
+
+            if (inicio >= fin)
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "La hora de inicio debe ser menor que la hora de fin.",
+                    ValidationGroup = "Turno"
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            TurnoTrabajo nuevo = new TurnoTrabajo
+            {
+                DiaSemana = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue),
+                HoraInicio = inicio,
+                HoraFin = fin,
+                IdMedico = idMedico
+            };
+
+            bool yaExiste = turnosTemp.Any(t =>
+                t.DiaSemana == nuevo.DiaSemana &&
+                t.HoraInicio == nuevo.HoraInicio &&
+                t.HoraFin == nuevo.HoraFin);
+
+            if (yaExiste)
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "Ese turno ya está cargado.",
+                    ValidationGroup = "Turno"
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            turnosTemp.Add(nuevo);
+            gvTurnos.DataSource = turnosTemp;
+            gvTurnos.DataBind();
+
+            // Deshabilitar el día elegido
+            ddlDiaSemana.Items.FindByValue(((int)nuevo.DiaSemana).ToString()).Enabled = false;
+        }
+
+        protected void gvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Eliminar")
+            {
+                int index = Convert.ToInt32(e.CommandArgument);
+                var eliminado = turnosTemp[index];
+                turnosTemp.RemoveAt(index);
+
+                gvTurnos.DataSource = turnosTemp;
+                gvTurnos.DataBind();
+
+                // Rehabilitar el día eliminado
+                var item = ddlDiaSemana.Items.FindByValue(((int)eliminado.DiaSemana).ToString());
+                if (item != null) item.Enabled = true;
+            }
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Dominio.Medico med = new Dominio.Medico
-                {
-                    Id = idMedico,
-                    Nombre = txtNombre.Text.Trim(),
-                    Apellido = txtApellido.Text.Trim(),
-                    Matricula = txtMatricula.Text.Trim(),
-                    Telefono = txtTelefono.Text.Trim(),
-                    Email = txtEmail.Text.Trim(),
-                    Especialidad = new System.Collections.Generic.List<Especialidad>
-                    {
-                        new Especialidad { Id = int.Parse(ddlEspecialidad.SelectedValue) }
-                    }
-                };
+            Page.Validate("Medico");
+            if (!Page.IsValid) return;
 
-                MedicoNegocio negocio = new MedicoNegocio();
-                negocio.Modificar(med);
-
-                Session.Remove("IdMedicoEditar");
-                Response.Redirect("GestionMedicos.aspx");
-            }
-            catch (Exception ex)
+            Medico med = new Medico
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "error",
-                    $"alert('Error al guardar: {ex.Message}');", true);
+                Id = idMedico,
+                Nombre = txtNombre.Text.Trim(),
+                Apellido = txtApellido.Text.Trim(),
+                Matricula = txtMatricula.Text.Trim(),
+                Telefono = txtTelefono.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Especialidad = new List<Especialidad>(),
+                TurnosTrabajo = turnosTemp
+            };
+
+            foreach (ListItem item in chkEspecialidades.Items)
+            {
+                if (item.Selected)
+                    med.Especialidad.Add(new Especialidad { Id = int.Parse(item.Value) });
             }
+
+            MedicoNegocio negocio = new MedicoNegocio();
+            negocio.Modificar(med);
+
+            TurnoTrabajoNegocio turnosNeg = new TurnoTrabajoNegocio();
+            turnosNeg.EliminarPorMedico(idMedico);
+
+            foreach (var t in turnosTemp)
+                turnosNeg.Agregar(t);
+
+            Response.Redirect("GestionMedicos.aspx");
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            Session.Remove("IdMedicoEditar");
             Response.Redirect("GestionMedicos.aspx");
         }
     }
