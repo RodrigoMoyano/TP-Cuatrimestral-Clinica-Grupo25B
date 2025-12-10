@@ -29,9 +29,15 @@
 
                 <asp:Button ID="btnEliminar" runat="server" Text="Eliminar"
                             CssClass="btn btn-danger" OnClick="btnEliminar_Click"
-                            OnClientClick="return confirm('¿Seguro que deseas eliminar esta especialidad?');" />
+                             />
 
                 <a href="Especialidades.aspx" class="btn btn-secondary">Volver</a>
+            </div>
+            <div class="alert alert-success" id="divExito" runat="server" visible="false">
+                ¡Especialidad editada con éxito!
+            </div>
+            <div class="alert alert-success" id="divEliminar" runat="server" visible="false">
+                ¡Especialidad eliminada con éxito!
             </div>
 
         </div>

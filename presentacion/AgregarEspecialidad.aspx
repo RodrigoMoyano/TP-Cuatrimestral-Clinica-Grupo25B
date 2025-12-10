@@ -26,6 +26,9 @@
             <asp:Button ID="btnCancelar" runat="server" CssClass="btn btn-secondary ms-2"
                         Text="Cancelar" OnClick="btnCancelar_Click" CausesValidation="false" />
         </div>
+        <div class="alert alert-success" id="divExito" runat="server" visible="false">
+            ¡Especialidad registrada con éxito!
+        </div>
 
         <asp:Label ID="lblMensaje" runat="server" CssClass="mt-2"></asp:Label>
     </div>

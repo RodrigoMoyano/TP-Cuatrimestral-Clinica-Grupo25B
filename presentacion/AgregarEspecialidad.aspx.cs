@@ -63,8 +63,12 @@ namespace presentacion
 
                 lblMensaje.CssClass = "text-success";
                 lblMensaje.Text = "Especialidad agregada correctamente.";
+
+                divExito.Visible = true;
+                ScriptManager.RegisterStartupScript(this, GetType(), "redir",
+                    "setTimeout(function(){ window.location = 'Especialidades.aspx'; }, 2000);", true);
+
                 
-                Response.Redirect("Especialidades.aspx");
             }
             catch (Exception ex)
             {

@@ -102,5 +102,8 @@
         <div class="text-center mt-4">
             <asp:Button ID="btnConfirmar" runat="server" CssClass="btn btn-primary px-4" Text="Confirmar turno" OnClick="btnConfirmar_Click" />
         </div>
+        <div class="alert alert-success" id="divExito" runat="server" visible="false">
+            ¡Turno registrado con éxito!
+        </div>
     </div>
 </asp:Content>

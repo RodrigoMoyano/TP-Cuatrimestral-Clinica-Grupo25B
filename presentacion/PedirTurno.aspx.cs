@@ -306,8 +306,10 @@ namespace presentacion
                 }
 
                 negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
-
-                Response.Redirect("MenuPaciente.aspx");
+                divExito.Visible = true;
+                ScriptManager.RegisterStartupScript(this, GetType(), "redir",
+                    "setTimeout(function(){ window.location = 'MenuPaciente.aspx'; }, 2000);", true);
+              
             }
             catch (Exception ex)
             {
