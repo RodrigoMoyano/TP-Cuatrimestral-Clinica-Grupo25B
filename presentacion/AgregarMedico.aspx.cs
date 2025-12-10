@@ -14,7 +14,7 @@ namespace presentacion
         {
             if (!IsPostBack)
             {
-                CargarRoles();
+
                 CargarEspecialidades();
                 CargarHorarios();
 
@@ -27,16 +27,7 @@ namespace presentacion
         //   CARGA INICIAL DE CONTROLES
         // ============================================================
 
-        private void CargarRoles()
-        {
-            RolNegocio rolNegocio = new RolNegocio();
 
-            ddlRol.DataSource = rolNegocio.Listar();
-            ddlRol.DataTextField = "Descripcion";
-            ddlRol.DataValueField = "Id";
-            ddlRol.DataBind();
-            ddlRol.Items.Insert(0, new ListItem("-- Seleccione un rol --", ""));
-        }
 
         private void CargarEspecialidades()
         {
@@ -81,7 +72,7 @@ namespace presentacion
                     NombreUsuario = txtUsuario.Text,
                     Clave = txtClave.Text,
                     Activo = true,
-                    Rol = new Rol { Id = int.Parse(ddlRol.SelectedValue) }
+                    Rol = new Rol { Id = 3 }
                 };
 
                 UsuarioNegocio negocio = new UsuarioNegocio();
@@ -173,12 +164,28 @@ namespace presentacion
         protected void btnGuardarMedico_Click(object sender, EventArgs e)
         {
             Page.Validate("Medico");
-            if (!Page.IsValid) return; // No guarda si hay errores
+            if (!Page.IsValid) return;
+
+            // 1️⃣ Validación: al menos un turno
+            List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
+
+            if (turnosTemp == null || turnosTemp.Count == 0)
+            {
+                vsMedico.HeaderText = "Debe agregar al menos un turno laboral antes de guardar";
+                return;
+            }
+
+            // 2️⃣ Validación: al menos una especialidad
+            bool tieneEspecialidad = chkEspecialidades.Items.Cast<ListItem>().Any(i => i.Selected);
+
+            if (!tieneEspecialidad)
+            {
+                vsMedico.HeaderText = "Debe seleccionar al menos una especialidad antes de guardar";
+                return;
+            }
 
             try
             {
-                List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
-
                 Medico medico = new Medico
                 {
                     Nombre = txtNombre.Text,
@@ -206,14 +213,48 @@ namespace presentacion
                     }
                 }
 
-                // Guardar médico
                 MedicoNegocio negocio = new MedicoNegocio();
                 int idMedico = negocio.Agregar(medico);
 
-                // Limpiar sesión
                 Session.Remove("TurnosTemp");
 
                 Response.Redirect("GestionMedicos.aspx", false);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex);
+                throw;
+            }
+        }
+
+        protected void btnCancelarUsuario_Click(object sender, EventArgs e)
+        {
+            // No se ha creado ningún usuario todavía
+            // Así que simplemente volvemos a la gestión de médicos
+
+            Response.Redirect("GestionMedicos.aspx");
+        }
+
+        protected void btnCancelarMedico_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1️⃣ Recupero el usuario que se creó en la etapa anterior
+                if (Session["idUsuario"] != null)
+                {
+                    int idUsuario = Convert.ToInt32(Session["idUsuario"]);
+
+                    // 2️⃣ Elimino el usuario de la base de datos
+                    UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+                    usuarioNegocio.Eliminar(idUsuario);
+                }
+
+                // 3️⃣ Limpio datos temporales
+                Session.Remove("idUsuario");
+                Session.Remove("TurnosTemp");
+
+                // 4️⃣ Vuelvo a Gestión de Médicos
+                Response.Redirect("GestionMedicos.aspx");
             }
             catch (Exception ex)
             {

@@ -49,19 +49,38 @@
         OnRowCommand="gvMedicos_RowCommand"
         DataKeyNames="Id" CssClass="table table-striped">
 
-        <Columns>
-            <asp:BoundField DataField="Id" HeaderText="ID" />
-            <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-            <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
-            <asp:BoundField DataField="Matricula" HeaderText="Matrícula" />
-            <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
-            <asp:BoundField DataField="Email" HeaderText="Email" />
-            <asp:BoundField DataField="EspecialidadesTexto" HeaderText="Especialidades" />
+       <Columns>
+    <asp:BoundField DataField="Id" HeaderText="ID" />
+    <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+    <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
+    <asp:BoundField DataField="Matricula" HeaderText="Matrícula" />
+    <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
+    <asp:BoundField DataField="Email" HeaderText="Email" />
+    <asp:BoundField DataField="EspecialidadesTexto" HeaderText="Especialidades" />
 
-            <asp:ButtonField CommandName="Editar" Text="Editar" ButtonType="Button" />
-            <asp:ButtonField CommandName="Eliminar" Text="Eliminar" ButtonType="Button" />
-            <asp:ButtonField CommandName="Detalle" Text="Ver" ButtonType="Button" />
-        </Columns>
+   
+    <asp:TemplateField HeaderText="Estado">
+        <ItemTemplate>
+            <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
+        </ItemTemplate>
+    </asp:TemplateField>
+
+    
+    <asp:TemplateField HeaderText="Acción">
+        <ItemTemplate>
+            <asp:Button ID="btnCambiarEstado" runat="server"
+                Text='<%# (bool)Eval("Activo") ? "Inactivar" : "Activar" %>'
+                CommandName="CambiarEstado"
+                CommandArgument='<%# Eval("Id") %>'
+                CssClass='<%# (bool)Eval("Activo") ? "btn btn-warning btn-sm" : "btn btn-success btn-sm" %>' />
+        </ItemTemplate>
+    </asp:TemplateField>
+
+    
+    <asp:ButtonField CommandName="Editar" Text="Editar" ButtonType="Button" />
+    <asp:ButtonField CommandName="Eliminar" Text="Eliminar" ButtonType="Button" />
+    <asp:ButtonField CommandName="Detalle" Text="Ver" ButtonType="Button" />
+</Columns>
     </asp:GridView>
 
 </asp:Content>

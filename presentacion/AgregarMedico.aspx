@@ -8,9 +8,7 @@
 
     <h2 class="mb-4">Alta de Médico</h2>
 
-    <!-- ============================
-         DATOS DE USUARIO (estructura original + validaciones)
-         ============================ -->
+   
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">Datos de Usuario</div>
         <div class="card-body">
@@ -34,33 +32,35 @@
                     CssClass="text-danger" ValidationGroup="Usuario" />
             </div>
 
-            <div class="mb-3">
-                <label for="ddlRol" class="form-label">Rol</label>
-                <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select"></asp:DropDownList>
-                <asp:RequiredFieldValidator ID="rfvRol" runat="server"
-                    ControlToValidate="ddlRol" InitialValue=""
-                    ErrorMessage="Debe seleccionar un rol"
-                    CssClass="text-danger" ValidationGroup="Usuario" />
-            </div>
+
 
             <asp:Button ID="btnGuardarUsuario" runat="server" Text="Guardar Usuario"
                 CssClass="btn btn-primary" OnClick="btnGuardarUsuario_Click"
                 ValidationGroup="Usuario" />
+            <asp:Button ID="btnCancelarUsuario" runat="server"
+                Text="Cancelar"
+                CssClass="btn btn-secondary ms-2"
+                OnClick="btnCancelarUsuario_Click"
+                CausesValidation="false" />
 
         </div>
     </div>
 
-    <!-- ============================
-         PANEL MÉDICO (estructura original + validaciones)
-         ============================ -->
+    
     <asp:Panel ID="pnlMedico" runat="server" Visible="false">
 
         <div class="card mb-4">
             <div class="card-header bg-success text-white">Datos del Médico</div>
             <div class="card-body">
 
-                <asp:ValidationSummary ID="vsMedico" runat="server" CssClass="text-danger mb-3"
-                    ValidationGroup="Medico" HeaderText="Errores en datos del médico:" />
+                <asp:ValidationSummary
+                    ID="vsMedico"
+                    runat="server"
+                    CssClass="text-danger mb-3"
+                    ValidationGroup="Medico"
+                    HeaderText="Errores en datos del médico:"
+                    ShowSummary="true"
+                    ShowMessageBox="false" />
 
                 <div class="mb-3">
                     <label for="txtNombre" class="form-label">Nombre</label>
@@ -96,10 +96,25 @@
 
                 <div class="mb-3">
                     <label for="txtEmail" class="form-label">Email</label>
+
                     <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvEmail" runat="server"
-                        ControlToValidate="txtEmail" ErrorMessage="El email es obligatorio"
-                        CssClass="text-danger" ValidationGroup="Medico" />
+
+                    <asp:RequiredFieldValidator
+                        ID="rfvEmail"
+                        runat="server"
+                        ControlToValidate="txtEmail"
+                        ErrorMessage="El email es obligatorio"
+                        CssClass="text-danger"
+                        ValidationGroup="Medico" />
+
+                    <asp:RegularExpressionValidator
+                        ID="revEmail"
+                        runat="server"
+                        ControlToValidate="txtEmail"
+                        ErrorMessage="Ingrese un email válido"
+                        CssClass="text-danger"
+                        ValidationGroup="Medico"
+                        ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" />
                 </div>
 
                 <div class="mb-3">
@@ -110,9 +125,7 @@
             </div>
         </div>
 
-        <!-- ============================
-             TURNOS DE TRABAJO (estructura original)
-             ============================ -->
+       
         <div class="card mb-4">
             <div class="card-header bg-info text-white">Turnos de trabajo</div>
             <div class="card-body">
@@ -156,9 +169,7 @@
             </div>
         </div>
 
-        <!-- ============================
-             TURNOS AGREGADOS (estructura original)
-             ============================ -->
+        
         <div class="card mb-4">
             <div class="card-header bg-dark text-white">Turnos agregados</div>
             <div class="card-body">
@@ -178,6 +189,11 @@
         <asp:Button ID="btnGuardarMedico" runat="server" Text="Guardar Médico"
             CssClass="btn btn-success" OnClick="btnGuardarMedico_Click"
             ValidationGroup="Medico" />
+        <asp:Button ID="btnCancelarMedico" runat="server"
+            Text="Cancelar"
+            CssClass="btn btn-secondary ms-2"
+            OnClick="btnCancelarMedico_Click"
+            CausesValidation="false" />
 
     </asp:Panel>
 

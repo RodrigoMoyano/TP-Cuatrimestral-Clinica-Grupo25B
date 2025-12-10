@@ -122,6 +122,24 @@ namespace presentacion
         // EDITAR / ELIMINAR / DETALLE
         protected void gvMedicos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            if (e.CommandName == "CambiarEstado")
+            {
+                int idMedico = Convert.ToInt32(e.CommandArgument);
+
+                MedicoNegocio negocio = new MedicoNegocio();
+                Medico medico = negocio.BuscarPorId(idMedico);
+
+                if (medico != null)
+                {
+                    bool nuevoEstado = !medico.Activo;   // si estaba activo -> inactivo, y viceversa
+                    negocio.CambiarEstado(idMedico, nuevoEstado);
+                    CargarGrilla();                      // refresca la grilla para ver el cambio
+                }
+
+                return; // salimos para no pasar al bloque de abajo
+            }
+
+
             if (e.CommandName == "Editar" ||
                 e.CommandName == "Eliminar" ||
                 e.CommandName == "Detalle")

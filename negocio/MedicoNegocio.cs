@@ -313,5 +313,16 @@ namespace Negocio
 
             return lista;
         }
+        //cambia solo estado en la BD
+        public void CambiarEstado(int idMedico, bool activo)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("UPDATE Medico SET Activo = @Activo WHERE Id = @Id");
+                datos.SetearParametro("@Activo", activo);
+                datos.SetearParametro("@Id", idMedico);
+                datos.EjecutarAccion();
+            }
+        }
     }
 }
