@@ -97,7 +97,7 @@
         DataKeyNames="Id">
 
         <Columns>
-            <asp:BoundField DataField="DiaSemana" HeaderText="Día" />
+            <asp:BoundField DataField="DiaSemanaTexto" HeaderText="Día" />
             <asp:BoundField DataField="HoraInicio" HeaderText="Inicio" />
             <asp:BoundField DataField="HoraFin" HeaderText="Fin" />
 

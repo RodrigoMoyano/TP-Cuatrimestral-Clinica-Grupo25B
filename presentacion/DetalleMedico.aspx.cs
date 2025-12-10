@@ -32,7 +32,7 @@ namespace presentacion
                     return;
                 }
 
-                
+
                 lblId.Text = medico.Id.ToString();
                 lblNombre.Text = medico.Nombre;
                 lblApellido.Text = medico.Apellido;
@@ -40,13 +40,13 @@ namespace presentacion
                 lblEmail.Text = medico.Email;
                 lblTelefono.Text = medico.Telefono;
 
-               
+
                 if (medico.Especialidad != null && medico.Especialidad.Any())
                     lblEspecialidad.Text = string.Join(", ", medico.Especialidad.Select(esp => esp.Descripcion));
                 else
                     lblEspecialidad.Text = "Sin especialidades registradas";
 
-             
+
                 TurnoTrabajoNegocio turnoNegocio = new TurnoTrabajoNegocio();
                 var turnos = turnoNegocio.ListarPorMedico(idMedico);
 
@@ -54,7 +54,7 @@ namespace presentacion
                 {
                     lblDisponibilidad.Text = string.Join("<br/>",
                         turnos.Select(t =>
-                            $"{TraducirDia(t.DiaSemana)} {t.HoraInicio:hh\\:mm} - {t.HoraFin:hh\\:mm}"
+                            $"{t.DiaSemanaTexto} {t.HoraInicio:hh\\:mm} - {t.HoraFin:hh\\:mm}"
                         )
                     );
                 }
@@ -65,7 +65,7 @@ namespace presentacion
             }
         }
 
-        
+
         private string TraducirDia(DayOfWeek dia)
         {
             switch (dia)
@@ -81,7 +81,7 @@ namespace presentacion
             }
         }
 
-        
+
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Session.Remove("IdMedicoDetalle");

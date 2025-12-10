@@ -19,6 +19,7 @@ namespace Dominio
         public List<TurnoTrabajo> TurnosTrabajo { get; set; }
 
         public Usuario Usuario { get; set; }
+        public bool Activo { get; set; }
 
         // ==============================
         //  ESPECIALIDADES EN TEXTO
@@ -50,7 +51,7 @@ namespace Dominio
                 foreach (var t in TurnosTrabajo)
                 {
                     // Podríamos pasarlo a español con CultureInfo, pero por ahora simple:
-                    string dia = t.DiaSemana.ToString(); // ej. "Monday"
+                    string dia = t.DiaSemanaTexto;
 
                     partes.Add($"{dia} {t.HoraInicio:hh\\:mm} - {t.HoraFin:hh\\:mm}");
                 }

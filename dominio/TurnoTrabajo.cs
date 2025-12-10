@@ -16,5 +16,7 @@ namespace Dominio
         public TimeSpan HoraFin { get; set; }
 
         public Medico Medico { get; set; }
+
+        public string DiaSemanaTexto { get; set; }
     }
 }

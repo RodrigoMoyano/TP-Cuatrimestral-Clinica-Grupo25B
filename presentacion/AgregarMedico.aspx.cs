@@ -35,6 +35,7 @@ namespace presentacion
             ddlRol.DataTextField = "Descripcion";
             ddlRol.DataValueField = "Id";
             ddlRol.DataBind();
+            ddlRol.Items.Insert(0, new ListItem("-- Seleccione un rol --", ""));
         }
 
         private void CargarEspecialidades()
@@ -70,6 +71,9 @@ namespace presentacion
 
         protected void btnGuardarUsuario_Click(object sender, EventArgs e)
         {
+            Page.Validate("Usuario");
+            if (!Page.IsValid) return; // No habilita panel si hay errores
+
             try
             {
                 Usuario usuario = new Usuario
@@ -94,21 +98,21 @@ namespace presentacion
             }
         }
 
-
-
+        // ============================================================
         //     BOTÓN: AGREGAR TURNO 
-
+        // ============================================================
 
         protected void btnAgregarTurno_Click(object sender, EventArgs e)
         {
+            Page.Validate("Turno");
+            if (!Page.IsValid) return;
+
             try
             {
-                // Validar selección de horarios
                 if (string.IsNullOrEmpty(ddlHoraInicio.SelectedValue) ||
                     string.IsNullOrEmpty(ddlHoraFin.SelectedValue))
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('Debe seleccionar hora de inicio y hora de fin.');", true);
+                    vsTurnos.HeaderText = "Debe seleccionar hora de inicio y hora de fin";
                     return;
                 }
 
@@ -117,22 +121,26 @@ namespace presentacion
 
                 if (inicio >= fin)
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('La hora de inicio debe ser menor que la hora de fin.');", true);
+                    vsTurnos.HeaderText = "La hora de inicio debe ser menor que la hora de fin";
                     return;
                 }
 
                 // Obtener lista temporal
                 List<TurnoTrabajo> lista = Session["TurnosTemp"] as List<TurnoTrabajo>;
 
+                DayOfWeek diaEnum = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue);
+                string diaTexto = new System.Globalization.CultureInfo("es-ES")
+                    .DateTimeFormat.GetDayName(diaEnum);
                 // Crear turno nuevo
                 TurnoTrabajo nuevo = new TurnoTrabajo
                 {
-                    DiaSemana = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue),
+                    DiaSemana = diaEnum,
+                    DiaSemanaTexto = diaTexto,
                     HoraInicio = inicio,
                     HoraFin = fin
                 };
-                // 🚦 Validación para evitar duplicados
+
+                // Validación para evitar duplicados
                 bool yaExiste = lista.Any(t =>
                     t.DiaSemana == nuevo.DiaSemana &&
                     t.HoraInicio == nuevo.HoraInicio &&
@@ -140,8 +148,7 @@ namespace presentacion
 
                 if (yaExiste)
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('Ese turno ya está cargado.');", true);
+                    vsTurnos.HeaderText = "Ese turno ya está cargado";
                     return;
                 }
 
@@ -155,11 +162,9 @@ namespace presentacion
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "error",
-                    $"alert('Error al agregar turno: {ex.Message}');", true);
+                vsTurnos.HeaderText = $"Error al agregar turno: {ex.Message}";
             }
         }
-
 
         // ============================================================
         //     GUARDAR MÉDICO DEFINITIVO
@@ -167,6 +172,9 @@ namespace presentacion
 
         protected void btnGuardarMedico_Click(object sender, EventArgs e)
         {
+            Page.Validate("Medico");
+            if (!Page.IsValid) return; // No guarda si hay errores
+
             try
             {
                 List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
@@ -178,10 +186,8 @@ namespace presentacion
                     Matricula = txtMatricula.Text,
                     Telefono = txtTelefono.Text,
                     Email = txtEmail.Text,
-
                     Especialidad = new List<Especialidad>(),
                     TurnosTrabajo = turnosTemp,
-
                     Usuario = new Usuario
                     {
                         Id = Convert.ToInt32(Session["idUsuario"])
@@ -203,10 +209,6 @@ namespace presentacion
                 // Guardar médico
                 MedicoNegocio negocio = new MedicoNegocio();
                 int idMedico = negocio.Agregar(medico);
-
-                // Guardar el turnoTrabjo del medico en tabla TurnoTrabajo en donde apareceran
-                //los turnos trabajos asociados al Id del medico
-
 
                 // Limpiar sesión
                 Session.Remove("TurnosTemp");

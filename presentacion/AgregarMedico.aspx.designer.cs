@@ -15,6 +15,15 @@ namespace presentacion
     {
 
         /// <summary>
+        /// vsUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsUsuario;
+
+        /// <summary>
         /// txtUsuario control.
         /// </summary>
         /// <remarks>
@@ -22,6 +31,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUsuario;
+
+        /// <summary>
+        /// rfvUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUsuario;
 
         /// <summary>
         /// txtClave control.
@@ -33,6 +51,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.TextBox txtClave;
 
         /// <summary>
+        /// rfvClave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvClave;
+
+        /// <summary>
         /// ddlRol control.
         /// </summary>
         /// <remarks>
@@ -40,6 +67,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRol;
+
+        /// <summary>
+        /// rfvRol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvRol;
 
         /// <summary>
         /// btnGuardarUsuario control.
@@ -60,6 +96,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.Panel pnlMedico;
 
         /// <summary>
+        /// vsMedico control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsMedico;
+
+        /// <summary>
         /// txtNombre control.
         /// </summary>
         /// <remarks>
@@ -67,6 +112,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
+
+        /// <summary>
+        /// rfvNombre control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombre;
 
         /// <summary>
         /// txtApellido control.
@@ -78,6 +132,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.TextBox txtApellido;
 
         /// <summary>
+        /// rfvApellido control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvApellido;
+
+        /// <summary>
         /// txtMatricula control.
         /// </summary>
         /// <remarks>
@@ -85,6 +148,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMatricula;
+
+        /// <summary>
+        /// rfvMatricula control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMatricula;
 
         /// <summary>
         /// txtTelefono control.
@@ -96,6 +168,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.TextBox txtTelefono;
 
         /// <summary>
+        /// rfvTelefono control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTelefono;
+
+        /// <summary>
         /// txtEmail control.
         /// </summary>
         /// <remarks>
@@ -105,6 +186,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.TextBox txtEmail;
 
         /// <summary>
+        /// rfvEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEmail;
+
+        /// <summary>
         /// chkEspecialidades control.
         /// </summary>
         /// <remarks>
@@ -112,6 +202,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList chkEspecialidades;
+
+        /// <summary>
+        /// vsTurnos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsTurnos;
 
         /// <summary>
         /// ddlDiaSemana control.
