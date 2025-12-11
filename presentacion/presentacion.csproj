@@ -91,6 +91,7 @@
     <Content Include="Pacientes.aspx" />
     <Content Include="PanelMedico.aspx" />
     <Content Include="PedirTurno.aspx" />
+    <Content Include="Perfil.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="SobreNosotros.aspx" />
     <Content Include="TurnoPaciente.aspx" />
@@ -252,6 +253,13 @@
     </Compile>
     <Compile Include="PedirTurno.aspx.designer.cs">
       <DependentUpon>PedirTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Perfil.aspx.cs">
+      <DependentUpon>Perfil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Perfil.aspx.designer.cs">
+      <DependentUpon>Perfil.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registro.aspx.cs">

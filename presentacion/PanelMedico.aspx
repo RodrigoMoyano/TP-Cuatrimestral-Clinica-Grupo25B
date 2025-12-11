@@ -7,8 +7,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <!-- TÍTULO PRINCIPAL -->
-    <h3 class="text-center mb-4" style="font-size: 32px; font-weight: bold;">
-        Panel del Médico
+    <h3 class="text-center mb-4" style="font-size: 32px; font-weight: bold;">Panel del Médico
     </h3>
 
     <!-- CARD INFORMACIÓN DEL MÉDICO -->
@@ -39,6 +38,51 @@
         </div>
 
         <div class="card-body">
+            <!-- 🔍 FILTROS -->
+<div class="row mb-3">
+
+    <!-- Filtro por paciente -->
+    <div class="col-md-4 mb-2">
+        <label><strong>Paciente:</strong></label>
+        <asp:TextBox ID="txtBuscarPaciente" runat="server"
+            CssClass="form-control"
+            AutoPostBack="true"
+            OnTextChanged="txtBuscarPaciente_TextChanged" />
+    </div>
+
+    <!-- Filtro por estado del turno -->
+    <div class="col-md-4 mb-2">
+        <label><strong>Estado del turno:</strong></label>
+        <asp:DropDownList ID="ddlEstado" runat="server"
+            CssClass="form-select"
+            AutoPostBack="true"
+            OnSelectedIndexChanged="ddlEstado_SelectedIndexChanged">
+
+            <asp:ListItem Value="0">Todos</asp:ListItem>
+            <asp:ListItem Value="Nuevo">Nuevo</asp:ListItem>
+            <asp:ListItem Value="Reprogramado">Reprogramado</asp:ListItem>
+            <asp:ListItem Value="Cancelado">Cancelado</asp:ListItem>
+            <asp:ListItem Value="No Asistió">No Asistió</asp:ListItem>
+            <asp:ListItem Value="Cerrado">Cerrado</asp:ListItem>
+
+        </asp:DropDownList>
+    </div>
+
+    <!-- Ordenar por fecha -->
+    <div class="col-md-4 mb-2">
+        <label><strong>Ordenar por fecha:</strong></label>
+        <asp:DropDownList ID="ddlOrdenFecha" runat="server"
+            CssClass="form-select"
+            AutoPostBack="true"
+            OnSelectedIndexChanged="ddlOrdenFecha_SelectedIndexChanged">
+            <asp:ListItem Value="desc">Más recientes primero</asp:ListItem>
+            <asp:ListItem Value="asc">Más antiguos primero</asp:ListItem>
+        </asp:DropDownList>
+    </div>
+
+</div>
+
+
 
             <asp:GridView
                 ID="gvTurnos"
@@ -60,7 +104,7 @@
 
                     <asp:TemplateField HeaderText="Paciente">
                         <ItemTemplate>
-                            <%# Eval("Paciente.Nombre") %>
+                            <%# Eval("Paciente.Nombre") + " " + Eval("Paciente.Apellido") %>
                         </ItemTemplate>
                     </asp:TemplateField>
 

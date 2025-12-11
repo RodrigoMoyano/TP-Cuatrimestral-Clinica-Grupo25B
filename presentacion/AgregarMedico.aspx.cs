@@ -64,9 +64,22 @@ namespace presentacion
         {
             Page.Validate("Usuario");
             if (!Page.IsValid) return; // No habilita panel si hay errores
+            lblErrorUsuario.Text = ""; // limpiar mensaje previo
 
             try
             {
+                UsuarioNegocio negocio = new UsuarioNegocio();
+
+                if (negocio.ExisteUsuario(txtUsuario.Text.Trim()))
+                {
+                    lblErrorUsuario.Text = "❌ El nombre de usuario ya existe. Elija otro.";
+                    return;
+                }
+
+                // Validar si el usuario ya existe
+
+
+
                 Usuario usuario = new Usuario
                 {
                     NombreUsuario = txtUsuario.Text,
@@ -75,12 +88,12 @@ namespace presentacion
                     Rol = new Rol { Id = 3 }
                 };
 
-                UsuarioNegocio negocio = new UsuarioNegocio();
                 int idUsuario = negocio.AgregarYObtenerId(usuario);
-
                 Session["idUsuario"] = idUsuario;
 
                 pnlMedico.Visible = true;
+
+               
             }
             catch (Exception ex)
             {
@@ -166,18 +179,21 @@ namespace presentacion
             Page.Validate("Medico");
             if (!Page.IsValid) return;
 
-            // 1️⃣ Validación: al menos un turno
-            List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
+            // Limpiar mensajes previos
+            lblErrorEmail.Text = "";
+            lblErrorMatricula.Text = "";
+            vsMedico.HeaderText = "";
 
+            // 1️⃣ Validación: al menos un turno laboral
+            List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
             if (turnosTemp == null || turnosTemp.Count == 0)
             {
                 vsMedico.HeaderText = "Debe agregar al menos un turno laboral antes de guardar";
                 return;
             }
 
-            // 2️⃣ Validación: al menos una especialidad
+            // 2️⃣ Validación: al menos una especialidad seleccionada
             bool tieneEspecialidad = chkEspecialidades.Items.Cast<ListItem>().Any(i => i.Selected);
-
             if (!tieneEspecialidad)
             {
                 vsMedico.HeaderText = "Debe seleccionar al menos una especialidad antes de guardar";
@@ -186,13 +202,30 @@ namespace presentacion
 
             try
             {
+                MedicoNegocio medicoNegocio = new MedicoNegocio();
+
+                // 3️⃣ Validación: email duplicado
+                if (medicoNegocio.ExisteEmail(txtEmail.Text.Trim()))
+                {
+                    lblErrorEmail.Text = "❌ El email ingresado ya está registrado.";
+                    return;
+                }
+
+                // 4️⃣ Validación: matrícula duplicada
+                if (medicoNegocio.ExisteMatricula(txtMatricula.Text.Trim()))
+                {
+                    lblErrorMatricula.Text = "❌ La matrícula ingresada ya está registrada.";
+                    return;
+                }
+
+                // 5️⃣ Crear objeto Médico
                 Medico medico = new Medico
                 {
-                    Nombre = txtNombre.Text,
-                    Apellido = txtApellido.Text,
-                    Matricula = txtMatricula.Text,
-                    Telefono = txtTelefono.Text,
-                    Email = txtEmail.Text,
+                    Nombre = txtNombre.Text.Trim(),
+                    Apellido = txtApellido.Text.Trim(),
+                    Matricula = txtMatricula.Text.Trim(),
+                    Telefono = txtTelefono.Text.Trim(),
+                    Email = txtEmail.Text.Trim(),
                     Especialidad = new List<Especialidad>(),
                     TurnosTrabajo = turnosTemp,
                     Usuario = new Usuario
@@ -202,6 +235,7 @@ namespace presentacion
                     IdUsuario = Convert.ToInt32(Session["idUsuario"])
                 };
 
+                // Agregar especialidades seleccionadas
                 foreach (ListItem item in chkEspecialidades.Items)
                 {
                     if (item.Selected)
@@ -213,11 +247,13 @@ namespace presentacion
                     }
                 }
 
-                MedicoNegocio negocio = new MedicoNegocio();
-                int idMedico = negocio.Agregar(medico);
+                // 6️⃣ Guardar médico en BD
+                int idMedico = medicoNegocio.Agregar(medico);
 
+                // Limpieza de sesión
                 Session.Remove("TurnosTemp");
 
+                // 7️⃣ Redirección
                 Response.Redirect("GestionMedicos.aspx", false);
             }
             catch (Exception ex)

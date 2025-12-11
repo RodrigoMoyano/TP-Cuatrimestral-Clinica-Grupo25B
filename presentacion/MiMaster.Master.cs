@@ -65,7 +65,7 @@ namespace presentacion
                 {
                     lnkMenu.Visible = true;
                     lnkMenuPacientes.Visible = true;
-
+                    lnkPerfil.Visible = true;
                     liAdmin.Visible = false;
 
                     liTurnos.Visible = false;

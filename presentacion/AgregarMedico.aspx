@@ -15,6 +15,7 @@
 
             <asp:ValidationSummary ID="vsUsuario" runat="server" CssClass="text-danger mb-3"
                 ValidationGroup="Usuario" HeaderText="Errores en datos de usuario:" />
+            <asp:Label ID="lblErrorUsuario" runat="server" CssClass="text-danger"></asp:Label>
 
             <div class="mb-3">
                 <label for="txtUsuario" class="form-label">Nombre de Usuario</label>
@@ -61,6 +62,8 @@
                     HeaderText="Errores en datos del médico:"
                     ShowSummary="true"
                     ShowMessageBox="false" />
+                <asp:Label ID="lblErrorEmail" runat="server" CssClass="text-danger"></asp:Label><br />
+                <asp:Label ID="lblErrorMatricula" runat="server" CssClass="text-danger"></asp:Label>
 
                 <div class="mb-3">
                     <label for="txtNombre" class="form-label">Nombre</label>

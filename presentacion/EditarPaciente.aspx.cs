@@ -1,4 +1,4 @@
-﻿using Dominio;
+using Dominio;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -81,16 +81,16 @@ namespace presentacion
             Paciente p = pacienteNegocio.ObtenerPorId(idPaciente);
             if (p == null) return;
 
-            // Usuario (cuidado con nulos)
+
             if (p.Usuario != null)
             {
                 txtIdUsuario.Text = p.Usuario.Id.ToString();
                 txtNombreUsuario.Text = p.Usuario.NombreUsuario;
 
-                // Mostrar contraseña
-                txtClave.Attributes["value"] = p.Usuario.Clave ?? "";
 
-                // Activo del usuario
+                txtPassword.Attributes["value"] = p.Usuario.Clave ?? "";
+
+
                 ddlActivoUsuario.SelectedValue = p.Usuario.Activo ? "true" : "false";
             }
             else
@@ -100,7 +100,7 @@ namespace presentacion
                 ddlActivoUsuario.SelectedValue = "true";
             }
 
-            // Paciente
+
             txtIdPaciente.Text = p.Id.ToString();
             txtNombre.Text = p.Nombre ?? "";
             txtApellido.Text = p.Apellido ?? "";
@@ -108,35 +108,30 @@ namespace presentacion
             txtEmail.Text = p.Email ?? "";
             txtTelefono.Text = p.Telefono ?? "";
 
+            if (p.Cobertura != null && p.Cobertura.Id > 1)
             
-
-            // Cobertura: si la cobertura del paciente viene cargada, setear el dropdown
-            if (p.Cobertura != null && p.Cobertura.Id > 0)
             {
-                ddlCobertura.SelectedValue = p.Cobertura.Tipo ?? "Particular";
-                if ((p.Cobertura.Tipo ?? "").Equals("Obra Social", StringComparison.OrdinalIgnoreCase))
-                {
-                    
-                    // Seleccionar por Id en ddlObrasSociales
-                    string idCob = p.Cobertura.Id.ToString();
-                    if (ddlObraSocial.Items.FindByValue(idCob) != null)
-                        ddlObraSocial.SelectedValue = idCob;
-                }
-                else
-                {
-                    
-                    ddlObraSocial.SelectedIndex = 0;
-                }
+                ddlCobertura.SelectedValue = "Obra Social";
+
+                
+                ddlObraSocial.Enabled = true;
+                ddlObraSocial.DataSource = coberturaNegocio.Listar().Where(x => x.Tipo == "Obra Social").ToList();
+                ddlObraSocial.DataTextField = "NombreObraSocial";
+                ddlObraSocial.DataValueField = "Id";
+                ddlObraSocial.DataBind();
+
+                
+                ddlObraSocial.SelectedValue = p.Cobertura.Id.ToString();
             }
             else
             {
-                // no tiene cobertura asignada
                 ddlCobertura.SelectedValue = "Particular";
-                
-                ddlObraSocial.SelectedIndex = 0;
+                ddlObraSocial.Items.Clear();
+                ddlObraSocial.Enabled = false;
             }
         }
-        
+
+
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("GestionPaciente.aspx");
@@ -152,14 +147,14 @@ namespace presentacion
                 if (u == null)
                     throw new Exception("No se encontró el usuario asociado.");
 
-                // 2) ACTUALIZAR SOLO LOS DATOS EDITADOS
+               
                 u.NombreUsuario = txtNombreUsuario.Text.Trim();
-                u.Clave = txtClave.Text.Trim();
+                u.Clave = txtPassword.Text.Trim();
                 u.Activo = ddlActivoUsuario.SelectedValue == "true";
 
                 usuarioNegocio.Modificar(u);
 
-                // 2) Actualizar Paciente
+                
                 Paciente p = new Paciente
                 {
                     Id = int.Parse(txtIdPaciente.Text),
@@ -171,7 +166,7 @@ namespace presentacion
                     Usuario = u
                 };
 
-                // asignar cobertura (por Id) si corresponde
+                
                 if (ddlCobertura.SelectedValue.Equals("Obra Social", StringComparison.OrdinalIgnoreCase)
                     && int.TryParse(ddlObraSocial.SelectedValue, out int idCob) && idCob > 0)
                 {
@@ -179,11 +174,11 @@ namespace presentacion
                 }
                 else
                 {
-                    // Particular -> no asignar Id (o asignar null)
-                    p.Cobertura = null;
+
+                    p.Cobertura = new Cobertura { Id = 1 };
                 }
 
-                pacienteNegocio.Modificar(p); // suponiendo que este método actualiza IdCobertura y demás
+                pacienteNegocio.Modificar(p); 
 
                 lblMensaje.ForeColor = System.Drawing.Color.Green;
                 lblMensaje.Text = "Datos guardados correctamente.";

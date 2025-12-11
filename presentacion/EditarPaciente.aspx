@@ -26,16 +26,19 @@
                 </div>
                 <div class="col-md-5">
                     <label class="form-label">Contraseña</label>
-                    <div class="input-group">
-                        <asp:TextBox ID="txtClave" runat="server" TextMode="Password" CssClass="form-control" />
-                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">
-                            <i id="iconEye" class="fa fa-eye"></i>
-                        </button>
+                        <div class="input-group">
+                            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" />
+
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">
+                                <span id="btnText">Mostrar</span>
+                            </button>
+                        </div>
                     </div>
+                
                 </div>
 
             </div>
-        </div>
+        
 
         <!-- ================= DATOS DEL PACIENTE ================= -->
         <div class="card mb-4">
@@ -123,20 +126,18 @@
 
     </div>
     <script>
-    function togglePassword() {
-        const txt = document.getElementById("<%= txtClave.ClientID %>");
-        const icon = document.getElementById("iconEye");
+        function togglePassword() {
+            const txt = document.getElementById("<%= txtPassword.ClientID %>");
+            const btnText = document.getElementById("btnText");
 
-        if (txt.type === "password") {
-            txt.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            txt.type = "password";
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
+            if (txt.type === "password") {
+                txt.type = "text";
+                btnText.innerText = "Ocultar";
+            } else {
+                txt.type = "password";
+                btnText.innerText = "Mostrar";
+            }
         }
-    }
     </script>
 
 </asp:Content>

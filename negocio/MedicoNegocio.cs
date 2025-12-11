@@ -324,5 +324,37 @@ namespace Negocio
                 datos.EjecutarAccion();
             }
         }
+
+        public bool ExisteEmail(string email)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT COUNT(*) FROM Medico WHERE Email = @Email");
+                    datos.SetearParametro("@Email", email);
+
+                    int count = datos.EjecutarAccionEscalar();
+                    return count > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al verificar email existente: " + ex.Message);
+                }
+            }
+        }
+
+        public bool ExisteMatricula(string matricula)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("SELECT COUNT(*) FROM Medico WHERE Matricula = @Matricula");
+                datos.SetearParametro("@Matricula", matricula);
+
+                int count = datos.EjecutarAccionEscalar();
+                return count > 0;
+            }
+        }
+
     }
 }

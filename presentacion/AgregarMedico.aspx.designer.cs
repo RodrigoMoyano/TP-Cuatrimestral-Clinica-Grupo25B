@@ -24,6 +24,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.ValidationSummary vsUsuario;
 
         /// <summary>
+        /// lblErrorUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorUsuario;
+
+        /// <summary>
         /// txtUsuario control.
         /// </summary>
         /// <remarks>
@@ -94,6 +103,24 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary vsMedico;
+
+        /// <summary>
+        /// lblErrorEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorEmail;
+
+        /// <summary>
+        /// lblErrorMatricula control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorMatricula;
 
         /// <summary>
         /// txtNombre control.

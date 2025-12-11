@@ -123,6 +123,25 @@ namespace Negocio
                 }
             }
         }
+        public void ModificarPerfil(Usuario usuario)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("UPDATE Usuario SET NombreUsuario=@NombreUsuario, Clave=@Clave,  IdRol=@IdRol WHERE Id=@Id");
+                    datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
+                    datos.SetearParametro("@Clave", usuario.Clave);
+                    datos.SetearParametro("@IdRol", usuario.Rol.Id);
+                    datos.SetearParametro("@Id", usuario.Id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al modificar usuario: " + ex.Message);
+                }
+            }
+        }
 
         public void Eliminar(int id)
         {
@@ -201,7 +220,7 @@ namespace Negocio
                 }
             }
         }
-        //Verificamos si el correo ya existe
+        
         public bool ExisteUsuario(string nombreUsuario)
         {
             using(Datos datos = new Datos())
@@ -239,7 +258,7 @@ namespace Negocio
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.SetearParametro("@IdRol", usuario.Rol.Id);
 
-                    int idGenerado = datos.EjecutarAccionEscalar(); // ✅ devuelve el identity
+                    int idGenerado = datos.EjecutarAccionEscalar(); 
                     usuario.Id = idGenerado;
                     return idGenerado;
                 }
@@ -304,6 +323,16 @@ namespace Negocio
             {
                 datos.CerrarConexion();
             }
+        }
+        public bool NombreUsuarioExiste(string nombre, int idActual)
+        {
+            Datos datos = new Datos();
+            datos.SetearConsulta("SELECT Id FROM Usuario WHERE NombreUsuario = @nombre AND Id <> @id");
+            datos.SetearParametro("@nombre", nombre);
+            datos.SetearParametro("@id", idActual);
+
+            datos.EjecutarLectura();
+            return datos.Lector.Read();
         }
 
 
