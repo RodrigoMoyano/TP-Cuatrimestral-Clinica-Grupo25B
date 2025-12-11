@@ -14,7 +14,7 @@ namespace presentacion
         {
             if (!IsPostBack)
             {
-                CargarRoles();
+
                 CargarEspecialidades();
                 CargarHorarios();
 
@@ -27,15 +27,7 @@ namespace presentacion
         //   CARGA INICIAL DE CONTROLES
         // ============================================================
 
-        private void CargarRoles()
-        {
-            RolNegocio rolNegocio = new RolNegocio();
 
-            ddlRol.DataSource = rolNegocio.Listar();
-            ddlRol.DataTextField = "Descripcion";
-            ddlRol.DataValueField = "Id";
-            ddlRol.DataBind();
-        }
 
         private void CargarEspecialidades()
         {
@@ -70,6 +62,9 @@ namespace presentacion
 
         protected void btnGuardarUsuario_Click(object sender, EventArgs e)
         {
+            Page.Validate("Usuario");
+            if (!Page.IsValid) return; // No habilita panel si hay errores
+
             try
             {
                 Usuario usuario = new Usuario
@@ -77,7 +72,7 @@ namespace presentacion
                     NombreUsuario = txtUsuario.Text,
                     Clave = txtClave.Text,
                     Activo = true,
-                    Rol = new Rol { Id = int.Parse(ddlRol.SelectedValue) }
+                    Rol = new Rol { Id = 3 }
                 };
 
                 UsuarioNegocio negocio = new UsuarioNegocio();
@@ -94,21 +89,21 @@ namespace presentacion
             }
         }
 
-
-
+        // ============================================================
         //     BOTÓN: AGREGAR TURNO 
-
+        // ============================================================
 
         protected void btnAgregarTurno_Click(object sender, EventArgs e)
         {
+            Page.Validate("Turno");
+            if (!Page.IsValid) return;
+
             try
             {
-                // Validar selección de horarios
                 if (string.IsNullOrEmpty(ddlHoraInicio.SelectedValue) ||
                     string.IsNullOrEmpty(ddlHoraFin.SelectedValue))
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('Debe seleccionar hora de inicio y hora de fin.');", true);
+                    vsTurnos.HeaderText = "Debe seleccionar hora de inicio y hora de fin";
                     return;
                 }
 
@@ -117,22 +112,26 @@ namespace presentacion
 
                 if (inicio >= fin)
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('La hora de inicio debe ser menor que la hora de fin.');", true);
+                    vsTurnos.HeaderText = "La hora de inicio debe ser menor que la hora de fin";
                     return;
                 }
 
                 // Obtener lista temporal
                 List<TurnoTrabajo> lista = Session["TurnosTemp"] as List<TurnoTrabajo>;
 
+                DayOfWeek diaEnum = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue);
+                string diaTexto = new System.Globalization.CultureInfo("es-ES")
+                    .DateTimeFormat.GetDayName(diaEnum);
                 // Crear turno nuevo
                 TurnoTrabajo nuevo = new TurnoTrabajo
                 {
-                    DiaSemana = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue),
+                    DiaSemana = diaEnum,
+                    DiaSemanaTexto = diaTexto,
                     HoraInicio = inicio,
                     HoraFin = fin
                 };
-                // 🚦 Validación para evitar duplicados
+
+                // Validación para evitar duplicados
                 bool yaExiste = lista.Any(t =>
                     t.DiaSemana == nuevo.DiaSemana &&
                     t.HoraInicio == nuevo.HoraInicio &&
@@ -140,8 +139,7 @@ namespace presentacion
 
                 if (yaExiste)
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('Ese turno ya está cargado.');", true);
+                    vsTurnos.HeaderText = "Ese turno ya está cargado";
                     return;
                 }
 
@@ -155,11 +153,9 @@ namespace presentacion
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "error",
-                    $"alert('Error al agregar turno: {ex.Message}');", true);
+                vsTurnos.HeaderText = $"Error al agregar turno: {ex.Message}";
             }
         }
-
 
         // ============================================================
         //     GUARDAR MÉDICO DEFINITIVO
@@ -167,10 +163,29 @@ namespace presentacion
 
         protected void btnGuardarMedico_Click(object sender, EventArgs e)
         {
+            Page.Validate("Medico");
+            if (!Page.IsValid) return;
+
+            // 1️⃣ Validación: al menos un turno
+            List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
+
+            if (turnosTemp == null || turnosTemp.Count == 0)
+            {
+                vsMedico.HeaderText = "Debe agregar al menos un turno laboral antes de guardar";
+                return;
+            }
+
+            // 2️⃣ Validación: al menos una especialidad
+            bool tieneEspecialidad = chkEspecialidades.Items.Cast<ListItem>().Any(i => i.Selected);
+
+            if (!tieneEspecialidad)
+            {
+                vsMedico.HeaderText = "Debe seleccionar al menos una especialidad antes de guardar";
+                return;
+            }
+
             try
             {
-                List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
-
                 Medico medico = new Medico
                 {
                     Nombre = txtNombre.Text,
@@ -178,10 +193,8 @@ namespace presentacion
                     Matricula = txtMatricula.Text,
                     Telefono = txtTelefono.Text,
                     Email = txtEmail.Text,
-
                     Especialidad = new List<Especialidad>(),
                     TurnosTrabajo = turnosTemp,
-
                     Usuario = new Usuario
                     {
                         Id = Convert.ToInt32(Session["idUsuario"])
@@ -200,18 +213,48 @@ namespace presentacion
                     }
                 }
 
-                // Guardar médico
                 MedicoNegocio negocio = new MedicoNegocio();
                 int idMedico = negocio.Agregar(medico);
 
-                // Guardar el turnoTrabjo del medico en tabla TurnoTrabajo en donde apareceran
-                //los turnos trabajos asociados al Id del medico
-
-
-                // Limpiar sesión
                 Session.Remove("TurnosTemp");
 
                 Response.Redirect("GestionMedicos.aspx", false);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex);
+                throw;
+            }
+        }
+
+        protected void btnCancelarUsuario_Click(object sender, EventArgs e)
+        {
+            // No se ha creado ningún usuario todavía
+            // Así que simplemente volvemos a la gestión de médicos
+
+            Response.Redirect("GestionMedicos.aspx");
+        }
+
+        protected void btnCancelarMedico_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1️⃣ Recupero el usuario que se creó en la etapa anterior
+                if (Session["idUsuario"] != null)
+                {
+                    int idUsuario = Convert.ToInt32(Session["idUsuario"]);
+
+                    // 2️⃣ Elimino el usuario de la base de datos
+                    UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+                    usuarioNegocio.Eliminar(idUsuario);
+                }
+
+                // 3️⃣ Limpio datos temporales
+                Session.Remove("idUsuario");
+                Session.Remove("TurnosTemp");
+
+                // 4️⃣ Vuelvo a Gestión de Médicos
+                Response.Redirect("GestionMedicos.aspx");
             }
             catch (Exception ex)
             {

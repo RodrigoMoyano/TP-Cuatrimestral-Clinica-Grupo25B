@@ -6,7 +6,7 @@ namespace Negocio
 {
     public class TurnoTrabajoNegocio : Datos
     {
-        
+
         public List<TurnoTrabajo> Listar()
         {
             List<TurnoTrabajo> lista = new List<TurnoTrabajo>();
@@ -37,7 +37,8 @@ namespace Negocio
                         {
                             Id = (int)datos.Lector["Id"],
                             IdMedico = (int)datos.Lector["IdMedico"],
-                            DiaSemana = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), datos.Lector["DiaSemana"].ToString()),
+                            //DiaSemana = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), datos.Lector["DiaSemana"].ToString()),
+                            DiaSemanaTexto = datos.Lector["DiaSemana"].ToString(),
                             HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
                             HoraFin = (TimeSpan)datos.Lector["HoraFin"],
 
@@ -61,7 +62,7 @@ namespace Negocio
             }
         }
 
-     
+
         public List<TurnoTrabajo> ListarPorMedico(int idMedico)
         {
             List<TurnoTrabajo> lista = new List<TurnoTrabajo>();
@@ -89,7 +90,8 @@ namespace Negocio
                     {
                         Id = (int)datos.Lector["Id"],
                         IdMedico = (int)datos.Lector["IdMedico"],
-                        DiaSemana = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), datos.Lector["DiaSemana"].ToString()),
+                        //DiaSemana = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), datos.Lector["DiaSemana"].ToString()),
+                        DiaSemanaTexto = datos.Lector["DiaSemana"].ToString(),
                         HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
                         HoraFin = (TimeSpan)datos.Lector["HoraFin"]
                     });
@@ -113,7 +115,7 @@ namespace Negocio
                     ");
 
                     datos.SetearParametro("@IdMedico", turno.IdMedico);
-                    datos.SetearParametro("@DiaSemana", turno.DiaSemana.ToString());
+                    datos.SetearParametro("@DiaSemana", turno.DiaSemanaTexto);
                     datos.SetearParametro("@HoraInicio", turno.HoraInicio);
                     datos.SetearParametro("@HoraFin", turno.HoraFin);
 
@@ -128,7 +130,7 @@ namespace Negocio
 
 
 
-     
+
         public void Modificar(TurnoTrabajo turno)
         {
             using (Datos datos = new Datos())
@@ -146,7 +148,7 @@ namespace Negocio
                     ");
 
                     datos.SetearParametro("@IdMedico", turno.IdMedico);
-                    datos.SetearParametro("@DiaSemana", turno.DiaSemana.ToString());
+                    datos.SetearParametro("@DiaSemana", turno.DiaSemanaTexto);
                     datos.SetearParametro("@HoraInicio", turno.HoraInicio);
                     datos.SetearParametro("@HoraFin", turno.HoraFin);
                     datos.SetearParametro("@Id", turno.Id);

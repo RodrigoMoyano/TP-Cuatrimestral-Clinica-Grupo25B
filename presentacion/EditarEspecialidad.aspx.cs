@@ -64,8 +64,10 @@ namespace presentacion
 
             EspecialidadNegocio negocio = new EspecialidadNegocio();
             negocio.Modificar(esp);
-
-            Response.Redirect("Especialidades.aspx");
+            divExito.Visible = true;
+            ScriptManager.RegisterStartupScript(this, GetType(), "redir",
+                "setTimeout(function(){ window.location = 'Especialidades.aspx'; }, 2000);", true);
+            /*Response.Redirect("Especialidades.aspx");*/
         }
 
         protected void btnEliminar_Click(object sender, EventArgs e)
@@ -73,7 +75,10 @@ namespace presentacion
             EspecialidadNegocio negocio = new EspecialidadNegocio();
             negocio.Eliminar(idEspecialidad);
 
-            Response.Redirect("Especialidades.aspx");
+            divEliminar.Visible = true;
+            ScriptManager.RegisterStartupScript(this, GetType(), "redir",
+                "setTimeout(function(){ window.location = 'Especialidades.aspx'; }, 2000);", true);
+            /*Response.Redirect("Especialidades.aspx");*/
         }
     }
 }

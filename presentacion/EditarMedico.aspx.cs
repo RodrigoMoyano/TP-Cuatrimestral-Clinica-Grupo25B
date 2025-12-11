@@ -11,6 +11,7 @@ namespace presentacion
     public partial class EditarMedico : System.Web.UI.Page
     {
         private int idMedico;
+
         private List<TurnoTrabajo> turnosTemp
         {
             get { return Session["TurnosTemp"] as List<TurnoTrabajo>; }
@@ -72,7 +73,6 @@ namespace presentacion
             txtTelefono.Text = med.Telefono;
             txtEmail.Text = med.Email;
 
-            // Marcar especialidades
             foreach (var esp in med.Especialidad)
             {
                 var item = chkEspecialidades.Items.FindByValue(esp.Id.ToString());
@@ -80,16 +80,16 @@ namespace presentacion
                     item.Selected = true;
             }
 
-            // Cargar turnos al Session
             turnosTemp = med.TurnosTrabajo ?? new List<TurnoTrabajo>();
             gvTurnos.DataSource = turnosTemp;
             gvTurnos.DataBind();
 
-            // Deshabilitar días ya ocupados
+            // DESHABILITAR DÍAS YA ELEGIDOS — CORREGIDO
             foreach (var t in turnosTemp)
             {
-                var item = ddlDiaSemana.Items.FindByValue(((int)t.DiaSemana).ToString());
-                if (item != null) item.Enabled = false;
+                var item = ddlDiaSemana.Items.FindByText(t.DiaSemanaTexto);
+                if (item != null)
+                    item.Enabled = false;
             }
         }
 
@@ -116,15 +116,17 @@ namespace presentacion
             TurnoTrabajo nuevo = new TurnoTrabajo
             {
                 DiaSemana = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue),
+                DiaSemanaTexto = ddlDiaSemana.SelectedItem.Text,   // ✔ CORREGIDO
                 HoraInicio = inicio,
                 HoraFin = fin,
                 IdMedico = idMedico
             };
 
             bool yaExiste = turnosTemp.Any(t =>
-                t.DiaSemana == nuevo.DiaSemana &&
+                t.DiaSemanaTexto == nuevo.DiaSemanaTexto &&
                 t.HoraInicio == nuevo.HoraInicio &&
-                t.HoraFin == nuevo.HoraFin);
+                t.HoraFin == nuevo.HoraFin
+            );
 
             if (yaExiste)
             {
@@ -142,8 +144,8 @@ namespace presentacion
             gvTurnos.DataSource = turnosTemp;
             gvTurnos.DataBind();
 
-            // Deshabilitar el día elegido
-            ddlDiaSemana.Items.FindByValue(((int)nuevo.DiaSemana).ToString()).Enabled = false;
+            // DESHABILITAR DÍA SELECCIONADO — CORREGIDO
+            ddlDiaSemana.Items.FindByText(nuevo.DiaSemanaTexto).Enabled = false;
         }
 
         protected void gvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -157,17 +159,15 @@ namespace presentacion
                 gvTurnos.DataSource = turnosTemp;
                 gvTurnos.DataBind();
 
-                // Rehabilitar el día eliminado
-                var item = ddlDiaSemana.Items.FindByValue(((int)eliminado.DiaSemana).ToString());
-                if (item != null) item.Enabled = true;
+                // REHABILITAR DÍA — CORREGIDO
+                var item = ddlDiaSemana.Items.FindByText(eliminado.DiaSemanaTexto);
+                if (item != null)
+                    item.Enabled = true;
             }
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            Page.Validate("Medico");
-            if (!Page.IsValid) return;
-
             Medico med = new Medico
             {
                 Id = idMedico,

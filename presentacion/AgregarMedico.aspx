@@ -8,67 +8,115 @@
 
     <h2 class="mb-4">Alta de Médico</h2>
 
- 
+   
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">Datos de Usuario</div>
         <div class="card-body">
 
+            <asp:ValidationSummary ID="vsUsuario" runat="server" CssClass="text-danger mb-3"
+                ValidationGroup="Usuario" HeaderText="Errores en datos de usuario:" />
+
             <div class="mb-3">
                 <label for="txtUsuario" class="form-label">Nombre de Usuario</label>
                 <asp:TextBox ID="txtUsuario" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="rfvUsuario" runat="server"
+                    ControlToValidate="txtUsuario" ErrorMessage="El nombre de usuario es obligatorio"
+                    CssClass="text-danger" ValidationGroup="Usuario" />
             </div>
 
             <div class="mb-3">
                 <label for="txtClave" class="form-label">Contraseña</label>
                 <asp:TextBox ID="txtClave" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="rfvClave" runat="server"
+                    ControlToValidate="txtClave" ErrorMessage="La contraseña es obligatoria"
+                    CssClass="text-danger" ValidationGroup="Usuario" />
             </div>
 
-            <div class="mb-3">
-                <label for="ddlRol" class="form-label">Rol</label>
-                <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select"></asp:DropDownList>
-            </div>
+
 
             <asp:Button ID="btnGuardarUsuario" runat="server" Text="Guardar Usuario"
-                CssClass="btn btn-primary" OnClick="btnGuardarUsuario_Click" />
+                CssClass="btn btn-primary" OnClick="btnGuardarUsuario_Click"
+                ValidationGroup="Usuario" />
+            <asp:Button ID="btnCancelarUsuario" runat="server"
+                Text="Cancelar"
+                CssClass="btn btn-secondary ms-2"
+                OnClick="btnCancelarUsuario_Click"
+                CausesValidation="false" />
 
         </div>
     </div>
 
-
-   
-   
+    
     <asp:Panel ID="pnlMedico" runat="server" Visible="false">
 
         <div class="card mb-4">
             <div class="card-header bg-success text-white">Datos del Médico</div>
             <div class="card-body">
 
+                <asp:ValidationSummary
+                    ID="vsMedico"
+                    runat="server"
+                    CssClass="text-danger mb-3"
+                    ValidationGroup="Medico"
+                    HeaderText="Errores en datos del médico:"
+                    ShowSummary="true"
+                    ShowMessageBox="false" />
+
                 <div class="mb-3">
                     <label for="txtNombre" class="form-label">Nombre</label>
                     <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvNombre" runat="server"
+                        ControlToValidate="txtNombre" ErrorMessage="El nombre es obligatorio"
+                        CssClass="text-danger" ValidationGroup="Medico" />
                 </div>
 
                 <div class="mb-3">
                     <label for="txtApellido" class="form-label">Apellido</label>
                     <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvApellido" runat="server"
+                        ControlToValidate="txtApellido" ErrorMessage="El apellido es obligatorio"
+                        CssClass="text-danger" ValidationGroup="Medico" />
                 </div>
 
                 <div class="mb-3">
                     <label for="txtMatricula" class="form-label">Matrícula</label>
                     <asp:TextBox ID="txtMatricula" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvMatricula" runat="server"
+                        ControlToValidate="txtMatricula" ErrorMessage="La matrícula es obligatoria"
+                        CssClass="text-danger" ValidationGroup="Medico" />
                 </div>
 
                 <div class="mb-3">
                     <label for="txtTelefono" class="form-label">Teléfono</label>
                     <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvTelefono" runat="server"
+                        ControlToValidate="txtTelefono" ErrorMessage="El teléfono es obligatorio"
+                        CssClass="text-danger" ValidationGroup="Medico" />
                 </div>
 
                 <div class="mb-3">
                     <label for="txtEmail" class="form-label">Email</label>
+
                     <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"></asp:TextBox>
+
+                    <asp:RequiredFieldValidator
+                        ID="rfvEmail"
+                        runat="server"
+                        ControlToValidate="txtEmail"
+                        ErrorMessage="El email es obligatorio"
+                        CssClass="text-danger"
+                        ValidationGroup="Medico" />
+
+                    <asp:RegularExpressionValidator
+                        ID="revEmail"
+                        runat="server"
+                        ControlToValidate="txtEmail"
+                        ErrorMessage="Ingrese un email válido"
+                        CssClass="text-danger"
+                        ValidationGroup="Medico"
+                        ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" />
                 </div>
 
-              
                 <div class="mb-3">
                     <label for="chkEspecialidades" class="form-label">Especialidades</label>
                     <asp:CheckBoxList ID="chkEspecialidades" runat="server" CssClass="form-select"></asp:CheckBoxList>
@@ -77,9 +125,13 @@
             </div>
         </div>
 
+       
         <div class="card mb-4">
             <div class="card-header bg-info text-white">Turnos de trabajo</div>
             <div class="card-body">
+
+                <asp:ValidationSummary ID="vsTurnos" runat="server" CssClass="text-danger mb-3"
+                    ValidationGroup="Turno" HeaderText="Errores en turnos:" />
 
                 <div class="mb-3">
                     <label for="ddlDiaSemana" class="form-label">Día de la semana</label>
@@ -111,7 +163,8 @@
                 <asp:Button ID="btnAgregarTurno" runat="server"
                     Text="Agregar turno"
                     CssClass="btn btn-secondary"
-                    OnClick="btnAgregarTurno_Click" />
+                    OnClick="btnAgregarTurno_Click"
+                    ValidationGroup="Turno" />
 
             </div>
         </div>
@@ -124,7 +177,7 @@
                     AutoGenerateColumns="false">
 
                     <Columns>
-                        <asp:BoundField DataField="DiaSemana" HeaderText="Día" />
+                        <asp:BoundField DataField="DiaSemanaTexto" HeaderText="Día" />
                         <asp:BoundField DataField="HoraInicio" HeaderText="Inicio" />
                         <asp:BoundField DataField="HoraFin" HeaderText="Fin" />
                     </Columns>
@@ -134,7 +187,13 @@
         </div>
 
         <asp:Button ID="btnGuardarMedico" runat="server" Text="Guardar Médico"
-            CssClass="btn btn-success" OnClick="btnGuardarMedico_Click" />
+            CssClass="btn btn-success" OnClick="btnGuardarMedico_Click"
+            ValidationGroup="Medico" />
+        <asp:Button ID="btnCancelarMedico" runat="server"
+            Text="Cancelar"
+            CssClass="btn btn-secondary ms-2"
+            OnClick="btnCancelarMedico_Click"
+            CausesValidation="false" />
 
     </asp:Panel>
 
