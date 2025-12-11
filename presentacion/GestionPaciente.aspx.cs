@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class GestionPaciente : System.Web.UI.Page
+    public partial class GestionPaciente : PaginaAdmin
     {
         private readonly PacienteNegocio negocio = new PacienteNegocio();
 

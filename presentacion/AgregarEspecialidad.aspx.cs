@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class AgregarEspecialidad : System.Web.UI.Page
+    public partial class AgregarEspecialidad : PaginaAdmin
     {
         protected void Page_Load(object sender, EventArgs e)
         {

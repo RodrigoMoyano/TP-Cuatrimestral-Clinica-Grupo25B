@@ -112,7 +112,7 @@ namespace Negocio
             using (Datos datos = new Datos())
             {
                 datos.SetearConsulta("UPDATE Paciente SET Nombre = @Nombre, Apellido = @Apellido, Dni = @Dni, " +
-                                     "Email = @Email, Telefono = @Telefono, IdUsuario = @IdUsuario " +
+                                     "Email = @Email, Telefono = @Telefono, IdUsuario = @IdUsuario, IdCobertura = @IdCobertura " +
                                      "WHERE Id = @Id");
 
                 datos.SetearParametro("@Nombre", paciente.Nombre);
@@ -121,12 +121,16 @@ namespace Negocio
                 datos.SetearParametro("@Email", paciente.Email);
                 datos.SetearParametro("@Telefono", paciente.Telefono);
                 datos.SetearParametro("@IdUsuario", paciente.Usuario.Id);
-                datos.SetearParametro("@IdCobertura", paciente.Cobertura?.Id);
+                datos.SetearParametro("@IdCobertura", paciente.Cobertura?.Id ?? 1);
                 datos.SetearParametro("@Id", paciente.Id);
+
+
 
                 datos.EjecutarAccion();
             }
         }
+
+
 
         public void Eliminar(int id)
         {
@@ -197,22 +201,28 @@ namespace Negocio
             {
                 datos.SetearConsulta(@"
                     SELECT
-                        P.Id,
-                        P.Nombre,
-                        P.Apellido,
-                        P.Dni,
-                        P.Email,
-                        P.Telefono,
-                        P.IdUsuario,
-                        U.NombreUsuario,
-                        U.Clave,
-                        U.IdRol,
-                        R.Descripcion AS RolDescripcion,
-                        U.Activo AS ActivoUsuario
-                    FROM Paciente P
-                    LEFT JOIN Usuario U ON P.IdUsuario = U.Id
-                    LEFT JOIN Rol R ON U.IdRol = R.Id
-                    WHERE P.Id = @Id");
+                    P.Id,
+                    P.Nombre,
+                    P.Apellido,
+                    P.Dni,
+                    P.Email,
+                    P.Telefono,
+                    P.IdUsuario,
+                    P.IdCobertura,
+                    U.NombreUsuario,
+                    U.Clave,
+                    U.IdRol,
+                    R.Descripcion AS RolDescripcion,
+                    U.Activo AS ActivoUsuario,
+                    C.Id AS CoberturaId,
+                    C.Tipo,
+                    C.NombreObraSocial,
+                    C.PlanCobertura
+                FROM Paciente P
+                LEFT JOIN Usuario U ON P.IdUsuario = U.Id
+                LEFT JOIN Rol R ON U.IdRol = R.Id
+                LEFT JOIN Cobertura C ON P.IdCobertura = C.Id
+                WHERE P.Id = @Id");
 
                 datos.SetearParametro("@Id", id);
                 datos.EjecutarLectura();
@@ -227,7 +237,7 @@ namespace Negocio
                         Dni = datos.Lector["Dni"].ToString(),
                         Email = datos.Lector["Email"].ToString(),
                         Telefono = datos.Lector["Telefono"].ToString(),
-                        
+
                     };
                     if (!Convert.IsDBNull(datos.Lector["IdUsuario"]))
                     {
@@ -242,6 +252,16 @@ namespace Negocio
                                 Id = (int)datos.Lector["IdRol"],
                                 Descripcion = datos.Lector["RolDescripcion"].ToString()
                             }
+                        };
+                    }
+                    if (!Convert.IsDBNull(datos.Lector["IdCobertura"]))
+                    {
+                        p.Cobertura = new Cobertura
+                        {
+                            Id = (int)datos.Lector["IdCobertura"],
+                            Tipo = datos.Lector["Tipo"].ToString(),
+                            NombreObraSocial = datos.Lector["NombreObraSocial"].ToString(),
+                            PlanCobertura = datos.Lector["PlanCobertura"].ToString()
                         };
                     }
 
@@ -333,6 +353,73 @@ namespace Negocio
             {
                 datos.CerrarConexion();
             }
+        }
+        public void ActualizarTelefono(int idUsuario, string telefono)
+        {
+            Datos datos = new Datos();
+            datos.SetearConsulta("UPDATE Paciente SET Telefono = @tel WHERE IdUsuario = @id");
+            datos.SetearParametro("@tel", telefono);
+            datos.SetearParametro("@id", idUsuario);
+            datos.EjecutarAccion();
+        }
+        public void ModificarPerfilPaciente(Paciente paciente, string nuevaClave = null)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    datos.SetearConsulta(
+                        "UPDATE Paciente SET " +
+                        "Nombre = @Nombre, " +
+                        "Apellido = @Apellido, " +
+                        "Email = @Email, " +
+                        "Telefono = @Telefono, " +
+                        "IdCobertura = @IdCobertura " +
+                        "WHERE Id = @IdPaciente");
+
+                    datos.SetearParametro("@Nombre", paciente.Nombre);
+                    datos.SetearParametro("@Apellido", paciente.Apellido);
+                    datos.SetearParametro("@Email", paciente.Email);
+                    datos.SetearParametro("@Telefono", paciente.Telefono);
+                    datos.SetearParametro("@IdCobertura", paciente.Cobertura?.Id ?? (object)DBNull.Value);
+                    datos.SetearParametro("@IdPaciente", paciente.Id);
+
+                    datos.EjecutarAccion();
+
+                   
+                    if (!string.IsNullOrWhiteSpace(nuevaClave) && paciente.Usuario != null)
+                    {
+                        datos.SetearConsulta("UPDATE Usuario SET Clave = @Clave WHERE Id = @IdUsuario");
+                        datos.SetearParametro("@Clave", nuevaClave);
+                        datos.SetearParametro("@IdUsuario", paciente.Usuario.Id);
+                        datos.EjecutarAccion();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al actualizar perfil del paciente: " + ex.Message, ex);
+                }
+            }
+        }
+        public Paciente ObtenerPorIdUsuario(int idUsuario)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta(@"
+            SELECT * FROM Paciente
+            WHERE IdUsuario = @idUsuario
+        ");
+
+                datos.SetearParametro("@idUsuario", idUsuario);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return ObtenerPorId((int)datos.Lector["Id"]);
+                }
+            }
+            return null;
         }
 
 

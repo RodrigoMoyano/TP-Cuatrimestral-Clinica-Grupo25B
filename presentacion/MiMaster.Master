@@ -63,6 +63,7 @@
                             <asp:HyperLink ID="lnkMenuPacientes" runat="server" CssClass="nav-link" NavigateUrl="~/MenuPaciente.aspx" Visible="false">Turnos</asp:HyperLink>
                             <asp:HyperLink ID="lnkEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Especialidades.aspx" Visible="false">Especialidades</asp:HyperLink>
                             <asp:HyperLink ID="lnkSobreNosotros" runat="server" CssClass="nav-link" NavigateUrl="~/SobreNosotros.aspx" Visible="false">Sobre Nosotros</asp:HyperLink>
+                            <asp:HyperLink ID="lnkPerfil" runat="server" CssClass="nav-link" NavigateUrl="~/Perfil.aspx" Visible="false">Perfil</asp:HyperLink>
 
 
                         </div>
