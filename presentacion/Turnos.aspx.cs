@@ -14,10 +14,11 @@ namespace presentacion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Seguridad.sessionActiva(Session["usuario"]))
-            {
-                Response.Redirect("Login.aspx", true);
-            }
+            //if (!Seguridad.sessionActiva(Session["usuario"]))
+            //{
+            //    Response.Redirect("Login.aspx", true);
+            //}
+            //Usuario usuario = Session["usuario"] as Usuario;
 
             if (!IsPostBack)
             {
@@ -122,6 +123,12 @@ namespace presentacion
         protected void btnAgregarTurno_Click(object sender, EventArgs e)
         {
             Response.Redirect("AgregarTurno.aspx");
+        }
+
+        protected void dgvVerTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvVerTurnos.PageIndex = e.NewPageIndex;
+            CargarListaTurnos();
         }
     }
 }

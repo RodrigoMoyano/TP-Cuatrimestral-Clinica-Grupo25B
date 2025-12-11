@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class AgregarMedico : System.Web.UI.Page
+    public partial class AgregarMedico : PaginaAdmin
     {
         protected void Page_Load(object sender, EventArgs e)
         {

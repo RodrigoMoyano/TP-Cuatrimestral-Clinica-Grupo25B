@@ -182,5 +182,10 @@ namespace presentacion
                 }
             }
         }
+
+        protected void cvFecha_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = calFecha.SelectedDate != DateTime.MinValue;
+        }
     }
 }

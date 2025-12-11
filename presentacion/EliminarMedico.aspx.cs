@@ -6,7 +6,7 @@ using Negocio;
 
 namespace presentacion
 {
-    public partial class EliminarMedico : System.Web.UI.Page
+    public partial class EliminarMedico : PaginaAdmin
     {
         private int idMedico;
 

@@ -1,10 +1,11 @@
 ﻿using System;
 using Dominio;
 using Negocio;
+using presentacion;
 
 namespace Presentacion
 {
-    public partial class ObservacionesTurno : System.Web.UI.Page
+    public partial class ObservacionesTurno : PaginaMedico
     {
         protected void Page_Load(object sender, EventArgs e)
         {

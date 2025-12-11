@@ -24,6 +24,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.DropDownList ddlPacientes;
 
         /// <summary>
+        /// rfvPcientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPcientes;
+
+        /// <summary>
         /// ddlEspecialidades control.
         /// </summary>
         /// <remarks>
@@ -31,6 +40,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidades;
+
+        /// <summary>
+        /// rfvEspecialidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEspecialidad;
 
         /// <summary>
         /// ddlMedicos control.
@@ -42,6 +60,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.DropDownList ddlMedicos;
 
         /// <summary>
+        /// rfvMedico control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMedico;
+
+        /// <summary>
         /// calFecha control.
         /// </summary>
         /// <remarks>
@@ -49,6 +76,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Calendar calFecha;
+
+        /// <summary>
+        /// cvFecha control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvFecha;
 
         /// <summary>
         /// ddlHoras control.
@@ -60,6 +96,15 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.DropDownList ddlHoras;
 
         /// <summary>
+        /// rfvHoras control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvHoras;
+
+        /// <summary>
         /// txtObservaciones control.
         /// </summary>
         /// <remarks>
@@ -67,6 +112,15 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
+
+        /// <summary>
+        /// revObservaciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revObservaciones;
 
         /// <summary>
         /// lblError control.

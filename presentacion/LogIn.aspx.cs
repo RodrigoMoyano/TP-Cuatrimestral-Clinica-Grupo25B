@@ -40,7 +40,7 @@ namespace presentacion
                 if (negocio.Login(usuario))
                 {
                    
-                    Session.Add("Usuario", usuario);
+                    Session.Add("usuario", usuario);
 
                     
                     if (usuario.Rol != null && usuario.Rol.Id == 3)   // 3 = Médico 

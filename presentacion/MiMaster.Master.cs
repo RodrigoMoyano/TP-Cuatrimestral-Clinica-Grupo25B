@@ -13,14 +13,6 @@ namespace presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Seguridad para que si no hay una sesion activa, no se pueda acceder a las demas paginas, obliga a loguearte
-            if (!(Page is LogIn) && !(Page is Registro))
-            {
-                if (!Seguridad.sessionActiva(Session["usuario"]))
-                {
-                    Response.Redirect("LogIn.aspx", false);
-                }
-            }
             //Oculto NavBar en LogIn.aspx
             string currentPage = System.IO.Path.GetFileName(Request.Path);
 
@@ -49,7 +41,6 @@ namespace presentacion
                     
                     lnkMisTurnos.Visible = false;
                     lnkPedirTurno.Visible = false;
-
 
                 }
                 else if (Seguridad.esMedico(Session["usuario"]))

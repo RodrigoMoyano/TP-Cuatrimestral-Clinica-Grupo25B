@@ -18,41 +18,41 @@ namespace presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esAdmin(Session["usuario"]))
-            {
-                Session.Add("error", "No tienes permisos para esta pantalla.");
-                Response.Redirect("LogIn.aspx", true);
-            }
+            //if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esAdmin(Session["usuario"]))
+            //{
+            //    Session.Add("error", "No tienes permisos para esta pantalla.");
+            //    Response.Redirect("LogIn.aspx", true);
+            //}
 
             if (!IsPostBack)
             {
                 CargarEspecialidades();
                 CargarCoberturas();
 
-                if (Request.QueryString["id"] != null)
-                {
-                    if (!Seguridad.esAdmin(Session["usuario"]))
-                    {
-                        Session.Add("error", "No tiene permiso para reprogramar turnos.");
-                        Response.Redirect("Error.aspx", true);
-                    }
-                    int idTurno = int.Parse(Request.QueryString["id"]);
+                //if (Request.QueryString["id"] != null)
+                //{
+                //    if (!Seguridad.esAdmin(Session["usuario"]))
+                //    {
+                //        Session.Add("error", "No tiene permiso para reprogramar turnos.");
+                //        Response.Redirect("Error.aspx", true);
+                //    }
+                //    int idTurno = int.Parse(Request.QueryString["id"]);
 
-                    ViewState["IdTurnoEditar"] = idTurno;
-                    btnConfirmar.Text = "Reprogramar Turno #" + idTurno;
+                //    ViewState["IdTurnoEditar"] = idTurno;
+                //    btnConfirmar.Text = "Reprogramar Turno #" + idTurno;
 
-                    lblTitulo.Text = "Reprogramar Turno #" + idTurno;
+                //    lblTitulo.Text = "Reprogramar Turno #" + idTurno;
 
-                    CargarDatosDelTurno(idTurno);
-                }
-                else
-                {
-                    if (Seguridad.esAdmin(Session["usuario"]))
-                    {
-                        Session.Add("error", "Los administradores solo reprograman turnos");
-                        Response.Redirect("Turnos.aspx", true);
-                    }
-                }
+                //    CargarDatosDelTurno(idTurno);
+                //}
+                //else
+                //{
+                //    if (Seguridad.esAdmin(Session["usuario"]))
+                //    {
+                //        Session.Add("error", "Los administradores solo reprograman turnos");
+                //        Response.Redirect("Turnos.aspx", true);
+                //    }
+                //}
             }
         }
 

@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class EditarEspecialidad : System.Web.UI.Page
+    public partial class EditarEspecialidad : PaginaAdmin
     {
         private int idEspecialidad;
 

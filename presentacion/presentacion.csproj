@@ -76,6 +76,7 @@
     <Content Include="EditarMedico.aspx" />
     <Content Include="EditarPaciente.aspx" />
     <Content Include="EliminarMedico.aspx" />
+    <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
     <Content Include="GestionMedicos.aspx" />
     <Content Include="GestionPaciente.aspx" />
@@ -153,6 +154,13 @@
     <Compile Include="EliminarMedico.aspx.designer.cs">
       <DependentUpon>EliminarMedico.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Especialidades.aspx.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -222,6 +230,9 @@
     <Compile Include="PaginaAdmin.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="PaginaBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="PaginaMedico.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -284,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="js\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

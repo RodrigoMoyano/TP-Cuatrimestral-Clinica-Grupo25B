@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class EditarMedico : System.Web.UI.Page
+    public partial class EditarMedico : PaginaAdmin
     {
         private int idMedico;
 

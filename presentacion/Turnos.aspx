@@ -79,6 +79,12 @@
             CssClass="table table-striped table-hover"
             Width="100%"
             DataKeyNames="IdTurno"
+            AllowPaging ="true"
+            PageSize="10"
+            PagerSettings-Mode="Numeric"
+            PagerStyle-HorizontalAlign="Center"
+            PagerStyle-CssClass="pagination-grid"
+            OnPageIndexChanging="dgvVerTurnos_PageIndexChanging"
             OnRowCommand="dgvVerTurnos_RowCommand"
             OnRowDataBound="dgvVerTurnos_RowDataBound">
 

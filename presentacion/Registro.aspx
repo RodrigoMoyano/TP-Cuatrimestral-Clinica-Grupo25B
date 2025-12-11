@@ -22,9 +22,15 @@
                         <asp:RequiredFieldValidator CssClass="validacion" ErrorMessage="Ingrese un usuario." Display="Dynamic" ControlToValidate="txtNombreUsuario" runat="server" />
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label class="form-label fw-bold">Contraseña</label>
-                        <asp:TextBox ID="txtPassword" CssClass="form-control" runat="server"></asp:TextBox>
+                        <div class="input-group">
+                            <asp:TextBox ID="txtPassword" CssClass="form-control" TextMode="Password" runat="server"></asp:TextBox>
+
+                            <span class="input-group-text" style="cursor: pointer;" onclick="togglePass()">
+                                <i id="iconPass" class="bi bi-eye-slash"></i>
+                            </span>
+                        </div>
                         <asp:RequiredFieldValidator CssClass="validacion" ErrorMessage="Ingrese una contraseña." Display="Dynamic" ControlToValidate="txtPassword" runat="server" />
                         <asp:RequiredFieldValidator CssClass="validacion" ErrorMessage="Minimo 8 caracteres" Display="Dynamic" ControlToValidate="txtPassword" runat="server" />
                     </div>
@@ -82,5 +88,21 @@
             </div>
         </div>
     </div>
+    <script>
+        function togglePass() {
+            var input = document.getElementById("<%= txtPassword.ClientID %>");
+            var icon = document.getElementById("iconPass");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }
+        }
+    </script>
 </asp:Content>
 

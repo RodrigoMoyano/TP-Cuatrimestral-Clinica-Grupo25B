@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class Menu : System.Web.UI.Page
+    public partial class Menu : PaginaBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {

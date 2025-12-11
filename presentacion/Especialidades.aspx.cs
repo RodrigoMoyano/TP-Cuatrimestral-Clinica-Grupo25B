@@ -11,7 +11,7 @@ using System.Web.UI.WebControls;
 
 namespace presentacion
 {
-    public partial class Especialidades : System.Web.UI.Page
+    public partial class Especialidades : PaginaPaciente
     {
        
         protected void Page_Load(object sender, EventArgs e)
@@ -22,7 +22,7 @@ namespace presentacion
                 return;
             }
 
-             Usuario usuario = (Usuario)Session["Usuario"];
+             Usuario usuario = (Usuario)Session["usuario"];
 
             if (usuario.Rol != null && usuario.Rol.Id == 1)
             {
