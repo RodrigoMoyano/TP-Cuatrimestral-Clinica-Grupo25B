@@ -502,14 +502,42 @@ namespace Negocio
 
             try
             {
-                datos.SetearConsulta(@"SELECT t.Id As IdTurno, t.Fecha, t.Hora, t.Observaciones, p.Id AS IdPaciente,p.IdCobertura,c.Tipo AS TipoCobertura,c.NombreObraSocial,t.IdMedico,t.IdEspecialidad,t.IdEstadoTurno
-                                        FROM Turno t
-                                        INNER JOIN Paciente p ON p.Id = t.IdPaciente
-                                        INNER JOIN Cobertura c ON c.Id = p.IdCobertura
-                                        WHERE t.Id = @idTurno");
+                datos.SetearConsulta(@"
+            SELECT 
+                t.Id AS IdTurno,
+                t.Fecha,
+                t.Hora,
+                t.Observaciones,
 
+                -- Paciente
+                p.Id AS IdPaciente,
+                p.Nombre AS NombrePaciente,
+                p.Apellido AS ApellidoPaciente,
+                p.IdCobertura,
 
-                datos.SetearParametro("@IdTurno", idTurno);
+                -- Cobertura
+                c.Tipo AS TipoCobertura,
+                c.NombreObraSocial,
+
+                -- Medico
+                t.IdMedico,
+
+                -- Especialidad
+                e.Id AS IdEspecialidad,
+                e.Descripcion AS EspecialidadDescripcion,
+
+                -- Estado del turno
+                et.Id AS IdEstadoTurno,
+                et.Descripcion AS EstadoDescripcion
+
+            FROM Turno t
+            INNER JOIN Paciente p ON p.Id = t.IdPaciente
+            INNER JOIN Cobertura c ON c.Id = p.IdCobertura
+            INNER JOIN Especialidad e ON e.Id = t.IdEspecialidad
+            INNER JOIN EstadoTurno et ON et.Id = t.IdEstadoTurno
+            WHERE t.Id = @idTurno");
+
+                datos.SetearParametro("@idTurno", idTurno);
                 datos.EjecutarLectura();
 
                 if (datos.Lector.Read())
@@ -518,22 +546,51 @@ namespace Negocio
 
                     turno.Id = (int)datos.Lector["IdTurno"];
                     turno.Fecha = (DateTime)datos.Lector["Fecha"];
-                    turno.Hora = (TimeSpan)datos.Lector["Hora"];
+
+                    // Hora segura
+                    turno.Hora = datos.Lector["Hora"] != DBNull.Value
+                        ? (TimeSpan)datos.Lector["Hora"]
+                        : TimeSpan.Zero;
+
                     turno.Observaciones = datos.Lector["Observaciones"] != DBNull.Value
                                           ? datos.Lector["Observaciones"].ToString()
                                           : "";
 
-
-                    turno.Paciente = new Paciente { Id = (int)datos.Lector["IdPaciente"] };
-                    turno.Paciente.Cobertura = new Cobertura()
+                    // ============================
+                    //   PACIENTE COMPLETO
+                    // ============================
+                    turno.Paciente = new Paciente
                     {
-                        Id = (int)datos.Lector["IdCobertura"],
-                        Tipo = datos.Lector["TipoCobertura"].ToString(),
-                        NombreObraSocial = datos.Lector["NombreObraSocial"].ToString()
+                        Id = (int)datos.Lector["IdPaciente"],
+                        Nombre = datos.Lector["NombrePaciente"].ToString(),
+                        Apellido = datos.Lector["ApellidoPaciente"].ToString(),
+                        Cobertura = new Cobertura
+                        {
+                            Id = (int)datos.Lector["IdCobertura"],
+                            Tipo = datos.Lector["TipoCobertura"].ToString(),
+                            NombreObraSocial = datos.Lector["NombreObraSocial"].ToString()
+                        }
                     };
+
+                    // ============================
+                    //   ESPECIALIDAD COMPLETA
+                    // ============================
+                    turno.Especialidad = new Especialidad
+                    {
+                        Id = (int)datos.Lector["IdEspecialidad"],
+                        Descripcion = datos.Lector["EspecialidadDescripcion"].ToString()
+                    };
+
+                    // ============================
+                    //   ESTADO COMPLETO
+                    // ============================
+                    turno.Estado = new EstadoTurno
+                    {
+                        Id = (int)datos.Lector["IdEstadoTurno"],
+                        Descripcion = datos.Lector["EstadoDescripcion"].ToString()
+                    };
+
                     turno.Medico = new Medico { Id = (int)datos.Lector["IdMedico"] };
-                    turno.Especialidad = new Especialidad { Id = (int)datos.Lector["IdEspecialidad"] };
-                    turno.Estado = new EstadoTurno { Id = (int)datos.Lector["IdEstadoTurno"] };
 
                     return turno;
                 }

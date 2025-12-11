@@ -10,37 +10,156 @@ namespace Presentacion
         {
             if (!IsPostBack)
             {
+                // 1) Validar existencia del ID
+                if (Request.QueryString["id"] == null)
+                {
+                    Response.Redirect("PanelMedico.aspx");
+                    return;
+                }
+
                 int idTurno = Convert.ToInt32(Request.QueryString["id"]);
 
+                // 2) Obtener el turno
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
                 Turno turno = turnoNegocio.BuscarPorId(idTurno);
 
-                if (turno != null)
-                {
-                    lblFecha.Text = "Fecha: " + turno.Fecha.ToString("dd/MM/yyyy");
-
-                    // ---- FORMATO DE HORA CORRECTO Y SEGURO ----
-                    if (turno.Hora != null && TimeSpan.TryParse(turno.Hora.ToString(), out TimeSpan horaTS))
-                        lblHora.Text = "Hora: " + horaTS.ToString(@"hh\:mm");
-                    else
-                        lblHora.Text = "Hora: -";
-
-                    lblPaciente.Text = "Paciente ID: " + turno.Paciente.Id;
-                    lblEspecialidad.Text = "Especialidad ID: " + turno.Especialidad.Id;
-                    lblEstado.Text = "Estado ID: " + turno.Estado.Id;
-
-                    lblObservaciones.Text = "Observaciones: " + turno.Observaciones;
-                }
-                else
+                if (turno == null)
                 {
                     lblObservaciones.Text = "No se encontró el turno.";
+                    return;
                 }
+
+                // 3) Validación de seguridad → el médico solo ve sus turnos
+                Usuario usuario = (Usuario)Session["Usuario"];
+
+                if (usuario != null && usuario.Rol.Id == 3) // Médico
+                {
+                    int idMedicoSesion = (int)Session["IdMedico"];
+
+                    if (idMedicoSesion != turno.Medico.Id)
+                    {
+                        Response.Redirect("PanelMedico.aspx");
+                        return;
+                    }
+                }
+
+                // Guardamos el turno para usarlo luego en validaciones
+                Session["TurnoActual"] = turno;
+
+                // 4) Mostrar datos
+                lblFecha.Text = "Fecha: " + turno.Fecha.ToString("dd/MM/yyyy");
+
+                // --- FORMATEO DE HORA SIMPLE Y SEGURO ---
+                try
+                {
+                    string valorHora = turno.Hora.ToString();
+
+                    if (!string.IsNullOrWhiteSpace(valorHora) &&
+                        TimeSpan.TryParse(valorHora, out TimeSpan ts))
+                    {
+                        lblHora.Text = "Hora: " + ts.ToString(@"hh\:mm");
+                    }
+                    else
+                    {
+                        lblHora.Text = "Hora: -";
+                    }
+                }
+                catch
+                {
+                    lblHora.Text = "Hora: -";
+                }
+
+
+                lblPaciente.Text = "Paciente: " +
+                                   turno.Paciente.Nombre + " " + turno.Paciente.Apellido;
+
+                lblEspecialidad.Text = "Especialidad: " +
+                                       turno.Especialidad.Descripcion;
+
+                lblEstado.Text = "Estado: " +
+                                 turno.Estado.Descripcion;
+
+                lblObservaciones.Text = "Observaciones: " + turno.Observaciones;
+
+                // 5) Configurar qué botones puede ver el usuario
+                ConfigurarAccionesPorRol();
+
+                // 6) Validaciones según estado del turno
+                AplicarValidacionesDeEstado(turno);
             }
         }
 
-        // -----------------------------------------
-        //   Mostrar modo edición
-        // -----------------------------------------
+
+        // ================================================================
+        // 🔵 Aplica validaciones según el estado y la fecha del turno
+        // ================================================================
+        private void AplicarValidacionesDeEstado(Turno turno)
+        {
+            // ❌ No permitir cerrar si ya está cerrado
+            if (turno.Estado.Id == 5) // Estado = Cerrado
+                btnCerrar.Enabled = false;
+
+            // ❌ No permitir "No asistió" si ya tiene ese estado
+            if (turno.Estado.Id == 4)
+                btnNoAsistio.Enabled = false;
+
+            // ❌ No permitir modificar estados si el turno es anterior a hoy
+            if (turno.Fecha.Date < DateTime.Today)
+            {
+                btnCerrar.Enabled = false;
+                btnNoAsistio.Enabled = false;
+                btnReprogramar.Enabled = false;
+                btnCancelar.Enabled = false;
+            }
+        }
+
+
+        // ================================================================
+        // 🔵 ROLES: QUÉ BOTONES SE MUESTRAN
+        // ================================================================
+        private void ConfigurarAccionesPorRol()
+        {
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            if (usuario == null)
+            {
+                btnReprogramar.Visible =
+                btnCancelar.Visible =
+                btnCerrar.Visible =
+                btnNoAsistio.Visible = false;
+                return;
+            }
+
+            int rol = usuario.Rol.Id; // 1=Admin, 2=Paciente, 3=Médico
+
+            if (rol == 1) // ADMINISTRADOR
+            {
+                btnReprogramar.Visible = true;
+                btnCancelar.Visible = true;
+                btnCerrar.Visible = true;
+                btnNoAsistio.Visible = true;
+            }
+            else if (rol == 3) // MÉDICO
+            {
+                btnReprogramar.Visible = false;
+                btnCancelar.Visible = false;
+
+                btnCerrar.Visible = true;
+                btnNoAsistio.Visible = true;
+            }
+            else // PACIENTE
+            {
+                btnReprogramar.Visible =
+                btnCancelar.Visible =
+                btnCerrar.Visible =
+                btnNoAsistio.Visible = false;
+            }
+        }
+
+
+        // ================================================================
+        // 🔵 EDICIÓN DE OBSERVACIONES
+        // ================================================================
         protected void btnEditarObs_Click(object sender, EventArgs e)
         {
             txtObservaciones.Visible = true;
@@ -50,18 +169,14 @@ namespace Presentacion
             lblObservaciones.Visible = false;
             btnEditarObs.Visible = false;
 
-            txtObservaciones.Text = lblObservaciones.Text.Replace("Observaciones: ", "");
+            txtObservaciones.Text =
+                lblObservaciones.Text.Replace("Observaciones: ", "");
         }
 
-        // -----------------------------------------
-        //   Guardar cambios
-        // -----------------------------------------
         protected void btnGuardarObs_Click(object sender, EventArgs e)
         {
             int idTurno = Convert.ToInt32(Request.QueryString["id"]);
-            TurnoNegocio negocio = new TurnoNegocio();
-
-            negocio.ActualizarObservaciones(idTurno, txtObservaciones.Text);
+            new TurnoNegocio().ActualizarObservaciones(idTurno, txtObservaciones.Text);
 
             lblObservaciones.Text = "Observaciones: " + txtObservaciones.Text;
 
@@ -73,9 +188,6 @@ namespace Presentacion
             btnEditarObs.Visible = true;
         }
 
-        // -----------------------------------------
-        //   Cancelar edición
-        // -----------------------------------------
         protected void btnCancelarEdicion_Click(object sender, EventArgs e)
         {
             txtObservaciones.Visible = false;
@@ -86,36 +198,44 @@ namespace Presentacion
             btnEditarObs.Visible = true;
         }
 
-        // -----------------------------------------
-        //   BOTONES EXISTENTES
-        // -----------------------------------------
+
+        // ================================================================
+        // 🔵 CAMBIOS DE ESTADO (CON VALIDACIÓN)
+        // ================================================================
         protected void btnReprogramar_Click(object sender, EventArgs e)
         {
-            int idTurno = Convert.ToInt32(Request.QueryString["id"]);
-            new TurnoNegocio().CambiarEstado(idTurno, 2);
+            new TurnoNegocio().CambiarEstado(
+                Convert.ToInt32(Request.QueryString["id"]), 2);
             Response.Redirect("PanelMedico.aspx");
         }
 
         protected void btnCerrar_Click(object sender, EventArgs e)
         {
-            int idTurno = Convert.ToInt32(Request.QueryString["id"]);
-            new TurnoNegocio().CambiarEstado(idTurno, 5);
+            var turno = (Turno)Session["TurnoActual"];
+
+            if (turno.Estado.Id == 5) return; // Ya está cerrado
+
+            new TurnoNegocio().CambiarEstado(turno.Id, 5);
             Response.Redirect("PanelMedico.aspx");
         }
 
         protected void btnNoAsistio_Click(object sender, EventArgs e)
         {
-            int idTurno = Convert.ToInt32(Request.QueryString["id"]);
-            new TurnoNegocio().CambiarEstado(idTurno, 4);
+            var turno = (Turno)Session["TurnoActual"];
+
+            if (turno.Estado.Id == 4) return; // Ya está marcado
+
+            new TurnoNegocio().CambiarEstado(turno.Id, 4);
             Response.Redirect("PanelMedico.aspx");
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            int idTurno = Convert.ToInt32(Request.QueryString["id"]);
-            new TurnoNegocio().CambiarEstado(idTurno, 3);
+            new TurnoNegocio().CambiarEstado(
+                Convert.ToInt32(Request.QueryString["id"]), 3);
             Response.Redirect("PanelMedico.aspx");
         }
+
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("PanelMedico.aspx");
