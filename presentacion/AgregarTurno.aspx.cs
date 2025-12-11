@@ -2,8 +2,10 @@
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -13,6 +15,8 @@ namespace presentacion
 {
     public partial class AgregarTurno : PaginaAdmin
     {
+        private string observaciones;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -34,7 +38,7 @@ namespace presentacion
             EspecialidadNegocio negocio = new EspecialidadNegocio();
             ddlEspecialidades.DataSource = negocio.Listar();
             ddlEspecialidades.DataTextField = "Descripcion";
-            ddlEspecialidades.DataValueField= "Id";
+            ddlEspecialidades.DataValueField = "Id";
             ddlEspecialidades.DataBind();
         }
 
@@ -45,35 +49,53 @@ namespace presentacion
             MedicoNegocio negocio = new MedicoNegocio();
             ddlMedicos.DataSource = negocio.ListarPorEspecialidad(idEspecialidad);
             ddlMedicos.DataTextField = "NombreCompleto";
-            ddlMedicos .DataValueField = "Id";
-            ddlMedicos .DataBind();
+            ddlMedicos.DataValueField = "Id";
+            ddlMedicos.DataBind();
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            Turno turno = new Turno();
-            TurnoNegocio negocio = new TurnoNegocio();
+            try
+            {
+                TurnoNegocio negocio = new TurnoNegocio();
 
-            turno.Paciente = new Paciente();
-            turno.Paciente.Id = int.Parse(ddlPacientes.SelectedValue);
+                int idPaciente = int.Parse(ddlPacientes.SelectedValue);
+                int idMedico = int.Parse(ddlMedicos.SelectedValue);
+                int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
 
-            turno.Medico = new Medico();
-            turno.Medico.Id = int.Parse(ddlMedicos.SelectedValue);
+                DateTime fecha = calFecha.SelectedDate;
+                TimeSpan hora = TimeSpan.Parse(ddlHoras.SelectedValue);
 
-            turno.Especialidad = new Especialidad();
-            turno.Especialidad.Id = int.Parse(ddlEspecialidades.SelectedValue);
-            
-            turno.Fecha = calFecha.SelectedDate;
-            turno.Hora = TimeSpan.Parse(ddlHoras.SelectedValue);
+                string observaciones = txtObservaciones.Text.Trim();
 
-            turno.Estado = new EstadoTurno();
-            turno.Estado.Id = 1;
-            turno.Estado.Descripcion = "Nuevo";
+                //Guardo el turno
+                negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
 
-            negocio.Agregar(turno);
+                //datos del paciente
+                PacienteNegocio pacNegocio = new PacienteNegocio();
+                var paciente = pacNegocio.ObtenerPorId(idPaciente);
 
-            Response.Redirect("Turnos.aspx");
+                string emailDestino = paciente.Email;
+                string nombrePaciente = paciente.Nombre;
+                string medicoNombre = ddlMedicos.SelectedItem.Text;
 
+                //Envio email
+                EmailService emailService = new EmailService();
+                emailService.EnviarConfirmacionTurno(emailDestino, nombrePaciente, fecha, medicoNombre);
+
+                
+                Response.Redirect("Turnos.aspx");
+            }
+            catch (SmtpException smtpEx)
+            {
+                lblError.Text = "Error al enviar el correo: " + smtpEx.Message;
+                lblError.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error: " + ex.Message;
+                lblError.Visible = true;
+            }
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
@@ -88,13 +110,13 @@ namespace presentacion
         }
         protected void calFecha_DayRender(object sender, DayRenderEventArgs e)
         {
-            if(string.IsNullOrEmpty(ddlMedicos.SelectedValue))
+            if (string.IsNullOrEmpty(ddlMedicos.SelectedValue))
             {
                 return;
             }
 
             int idMedico;
-            if(!int.TryParse(ddlMedicos.SelectedValue, out idMedico))
+            if (!int.TryParse(ddlMedicos.SelectedValue, out idMedico))
             {
                 return;
             }
@@ -105,7 +127,7 @@ namespace presentacion
             TurnoTrabajoNegocio negocio = new TurnoTrabajoNegocio();
             var turno = negocio.ObtenerHorario(idMedico, diaSemana);
 
-            if(turno != null)
+            if (turno != null)
             {
                 e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
@@ -113,30 +135,30 @@ namespace presentacion
 
         protected void calFecha_SelectionChanged(object sender, EventArgs e)
         {
-            ddlHoras.Items.Clear ();
+            ddlHoras.Items.Clear();
 
             DateTime fechaSelecionada = calFecha.SelectedDate;
 
-            if(fechaSelecionada < DateTime.Now.Date)
+            if (fechaSelecionada < DateTime.Now.Date)
             {
                 calFecha.SelectedDates.Clear();
                 return;
             }
 
-            if(ddlMedicos.SelectedValue == "")
+            if (ddlMedicos.SelectedValue == "")
             {
                 return;
             }
 
             int idMedico = int.Parse(ddlMedicos.SelectedValue);
 
-            string diaSemana = fechaSelecionada.ToString("dddd", new CultureInfo("es-ES") );
+            string diaSemana = fechaSelecionada.ToString("dddd", new CultureInfo("es-ES"));
             diaSemana = char.ToUpper(diaSemana[0]) + diaSemana.Substring(1);
 
             TurnoTrabajoNegocio trabajoNegocio = new TurnoTrabajoNegocio();
             var turnoTrabajo = trabajoNegocio.ObtenerHorario(idMedico, diaSemana);
 
-            if(turnoTrabajo == null)
+            if (turnoTrabajo == null)
             {
                 return;
             }
@@ -147,14 +169,14 @@ namespace presentacion
             TimeSpan inicio = turnoTrabajo.HoraInicio;
             TimeSpan fin = turnoTrabajo.HoraFin;
 
-            for(TimeSpan h = inicio; h < fin; h = h.Add(TimeSpan.FromMinutes(30)))
+            for (TimeSpan h = inicio; h < fin; h = h.Add(TimeSpan.FromMinutes(30)))
             {
                 if (fechaSelecionada.Date == DateTime.Now.Date && h <= DateTime.Now.TimeOfDay)
                 {
                     continue;
                 }
 
-                if(!ocupados.Contains(h))
+                if (!ocupados.Contains(h))
                 {
                     ddlHoras.Items.Add(h.ToString(@"hh\:mm"));
                 }
