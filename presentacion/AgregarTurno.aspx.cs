@@ -40,10 +40,24 @@ namespace presentacion
             ddlEspecialidades.DataTextField = "Descripcion";
             ddlEspecialidades.DataValueField = "Id";
             ddlEspecialidades.DataBind();
+
+            ddlEspecialidades.Items.Insert(0, new ListItem("-- Seleccione especialidad --", ""));
         }
 
         protected void ddlEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(ddlEspecialidades.SelectedValue))
+            {
+                ddlMedicos.Items.Clear();
+                ddlMedicos.Items.Insert(0, new ListItem("-- Seleccione médico --", ""));
+                
+                calFecha.SelectedDates.Clear();
+                ddlHoras.Items.Clear();
+                calFecha.VisibleDate = DateTime.Now;
+                calFecha.DataBind();
+                return;
+            }
+
             int idEspecialidad = int.Parse(ddlEspecialidades.SelectedValue);
 
             MedicoNegocio negocio = new MedicoNegocio();
@@ -51,6 +65,13 @@ namespace presentacion
             ddlMedicos.DataTextField = "NombreCompleto";
             ddlMedicos.DataValueField = "Id";
             ddlMedicos.DataBind();
+
+            ddlMedicos.Items.Insert(0, new ListItem("-- Seleccione médico --", ""));
+
+            calFecha.SelectedDates.Clear();
+            ddlHoras.Items.Clear();
+            calFecha.VisibleDate = DateTime.Now;
+            calFecha.DataBind();
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -107,6 +128,12 @@ namespace presentacion
         {
             ddlHoras.Items.Clear();
             calFecha.SelectedDates.Clear();
+            
+            calFecha.VisibleDate = DateTime.Now;
+
+            calFecha.TodaysDate = DateTime.Now;
+
+            calFecha.DataBind();
         }
         protected void calFecha_DayRender(object sender, DayRenderEventArgs e)
         {
