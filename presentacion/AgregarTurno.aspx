@@ -53,7 +53,7 @@
         <asp:Label ID="lblError" runat="server" ForeColor="Red" Visible="false"></asp:Label>
 
         <asp:Button ID="btnGuardar" runat="server" Text="Guardar Turno" CssClass="btn btn-success" OnClick="btnGuardar_Click" />
-        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" OnClick="btnCancelar_Click" />
+        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" BackColor="Red" CssClass="btn btn-secondary" OnClick="btnCancelar_Click" />
 
     </div>
 

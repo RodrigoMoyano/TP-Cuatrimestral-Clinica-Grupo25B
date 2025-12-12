@@ -42,26 +42,23 @@
         </div>
 
         <!-- Cobertura -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Cobertura</label>
-            <asp:DropDownList 
-                ID="ddlCobertura" 
-                runat="server" 
-                CssClass="form-select"
-                AutoPostBack="true"
-                OnSelectedIndexChanged="ddlCobertura_SelectedIndexChanged">
-            </asp:DropDownList>
-            <div>
-               
-                <asp:Label ID="lblErrorCobertura" runat="server" ForeColor="Red" Visible="false"></asp:Label>
-            </div>
+       <div class="card mb-4">
+         <div class="card-header">Cobertura</div>
+            <div class="card-body row g-3">
 
-            <asp:DropDownList 
-                ID="ddlObraSocial" 
-                runat="server" 
-                CssClass="form-select">
-            </asp:DropDownList>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Tipo de Cobertura</label>
+                    <asp:Label ID="lblTipoCobertura" runat="server" CssClass="form-control bg-light" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Obra Social</label>
+                    <asp:Label ID="lblObraSocial" runat="server" CssClass="form-control bg-light" />
+                </div>
+
+            </div>
         </div>
+
         <div>
             
             <asp:Label ID="lblErrorObraSocial" runat="server" ForeColor="Red" Visible="false"></asp:Label>

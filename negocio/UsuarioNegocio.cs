@@ -78,9 +78,9 @@ namespace Negocio
                 datos.SetearConsulta(@"SELECT u.Id, u.NombreUsuario, u.Clave, r.Id AS RolId, r.Descripcion AS RolDescripcion FROM Usuario u INNER JOIN Rol r ON u.IdRol = r.Id WHERE u.NombreUsuario = @NombreUsuario AND u.Clave = @Clave AND u.Activo = 1");
                 datos.SetearParametro("@NombreUsuario", usuario.NombreUsuario);
                 datos.SetearParametro("@Clave", usuario.Clave);
-                
+
                 datos.EjecutarLectura();
-                
+
                 if (datos.Lector.Read())
                 {
                     usuario.Id = (int)datos.Lector["Id"];
@@ -220,10 +220,10 @@ namespace Negocio
                 }
             }
         }
-        
+
         public bool ExisteUsuario(string nombreUsuario)
         {
-            using(Datos datos = new Datos())
+            using (Datos datos = new Datos())
             {
                 try
                 {
@@ -258,7 +258,7 @@ namespace Negocio
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.SetearParametro("@IdRol", usuario.Rol.Id);
 
-                    int idGenerado = datos.EjecutarAccionEscalar(); 
+                    int idGenerado = datos.EjecutarAccionEscalar();
                     usuario.Id = idGenerado;
                     return idGenerado;
                 }
@@ -333,6 +333,96 @@ namespace Negocio
 
             datos.EjecutarLectura();
             return datos.Lector.Read();
+        }
+        //aDMIN
+        public void AgregarAdmin(Usuario admin)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("INSERT INTO Usuario (NombreUsuario, Clave, Activo, IdRol) VALUES (@NombreUsuario, @Clave, 1, 1)");
+                    datos.SetearParametro("@NombreUsuario", admin.NombreUsuario);
+                    datos.SetearParametro("@Clave", admin.Clave);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al agregar usuario: " + ex.Message);
+                }
+            }
+        }
+        public List<Usuario> ListarAdmin(string estado)
+        {
+            List<Usuario> lista = new List<Usuario>();
+
+            using (Datos datos = new Datos())
+            {
+                string consulta = "SELECT Id, NombreUsuario, Activo FROM Usuario WHERE IdRol = 1";
+
+                if (estado == "1")
+                    consulta += " AND Activo = 1";
+                else if (estado == "0")
+                    consulta += " AND Activo = 0";
+
+                datos.SetearConsulta(consulta);
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Usuario aux = new Usuario();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.NombreUsuario = datos.Lector["NombreUsuario"].ToString();
+                    aux.Activo = (bool)datos.Lector["Activo"];
+
+                    lista.Add(aux);
+                }
+            }
+
+            return lista;
+        }
+
+        public void EstadoAdmin(int id, bool activo)
+        {
+            using (Datos datos = new Datos())
+            {
+
+                datos.SetearConsulta("Update Usuario Set Activo = @Activo Where Id = @Id");
+                datos.SetearParametro("@Activo", activo);
+                datos.SetearParametro("@Id", id);
+
+                datos.EjecutarAccion();
+            }
+        }
+        public void EditarAdmin(Usuario admin)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    // Si NO cambia la contraseña → no actualizar Clave
+                    if (string.IsNullOrEmpty(admin.Clave))
+                    {
+                        datos.SetearConsulta("UPDATE Usuario SET NombreUsuario = @nombre WHERE Id = @id");
+                        datos.SetearParametro("@nombre", admin.NombreUsuario);
+                        datos.SetearParametro("@id", admin.Id);
+                    }
+                    else
+                    {
+                        // Si cambia la contraseña → actualizar ambos campos
+                        datos.SetearConsulta("UPDATE Usuario SET NombreUsuario = @nombre, Clave = @clave WHERE Id = @id");
+                        datos.SetearParametro("@nombre", admin.NombreUsuario);
+                        datos.SetearParametro("@clave", admin.Clave);
+                        datos.SetearParametro("@id", admin.Id);
+                    }
+
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al ejecutar acción: " + ex.Message);
+                }
+            }
         }
 
 

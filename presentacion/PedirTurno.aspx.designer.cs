@@ -60,31 +60,22 @@ namespace presentacion
         protected global::System.Web.UI.WebControls.Label lblErrorMedico;
 
         /// <summary>
-        /// Control ddlCobertura.
+        /// Control lblTipoCobertura.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCobertura;
+        protected global::System.Web.UI.WebControls.Label lblTipoCobertura;
 
         /// <summary>
-        /// Control lblErrorCobertura.
+        /// Control lblObraSocial.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblErrorCobertura;
-
-        /// <summary>
-        /// Control ddlObraSocial.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlObraSocial;
+        protected global::System.Web.UI.WebControls.Label lblObraSocial;
 
         /// <summary>
         /// Control lblErrorObraSocial.

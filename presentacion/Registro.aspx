@@ -84,6 +84,8 @@
 
             <div class="d-grid gap-2 mt-4 pt-3 border-top">
                 <asp:Button ID="btnAceptarRegistro" CssClass="btn btn-primary mt-3" OnClick="btnAceptarRegistro_Click" runat="server" Text="Aceptar" />
+
+                <asp:Button ID="btnCancelarRegistro" CssClass="btn btn-danger mt-1" runat="server" Text="Cancelar" OnClick="btnCancelarRegistro_Click" />
                 <asp:Label ID="lblMensaje" runat="server" CssClass="fw-bold text-danger" Font-Bold="true" />
             </div>
         </div>

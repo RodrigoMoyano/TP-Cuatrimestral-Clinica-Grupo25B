@@ -67,17 +67,20 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AgregarAdmin.aspx" />
     <Content Include="AgregarEspecialidad.aspx" />
     <Content Include="AgregarMedico.aspx" />
     <Content Include="AgregarTurno.aspx" />
     <Content Include="css\misEstilos.css" />
     <Content Include="DetalleMedico.aspx" />
+    <Content Include="EditarAdmin.aspx" />
     <Content Include="EditarEspecialidad.aspx" />
     <Content Include="EditarMedico.aspx" />
     <Content Include="EditarPaciente.aspx" />
     <Content Include="EliminarMedico.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
+    <Content Include="GestionAdmin.aspx" />
     <Content Include="GestionMedicos.aspx" />
     <Content Include="GestionPaciente.aspx" />
     <Content Include="Global.asax" />
@@ -99,6 +102,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgregarAdmin.aspx.cs">
+      <DependentUpon>AgregarAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AgregarAdmin.aspx.designer.cs">
+      <DependentUpon>AgregarAdmin.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AgregarEspecialidad.aspx.cs">
       <DependentUpon>AgregarEspecialidad.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -126,6 +136,13 @@
     </Compile>
     <Compile Include="DetalleMedico.aspx.designer.cs">
       <DependentUpon>DetalleMedico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditarAdmin.aspx.cs">
+      <DependentUpon>EditarAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditarAdmin.aspx.designer.cs">
+      <DependentUpon>EditarAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="EditarEspecialidad.aspx.cs">
       <DependentUpon>EditarEspecialidad.aspx</DependentUpon>
@@ -168,6 +185,13 @@
     </Compile>
     <Compile Include="Especialidades.aspx.designer.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionAdmin.aspx.cs">
+      <DependentUpon>GestionAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GestionAdmin.aspx.designer.cs">
+      <DependentUpon>GestionAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="GestionMedicos.aspx.cs">
       <DependentUpon>GestionMedicos.aspx</DependentUpon>
