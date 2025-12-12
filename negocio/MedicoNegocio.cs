@@ -355,6 +355,33 @@ namespace Negocio
                 return count > 0;
             }
         }
+        public bool ExisteEmail(string email, int idMedicoActual)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta(
+                    "SELECT COUNT(*) FROM Medico WHERE Email = @Email AND Id <> @Id");
+                datos.SetearParametro("@Email", email);
+                datos.SetearParametro("@Id", idMedicoActual);
+
+                int count = datos.EjecutarAccionEscalar();
+                return count > 0;
+            }
+        }
+
+        public bool ExisteMatricula(string matricula, int idMedicoActual)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta(
+                    "SELECT COUNT(*) FROM Medico WHERE Matricula = @Matricula AND Id <> @Id");
+                datos.SetearParametro("@Matricula", matricula);
+                datos.SetearParametro("@Id", idMedicoActual);
+
+                int count = datos.EjecutarAccionEscalar();
+                return count > 0;
+            }
+        }
 
     }
 }

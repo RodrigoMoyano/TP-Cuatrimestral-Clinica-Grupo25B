@@ -67,7 +67,7 @@ namespace presentacion
             divExito.Visible = true;
             ScriptManager.RegisterStartupScript(this, GetType(), "redir",
                 "setTimeout(function(){ window.location = 'Especialidades.aspx'; }, 2000);", true);
-            /*Response.Redirect("Especialidades.aspx");*/
+            
         }
 
         protected void btnEliminar_Click(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace presentacion
             divEliminar.Visible = true;
             ScriptManager.RegisterStartupScript(this, GetType(), "redir",
                 "setTimeout(function(){ window.location = 'Especialidades.aspx'; }, 2000);", true);
-            /*Response.Redirect("Especialidades.aspx");*/
+            
         }
     }
 }

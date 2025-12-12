@@ -8,7 +8,7 @@
 
     <h2 class="mb-4">Alta de Médico</h2>
 
-   
+
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">Datos de Usuario</div>
         <div class="card-body">
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    
+
     <asp:Panel ID="pnlMedico" runat="server" Visible="false">
 
         <div class="card mb-4">
@@ -91,10 +91,18 @@
 
                 <div class="mb-3">
                     <label for="txtTelefono" class="form-label">Teléfono</label>
-                    <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" MaxLength="12"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvTelefono" runat="server"
                         ControlToValidate="txtTelefono" ErrorMessage="El teléfono es obligatorio"
                         CssClass="text-danger" ValidationGroup="Medico" />
+                    <asp:RegularExpressionValidator
+                        ID="revTelefono"
+                        runat="server"
+                        ControlToValidate="txtTelefono"
+                        ErrorMessage="El teléfono debe contener solo números y un máximo de 12 dígitos."
+                        CssClass="text-danger"
+                        ValidationGroup="Medico"
+                        ValidationExpression="^\d{1,12}$" />
                 </div>
 
                 <div class="mb-3">
@@ -128,7 +136,7 @@
             </div>
         </div>
 
-       
+
         <div class="card mb-4">
             <div class="card-header bg-info text-white">Turnos de trabajo</div>
             <div class="card-body">
@@ -172,17 +180,26 @@
             </div>
         </div>
 
-        
+
         <div class="card mb-4">
             <div class="card-header bg-dark text-white">Turnos agregados</div>
             <div class="card-body">
-                <asp:GridView ID="gvTurnos" runat="server" CssClass="table table-bordered"
-                    AutoGenerateColumns="false">
+                <asp:GridView
+                    ID="gvTurnos"
+                    runat="server"
+                    CssClass="table table-bordered"
+                    AutoGenerateColumns="false"
+                    OnRowCommand="gvTurnos_RowCommand">
 
                     <Columns>
                         <asp:BoundField DataField="DiaSemanaTexto" HeaderText="Día" />
                         <asp:BoundField DataField="HoraInicio" HeaderText="Inicio" />
                         <asp:BoundField DataField="HoraFin" HeaderText="Fin" />
+
+                        <asp:ButtonField
+                            Text="Eliminar"
+                            CommandName="Eliminar"
+                            ButtonType="Button" />
                     </Columns>
 
                 </asp:GridView>

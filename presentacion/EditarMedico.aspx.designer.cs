@@ -15,6 +15,15 @@ namespace presentacion
     {
 
         /// <summary>
+        /// vsEditarMedico control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsEditarMedico;
+
+        /// <summary>
         /// hfIdMedico control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,24 @@ namespace presentacion
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtTelefono;
+
+        /// <summary>
+        /// revTelefonoNumeros control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revTelefonoNumeros;
+
+        /// <summary>
+        /// revTelefonoLongitud control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revTelefonoLongitud;
 
         /// <summary>
         /// txtEmail control.

@@ -18,14 +18,12 @@ namespace presentacion
                 CargarEspecialidades();
                 CargarHorarios();
 
-                // Inicializar lista temporal de turnos
+                // inicializa lista temporal de turnos
                 Session["TurnosTemp"] = new List<TurnoTrabajo>();
             }
         }
 
-        // ============================================================
-        //   CARGA INICIAL DE CONTROLES
-        // ============================================================
+        
 
 
 
@@ -56,9 +54,9 @@ namespace presentacion
             }
         }
 
-        // ============================================================
-        //       GUARDAR USUARIO
-        // ============================================================
+        
+        //  GUARDA USUARIO
+    
 
         protected void btnGuardarUsuario_Click(object sender, EventArgs e)
         {
@@ -92,8 +90,15 @@ namespace presentacion
                 Session["idUsuario"] = idUsuario;
 
                 pnlMedico.Visible = true;
-
                
+                btnGuardarUsuario.Enabled = false;
+                btnCancelarUsuario.Enabled = false;
+
+            
+                txtUsuario.Enabled = false;
+                txtClave.Enabled = false;
+
+
             }
             catch (Exception ex)
             {
@@ -102,9 +107,9 @@ namespace presentacion
             }
         }
 
-        // ============================================================
-        //     BOTÓN: AGREGAR TURNO 
-        // ============================================================
+        
+       
+        
 
         protected void btnAgregarTurno_Click(object sender, EventArgs e)
         {
@@ -129,13 +134,13 @@ namespace presentacion
                     return;
                 }
 
-                // Obtener lista temporal
+                // Obtiene lista temporal
                 List<TurnoTrabajo> lista = Session["TurnosTemp"] as List<TurnoTrabajo>;
 
                 DayOfWeek diaEnum = (DayOfWeek)int.Parse(ddlDiaSemana.SelectedValue);
                 string diaTexto = new System.Globalization.CultureInfo("es-ES")
                     .DateTimeFormat.GetDayName(diaEnum);
-                // Crear turno nuevo
+                // Crea turno nuevo
                 TurnoTrabajo nuevo = new TurnoTrabajo
                 {
                     DiaSemana = diaEnum,
@@ -144,7 +149,7 @@ namespace presentacion
                     HoraFin = fin
                 };
 
-                // Validación para evitar duplicados
+                // Validacion para evitar duplicados
                 bool yaExiste = lista.Any(t =>
                     t.DiaSemana == nuevo.DiaSemana &&
                     t.HoraInicio == nuevo.HoraInicio &&
@@ -158,45 +163,103 @@ namespace presentacion
 
                 lista.Add(nuevo);
 
-                // Actualizar grilla
+                // Actualiza grilla
                 gvTurnos.DataSource = lista;
                 gvTurnos.DataBind();
 
                 ddlDiaSemana.SelectedItem.Enabled = false;
+                Page.SetFocus(gvTurnos);
             }
             catch (Exception ex)
             {
                 vsTurnos.HeaderText = $"Error al agregar turno: {ex.Message}";
             }
         }
+        protected void gvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Eliminar")
+            {
+                int index = Convert.ToInt32(e.CommandArgument);
 
-        // ============================================================
-        //     GUARDAR MÉDICO DEFINITIVO
-        // ============================================================
+                List<TurnoTrabajo> lista = Session["TurnosTemp"] as List<TurnoTrabajo>;
+
+                if (lista == null || index < 0 || index >= lista.Count)
+                    return;
+
+                TurnoTrabajo eliminado = lista[index];
+
+                // Elimina turno
+                lista.RemoveAt(index);
+
+                // Actualizar grilla
+                gvTurnos.DataSource = lista;
+                gvTurnos.DataBind();
+
+                // Rehabilitar el día eliminado
+                var item = ddlDiaSemana.Items
+                    .Cast<ListItem>()
+                    .FirstOrDefault(i =>
+                        i.Text.Equals(eliminado.DiaSemanaTexto, StringComparison.OrdinalIgnoreCase));
+
+                if (item != null)
+                    item.Enabled = true;
+            }
+        }
+
+       
+        //  GUARDA MEDICO DEFINITIVO
+        
 
         protected void btnGuardarMedico_Click(object sender, EventArgs e)
         {
             Page.Validate("Medico");
             if (!Page.IsValid) return;
 
+
             // Limpiar mensajes previos
             lblErrorEmail.Text = "";
             lblErrorMatricula.Text = "";
             vsMedico.HeaderText = "";
 
-            // 1️⃣ Validación: al menos un turno laboral
-            List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
-            if (turnosTemp == null || turnosTemp.Count == 0)
+            string telefono = txtTelefono.Text.Trim();
+
+            if (!telefono.All(char.IsDigit) || telefono.Length > 12)
             {
-                vsMedico.HeaderText = "Debe agregar al menos un turno laboral antes de guardar";
+                
+                vsMedico.HeaderText = "El teléfono debe contener solo números y un máximo de 12 dígitos.";
                 return;
             }
 
-            // 2️⃣ Validación: al menos una especialidad seleccionada
+            //  Validación: al menos un turno laboral
+            
+            List<TurnoTrabajo> turnosTemp = Session["TurnosTemp"] as List<TurnoTrabajo>;
+            if (turnosTemp == null || turnosTemp.Count == 0)
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "❌ Debe agregar al menos un turno laboral antes de guardar.",
+                    ValidationGroup = "Medico"
+                };
+
+                Page.Validators.Add(cv);
+                return;
+            }
+
+
+            // Validación: al menos una especialidad seleccionada
+
             bool tieneEspecialidad = chkEspecialidades.Items.Cast<ListItem>().Any(i => i.Selected);
             if (!tieneEspecialidad)
             {
-                vsMedico.HeaderText = "Debe seleccionar al menos una especialidad antes de guardar";
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "❌ Debe seleccionar al menos una especialidad antes de guardar.",
+                    ValidationGroup = "Medico"
+                };
+
+                Page.Validators.Add(cv);
                 return;
             }
 
@@ -204,21 +267,21 @@ namespace presentacion
             {
                 MedicoNegocio medicoNegocio = new MedicoNegocio();
 
-                // 3️⃣ Validación: email duplicado
+                // Validación: email duplicado
                 if (medicoNegocio.ExisteEmail(txtEmail.Text.Trim()))
                 {
                     lblErrorEmail.Text = "❌ El email ingresado ya está registrado.";
                     return;
                 }
 
-                // 4️⃣ Validación: matrícula duplicada
+                // Validación: matrícula duplicada
                 if (medicoNegocio.ExisteMatricula(txtMatricula.Text.Trim()))
                 {
                     lblErrorMatricula.Text = "❌ La matrícula ingresada ya está registrada.";
                     return;
                 }
 
-                // 5️⃣ Crear objeto Médico
+                // Crear objeto Médico
                 Medico medico = new Medico
                 {
                     Nombre = txtNombre.Text.Trim(),
@@ -247,13 +310,13 @@ namespace presentacion
                     }
                 }
 
-                // 6️⃣ Guardar médico en BD
+                //  Guardar médico en BD
                 int idMedico = medicoNegocio.Agregar(medico);
 
                 // Limpieza de sesión
                 Session.Remove("TurnosTemp");
 
-                // 7️⃣ Redirección
+                // Redirección
                 Response.Redirect("GestionMedicos.aspx", false);
             }
             catch (Exception ex)
@@ -265,8 +328,8 @@ namespace presentacion
 
         protected void btnCancelarUsuario_Click(object sender, EventArgs e)
         {
-            // No se ha creado ningún usuario todavía
-            // Así que simplemente volvemos a la gestión de médicos
+            // No se crea usuario y se vuelve a gestion medicos
+            
 
             Response.Redirect("GestionMedicos.aspx");
         }
@@ -275,21 +338,21 @@ namespace presentacion
         {
             try
             {
-                // 1️⃣ Recupero el usuario que se creó en la etapa anterior
+                // 1 Si se había creado un usuario en la primera etapa
                 if (Session["idUsuario"] != null)
                 {
                     int idUsuario = Convert.ToInt32(Session["idUsuario"]);
 
-                    // 2️⃣ Elimino el usuario de la base de datos
+                    // 2️⃣ Eliminar el usuario de la base de datos
                     UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
                     usuarioNegocio.Eliminar(idUsuario);
                 }
 
-                // 3️⃣ Limpio datos temporales
+                // Limpiar datos temporales de sesión
                 Session.Remove("idUsuario");
                 Session.Remove("TurnosTemp");
 
-                // 4️⃣ Vuelvo a Gestión de Médicos
+                // Volver a Gestión de Médicos
                 Response.Redirect("GestionMedicos.aspx");
             }
             catch (Exception ex)

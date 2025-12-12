@@ -8,6 +8,13 @@
 
     <h3 class="mb-4">Editar Médico</h3>
 
+    <asp:ValidationSummary 
+    ID="vsEditarMedico"
+    runat="server"
+    CssClass="text-danger mb-3"
+    HeaderText="Corrija los siguientes errores:"
+    DisplayMode="BulletList" />
+
     <asp:HiddenField ID="hfIdMedico" runat="server" />
 
     <div class="card p-4 shadow-sm">
@@ -31,10 +38,35 @@
         </div>
 
        
-        <div class="mb-3">
-            <label>Teléfono</label>
-            <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" />
-        </div>
+       <div class="mb-3">
+    <label>Teléfono</label>
+
+    <asp:TextBox 
+        ID="txtTelefono" 
+        runat="server" 
+        CssClass="form-control" 
+        MaxLength="12" />
+
+    <!-- Solo números -->
+    <asp:RegularExpressionValidator
+        ID="revTelefonoNumeros"
+        runat="server"
+        ControlToValidate="txtTelefono"
+        ValidationExpression="^\d+$"
+        ErrorMessage="El teléfono solo puede contener números."
+        CssClass="text-danger"
+        Display="Dynamic" />
+
+    <!-- Máximo 12 dígitos -->
+    <asp:RegularExpressionValidator
+        ID="revTelefonoLongitud"
+        runat="server"
+        ControlToValidate="txtTelefono"
+        ValidationExpression="^\d{1,12}$"
+        ErrorMessage="El teléfono no puede tener más de 12 dígitos."
+        CssClass="text-danger"
+        Display="Dynamic" />
+</div>
 
         
         <div class="mb-3">
