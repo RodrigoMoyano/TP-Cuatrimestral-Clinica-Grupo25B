@@ -168,6 +168,80 @@ namespace presentacion
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            Page.Validate();
+            if (!Page.IsValid)
+                return;
+            string telefono = txtTelefono.Text.Trim();
+
+            if (!telefono.All(char.IsDigit) || telefono.Length > 12)
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "El teléfono debe contener solo números y un máximo de 12 dígitos."
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            // 🔹 Validación: campos obligatorios
+            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                string.IsNullOrWhiteSpace(txtApellido.Text) ||
+                string.IsNullOrWhiteSpace(txtMatricula.Text) ||
+                string.IsNullOrWhiteSpace(txtTelefono.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text))
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "Todos los campos del médico son obligatorios."
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            // 🔹 Validación: al menos una especialidad
+            bool tieneEspecialidad = chkEspecialidades.Items.Cast<ListItem>()
+                                        .Any(i => i.Selected);
+
+            if (!tieneEspecialidad)
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "Debe seleccionar al menos una especialidad."
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            MedicoNegocio negocio = new MedicoNegocio();
+
+            // 🔹 Validación: email duplicado
+            if (negocio.ExisteEmail(txtEmail.Text.Trim(), idMedico))
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "El email ingresado ya pertenece a otro médico."
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            // 🔹 Validación: matrícula duplicada
+            if (negocio.ExisteMatricula(txtMatricula.Text.Trim(), idMedico))
+            {
+                CustomValidator cv = new CustomValidator
+                {
+                    IsValid = false,
+                    ErrorMessage = "La matrícula ingresada ya pertenece a otro médico."
+                };
+                Page.Validators.Add(cv);
+                return;
+            }
+
+            // 🔹 Construcción del médico
             Medico med = new Medico
             {
                 Id = idMedico,
@@ -183,10 +257,13 @@ namespace presentacion
             foreach (ListItem item in chkEspecialidades.Items)
             {
                 if (item.Selected)
-                    med.Especialidad.Add(new Especialidad { Id = int.Parse(item.Value) });
+                {
+                    med.Especialidad.Add(
+                        new Especialidad { Id = int.Parse(item.Value) });
+                }
             }
 
-            MedicoNegocio negocio = new MedicoNegocio();
+            // 🔹 Guardar cambios
             negocio.Modificar(med);
 
             TurnoTrabajoNegocio turnosNeg = new TurnoTrabajoNegocio();
