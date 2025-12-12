@@ -29,7 +29,7 @@
 
         <div class="mb-3">
             <label>Médico</label>
-            <asp:DropDownList ID="ddlMedicos" runat="server" CssClass="form-select" OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged"></asp:DropDownList>
+            <asp:DropDownList ID="ddlMedicos" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlMedicos_SelectedIndexChanged"></asp:DropDownList>
             <asp:RequiredFieldValidator ID="rfvMedico" runat="server" ControlToValidate="ddlMedicos" InitialValue="" ErrorMessage="Seleccione un medico" ForeColor="Red"/>
         </div>
 

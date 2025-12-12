@@ -1,7 +1,7 @@
 ﻿
 /*LOGIN*/
 /*imagen*/
-.card-shadow{
+.card-shadow {
     max-width: 500px;
     width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -61,8 +61,8 @@ html, body {
     padding-right: 15px;
 }
 /*Validaciones*/
-.validacion{
-    color:red;
+.validacion {
+    color: red;
 }
 /*Registro*/
 .registro-container {
@@ -74,28 +74,32 @@ html, body {
     padding-bottom: 3rem;
     background-color: #f8f9fa;
 }
+
 .registro-titulo-seccion {
     color: #6c757d;
     border-bottom: 1px solid #dee2e6;
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
-    font-size:1.1rem;
+    font-size: 1.1rem;
 }
-.borde-derecho-md{
-    border-right:none;
+
+.borde-derecho-md {
+    border-right: none;
 }
-@media(min-width:768px){
+
+@media(min-width:768px) {
     .borde-derecho-md {
         border-right: 1px solid #dee2e6;
     }
 }
+
 .error-validacion {
     color: #dc3545;
-    font-size:0.875em;
+    font-size: 0.875em;
     display: block;
 }
 /*Mesaje Registro Exitoso*/
-.msjRegistro{
+.msjRegistro {
     background-color: #e6f9e8;
     border: 1px solid #3cb371;
     color: #2d6a4f;
@@ -131,4 +135,20 @@ html, body {
     background-color: #007bff;
     color: white;
     font-weight: bold;
+}
+/*PAgina Error*/
+.error-card {
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 40px;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: block;
 }
