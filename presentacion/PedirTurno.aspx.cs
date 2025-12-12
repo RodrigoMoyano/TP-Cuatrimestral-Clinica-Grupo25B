@@ -18,44 +18,56 @@ namespace presentacion
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!Seguridad.esPaciente(Session["usuario"]) && !Seguridad.esAdmin(Session["usuario"]))
-            //{
-            //    Session.Add("error", "No tienes permisos para esta pantalla.");
-            //    Response.Redirect("LogIn.aspx", true);
-            //}
+            Usuario usuario = (Usuario)Session["usuario"];
+            PacienteNegocio pacNeg = new PacienteNegocio();
+            Paciente paciente = pacNeg.ObtenerPorIdUsuario(usuario.Id);
+
 
             if (!IsPostBack)
             {
+                
+                
+                if (Request.QueryString["id"] != null)
+                {
+                    int idTurno = int.Parse(Request.QueryString["id"]);
+
+                    ViewState["IdTurnoEditar"] = idTurno;
+
+                    CargarEspecialidades();
+                    CargarDatosDelTurno(idTurno);
+
+                    ddlEspecialidad.Enabled = false;
+                    ddlMedico.Enabled = false;
+
+                    
+                    TurnoNegocio turnoNeg = new TurnoNegocio();
+                    Turno turno = turnoNeg.BuscarPorId(idTurno);
+
+                    
+                    Paciente pacienteTurno = pacNeg.ObtenerPorId(turno.Paciente.Id);
+
+                    if (pacienteTurno != null)
+                        CargarCoberturaPaciente(pacienteTurno);
+
+                    return;
+                }
+
+                
                 CargarEspecialidades();
-                CargarCoberturas();
 
-                //if (Request.QueryString["id"] != null)
-                //{
-                //    if (!Seguridad.esAdmin(Session["usuario"]))
-                //    {
-                //        Session.Add("error", "No tiene permiso para reprogramar turnos.");
-                //        Response.Redirect("Error.aspx", true);
-                //    }
-                //    int idTurno = int.Parse(Request.QueryString["id"]);
+                if (paciente == null)
+                {
+                    MostrarError("No se pudo cargar el perfil del paciente.");
+                    return;
+                }
 
-                //    ViewState["IdTurnoEditar"] = idTurno;
-                //    btnConfirmar.Text = "Reprogramar Turno #" + idTurno;
-
-                //    lblTitulo.Text = "Reprogramar Turno #" + idTurno;
-
-                //    CargarDatosDelTurno(idTurno);
-                //}
-                //else
-                //{
-                //    if (Seguridad.esAdmin(Session["usuario"]))
-                //    {
-                //        Session.Add("error", "Los administradores solo reprograman turnos");
-                //        Response.Redirect("Turnos.aspx", true);
-                //    }
-                //}
+                Session["paciente"] = paciente;
+                CargarCoberturaPaciente(paciente);
             }
         }
 
+        
+            
         private void CargarEspecialidades()
         {
             EspecialidadNegocio negocio = new EspecialidadNegocio();
@@ -87,51 +99,27 @@ namespace presentacion
             ddlHorario.Items.Clear();
             calFecha.SelectedDates.Clear();
         }
-        private void CargarCoberturas()
+        
+        private void CargarCoberturaPaciente(Paciente p)
         {
-           
-            CoberturaNegocio negocio = new CoberturaNegocio();
-
-            var lista = negocio.Listar()
-                               .Select(x => x.Tipo)
-                               .Distinct()
-                               .ToList();
-
-            ddlCobertura.DataSource = lista;
-            ddlCobertura.DataBind();
-
-            ddlCobertura.Items.Insert(0, new ListItem("-- Seleccione --", ""));
-        }
-        protected void ddlCobertura_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ddlObraSocial.Items.Clear();
-
-            
-            if (ddlCobertura.SelectedValue == "Particular")
+            if (p.Cobertura != null)
             {
-                ddlObraSocial.Enabled = false;
-                return;
+                lblTipoCobertura.Text = p.Cobertura.Tipo;
+
+                if (p.Cobertura.Tipo == "Obra Social")
+                {
+                    lblObraSocial.Text = $"{p.Cobertura.NombreObraSocial} {p.Cobertura.PlanCobertura}";
+                }
+                else
+                {
+                    lblObraSocial.Text = "-";
+                }
             }
-
-            
-            CoberturaNegocio negocio = new CoberturaNegocio();
-            var lista = negocio.Listar()
-                               .Where(x => x.Tipo == "Obra Social")
-                               .ToList();
-
-            ddlObraSocial.Enabled = true;
-            ddlObraSocial.DataSource = lista;
-            ddlObraSocial.DataTextField = "NombreObraSocial";
-            ddlObraSocial.DataValueField = "Id";
-            ddlObraSocial.DataBind();
-            ddlObraSocial.Items.Insert(0, new ListItem("-- Seleccione Obra Social --", ""));
-        }
-        protected void ddlObraSocial_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int id = int.Parse(ddlObraSocial.SelectedValue);
-
-            CoberturaNegocio negocio = new CoberturaNegocio();
-            var cobertura = negocio.Listar().First(x => x.Id == id);
+            else
+            {
+                lblTipoCobertura.Text = "Particular";
+                lblObraSocial.Text = "-";
+            }
         }
 
 
@@ -196,7 +184,7 @@ namespace presentacion
         {
             LimpiarErrores();
 
-            // VALIDACIONES
+            
             bool hayError = false;
 
             if (ddlEspecialidad.SelectedValue == "0")
@@ -227,31 +215,18 @@ namespace presentacion
                 hayError = true;
             }
 
-            if (ddlCobertura.SelectedValue == "")
-            {
-                lblErrorCobertura.Text = "Debe seleccionar una cobertura.";
-                lblErrorCobertura.Visible = true;
-                hayError = true;
-            }
-
-            if (ddlCobertura.SelectedValue == "Obra Social" && ddlObraSocial.SelectedValue == "")
-            {
-                lblErrorObraSocial.Text = "Debe seleccionar una obra social.";
-                lblErrorObraSocial.Visible = true;
-                hayError = true;
-            }
-
+           
             if (hayError)
                 return;
 
-            // DATOS FINALES DEL TURNO
+            
             int idMedico = int.Parse(ddlMedico.SelectedValue);
             int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
             DateTime fecha = calFecha.SelectedDate;
             TimeSpan hora = TimeSpan.Parse(ddlHorario.SelectedValue);
             string observaciones = txtObservaciones.Text.Trim();
 
-            // VALIDACIÓN DE FECHA / HORA
+            
             if (fecha.Date < DateTime.Now.Date)
             {
                 MostrarError("No se puede seleccionar una fecha pasada.");
@@ -268,7 +243,7 @@ namespace presentacion
             {
                 TurnoNegocio negocio = new TurnoNegocio();
 
-                // SI ES EDICIÓN (ADMIN)
+                
                 if (ViewState["IdTurnoEditar"] != null)
                 {
                     int idTurno = (int)ViewState["IdTurnoEditar"];
@@ -281,7 +256,7 @@ namespace presentacion
                     return;
                 }
 
-                // SI ES ALTA NORMAL (PACIENTE)
+                
                 Usuario usuario = (Usuario)Session["usuario"];
                 PacienteNegocio pacNeg = new PacienteNegocio();
                 int idPaciente = pacNeg.ObtenerIdPacientePorIdUsuario(usuario.Id);
@@ -292,24 +267,27 @@ namespace presentacion
                     return;
                 }
 
-                if (ViewState["IdTurnoEditar"] != null)
-                {
-                    int idTurno = (int)ViewState["IdTurnoEditar"];
-
-                    negocio.Modificar(idTurno, idMedico, idEspecialidad, fecha, hora, observaciones);
-
-                    ViewState["IdTurnoEditar"] = null;
-
-                    Response.Redirect("Turnos.aspx");
-                    return;
-                    
-                }
 
                 negocio.Agregar(idPaciente, idMedico, idEspecialidad, fecha, hora, observaciones);
+
+                Paciente paciente = pacNeg.ObtenerPorIdUsuario(usuario.Id);
+                string emailDestino = paciente.Email;
+                string nombrePaciente = paciente.Nombre;
+                string medicoNombre = ddlMedico.SelectedItem.Text;
+
+                EmailService emailService = new EmailService();
+                emailService.EnviarConfirmacionTurno(emailDestino, nombrePaciente, fecha, medicoNombre);
+
                 divExito.Visible = true;
                 ScriptManager.RegisterStartupScript(this, GetType(), "redir",
                     "setTimeout(function(){ window.location = 'MenuPaciente.aspx'; }, 2000);", true);
-              
+
+
+            }
+            catch (SmtpException smtpEx)
+            {
+                lblError.Text = "Error al enviar el correo: " + smtpEx.Message;
+                lblError.Visible = true;
             }
             catch (Exception ex)
             {
@@ -349,10 +327,10 @@ namespace presentacion
             if (turno == null)
                 return;
 
-            //ESPECIALIDAD
+            
             ddlEspecialidad.SelectedValue = turno.Especialidad.Id.ToString();
 
-            //Cargar médicos filtrados por especialidad
+            
             MedicoNegocio mNeg = new MedicoNegocio();
             var medicos = mNeg.ListarPorEspecialidad(turno.Especialidad.Id);
 
@@ -363,11 +341,11 @@ namespace presentacion
             ddlMedico.Items.Insert(0, new ListItem("-- Seleccione --", "0"));
             ddlMedico.SelectedValue = turno.Medico.Id.ToString();
 
-            //fecha
+            
             calFecha.SelectedDate = turno.Fecha;
             calFecha.VisibleDate = turno.Fecha;
 
-            //HORArios
+            
             ddlHorario.Items.Clear();
 
             if (ddlMedico.SelectedValue != "0")
@@ -398,36 +376,10 @@ namespace presentacion
                 }
             }
 
-            // Cobertura paciente
-            if (turno.Paciente != null && turno.Paciente.Cobertura != null)
-            {
-                //Selecciona el tipo de cobertura
-                ddlCobertura.SelectedValue = turno.Paciente.Cobertura.Tipo;
+            
+            
 
-                if (turno.Paciente.Cobertura.Tipo == "Obra Social")
-                {
-                    //Cargar obras sociales disponibles
-                    CoberturaNegocio negocioCobertura = new CoberturaNegocio();
-                    var listaOS = negocioCobertura.Listar().Where(x => x.Tipo == "Obra Social").ToList();
-
-                    ddlObraSocial.DataSource = listaOS;
-                    ddlObraSocial.DataTextField = "NombreObraSocial";
-                    ddlObraSocial.DataValueField = "Id";
-                    ddlObraSocial.DataBind();
-                    ddlObraSocial.Items.Insert(0, new ListItem("-- Seleccione Obra Social --", ""));
-
-                    //Selecciona la obra social del paciente
-                    ddlObraSocial.SelectedValue = turno.Paciente.Cobertura.Id.ToString();
-                    ddlObraSocial.Enabled = true;
-                }
-                else
-                {
-                    ddlObraSocial.Items.Clear();
-                    ddlObraSocial.Enabled = false;
-                }
-            }
-
-            // --- E. Observaciones ---
+           
             txtObservaciones.Text = turno.Observaciones;
         }
 
@@ -450,11 +402,7 @@ namespace presentacion
             lblErrorHorario.Text = "";
             lblErrorHorario.Visible = false;
 
-            lblErrorCobertura.Text = "";
-            lblErrorCobertura.Visible = false;
-
-            lblErrorObraSocial.Text = "";
-            lblErrorObraSocial.Visible = false;
+           
         }
 
     }
