@@ -15,12 +15,16 @@
             </asp:DropDownList>
         </div>
             <asp:GridView 
-            ID="gvTurnos" 
-            runat="server" 
-            AutoGenerateColumns="False" 
-            CssClass="table"
-            OnRowCommand="gvTurnos_RowCommand"
-            OnRowDataBound="gvTurnos_RowDataBound">
+                ID="gvTurnos" 
+                runat="server" 
+                AutoGenerateColumns="False" 
+                CssClass="table"
+                AllowPaging="true"
+                PageSize="10"
+                PagerStyle-HorizontalAlign="Center"
+                OnPageIndexChanging="gvTurnos_PageIndexChanging"
+                OnRowCommand="gvTurnos_RowCommand"
+                OnRowDataBound="gvTurnos_RowDataBound">
             <Columns>
                 <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
                 <asp:BoundField DataField="Hora" HeaderText="Hora" />

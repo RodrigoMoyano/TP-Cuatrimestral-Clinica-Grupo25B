@@ -19,6 +19,8 @@ namespace presentacion
                 {
                     return;
                 }
+                gvTurnos.PageSize = 10;
+                gvTurnos.AllowPaging = true;
 
                 CargarTurnos();
             }
@@ -66,7 +68,7 @@ namespace presentacion
                     
                     lista = turnoNeg.ListarPorPacienteFiltrado(idPaciente, estadoSeleccionado);
                 }
-
+                
                 gvTurnos.DataSource = lista;
                 gvTurnos.DataBind();
             }
@@ -88,7 +90,7 @@ namespace presentacion
                 CargarTurnos();
             }
         }
-        //Para que el boton cancelar desaparezca 
+        
         protected void gvTurnos_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -109,8 +111,15 @@ namespace presentacion
         }
         protected void ddlFiltroEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
+            gvTurnos.PageIndex = 0;
             CargarTurnos();
         }
+        protected void gvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvTurnos.PageIndex = e.NewPageIndex;
 
+            CargarTurnos();
+        }
     }
+
 }
