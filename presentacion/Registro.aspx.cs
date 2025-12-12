@@ -120,5 +120,10 @@ namespace presentacion
                 lblMensaje.Text = "Error al registrar paciente: " + ex.InnerException.Message;
             }
         }
+
+        protected void btnCancelarRegistro_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Login.aspx");
+        }
     }
 }

@@ -38,6 +38,8 @@ namespace presentacion
 
                     liTurnos.Visible = false;
                     lnkGestionTurnos.Visible = true;
+
+                    lnkAdmin.Visible = true;
                     
                     lnkMisTurnos.Visible = false;
                     lnkPedirTurno.Visible = false;

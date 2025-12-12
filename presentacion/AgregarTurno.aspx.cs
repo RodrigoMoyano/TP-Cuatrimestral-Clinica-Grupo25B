@@ -100,7 +100,7 @@ namespace presentacion
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("Turnos.aspx");
         }
 
         protected void ddlMedicos_SelectedIndexChanged(object sender, EventArgs e)

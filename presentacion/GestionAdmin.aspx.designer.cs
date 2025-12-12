@@ -11,43 +11,34 @@ namespace presentacion
 {
 
 
-    public partial class GestionPaciente
+    public partial class GestionAdmin
     {
 
         /// <summary>
-        /// btnIrRegistro control.
+        /// btnAgregarAdmin control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnIrRegistro;
+        protected global::System.Web.UI.WebControls.Button btnAgregarAdmin;
 
         /// <summary>
-        /// ddlFiltro control.
+        /// ddlEstado control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlFiltro;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEstado;
 
         /// <summary>
-        /// gvPacientes control.
+        /// dgvAdmin control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvPacientes;
-
-        /// <summary>
-        /// lblMensaje control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMensaje;
+        protected global::System.Web.UI.WebControls.GridView dgvAdmin;
     }
 }
