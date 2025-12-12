@@ -26,7 +26,7 @@
     </Columns>
 </asp:GridView>
 
-    <!-- Panel para agregar/editar cobertura -->
+   
     <asp:Panel ID="pnlFormulario" runat="server" CssClass="card p-3 mt-3" Visible="false">
         <h5 id="lblTituloFormulario" runat="server"></h5>
 

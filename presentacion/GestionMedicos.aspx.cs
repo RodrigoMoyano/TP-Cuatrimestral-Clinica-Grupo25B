@@ -19,9 +19,9 @@ namespace presentacion
             }
         }
 
-        // ====================================
+        
         //  CARGA DE ESPECIALIDADES PARA EL FILTRO
-        // ====================================
+     
         private void CargarEspecialidades()
         {
             EspecialidadNegocio negocio = new EspecialidadNegocio();
@@ -34,9 +34,8 @@ namespace presentacion
                 ddlEspecialidad.Items.Add(new ListItem(esp.Descripcion, esp.Id.ToString()));
         }
 
-        // ====================================
         //  CARGA DE LA GRILLA
-        // ====================================
+        
         private void CargarGrilla()
         {
             MedicoNegocio negocio = new MedicoNegocio();
@@ -50,21 +49,21 @@ namespace presentacion
             else // Activos
                 lista = negocio.Listar();
 
-            // Luego aplicamos filtros de nombre y especialidad
+            // despues aplicamos filtros de nombre y especialidad
             lista = AplicarFiltros(lista);
 
             gvMedicos.DataSource = lista;
             gvMedicos.DataBind();
         }
 
-        // ====================================
+      
         //      FILTROS APLICADOS
-        // ====================================
+     
         private List<Medico> AplicarFiltros(List<Medico> lista)
         {
-            // ----------------------------
+          
             // FILTRO POR NOMBRE
-            // ----------------------------
+            
             if (!string.IsNullOrWhiteSpace(txtBuscar.Text))
             {
                 string texto = txtBuscar.Text.ToLower();
@@ -74,9 +73,8 @@ namespace presentacion
                 ).ToList();
             }
 
-            // ----------------------------
+            
             // FILTRO POR ESPECIALIDAD
-            // ----------------------------
             if (ddlEspecialidad.SelectedValue != "0")
             {
                 lista = lista.Where(m =>
@@ -88,9 +86,7 @@ namespace presentacion
             return lista;
         }
 
-        // ====================================
-        //  EVENTOS — ACTUALIZAN LA GRILLA
-        // ====================================
+        
         protected void txtBuscar_TextChanged(object sender, EventArgs e)
         {
             CargarGrilla();
@@ -131,7 +127,7 @@ namespace presentacion
 
                 if (medico != null)
                 {
-                    bool nuevoEstado = !medico.Activo;   // si estaba activo -> inactivo, y viceversa
+                    bool nuevoEstado = !medico.Activo;   // si estaba activo entonces inactivo, y viceversa
                     negocio.CambiarEstado(idMedico, nuevoEstado);
                     CargarGrilla();                      // refresca la grilla para ver el cambio
                 }

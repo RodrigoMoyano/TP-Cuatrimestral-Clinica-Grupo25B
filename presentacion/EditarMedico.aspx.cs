@@ -84,7 +84,7 @@ namespace presentacion
             gvTurnos.DataSource = turnosTemp;
             gvTurnos.DataBind();
 
-            // DESHABILITAR DÍAS YA ELEGIDOS — CORREGIDO
+            // DESHABILITAR DIAS YA ELEGIDOS — CORREGIDO
             foreach (var t in turnosTemp)
             {
                 var item = ddlDiaSemana.Items.FindByText(t.DiaSemanaTexto);
@@ -144,7 +144,7 @@ namespace presentacion
             gvTurnos.DataSource = turnosTemp;
             gvTurnos.DataBind();
 
-            // DESHABILITAR DÍA SELECCIONADO — CORREGIDO
+            // DESHABILITAR DIA SELECCIONADO — CORREGIDO
             ddlDiaSemana.Items.FindByText(nuevo.DiaSemanaTexto).Enabled = false;
         }
 
@@ -159,7 +159,7 @@ namespace presentacion
                 gvTurnos.DataSource = turnosTemp;
                 gvTurnos.DataBind();
 
-                // REHABILITAR DÍA — CORREGIDO
+                // REHABILITAR DIA — CORREGIDO
                 var item = ddlDiaSemana.Items.FindByText(eliminado.DiaSemanaTexto);
                 if (item != null)
                     item.Enabled = true;
@@ -200,7 +200,7 @@ namespace presentacion
                 return;
             }
 
-            // 🔹 Validación: al menos una especialidad
+            //  Validación: al menos una especialidad
             bool tieneEspecialidad = chkEspecialidades.Items.Cast<ListItem>()
                                         .Any(i => i.Selected);
 
@@ -217,7 +217,7 @@ namespace presentacion
 
             MedicoNegocio negocio = new MedicoNegocio();
 
-            // 🔹 Validación: email duplicado
+            //  Validación: email duplicado
             if (negocio.ExisteEmail(txtEmail.Text.Trim(), idMedico))
             {
                 CustomValidator cv = new CustomValidator
@@ -229,7 +229,7 @@ namespace presentacion
                 return;
             }
 
-            // 🔹 Validación: matrícula duplicada
+            //  Validación: matrícula duplicada
             if (negocio.ExisteMatricula(txtMatricula.Text.Trim(), idMedico))
             {
                 CustomValidator cv = new CustomValidator
@@ -241,7 +241,7 @@ namespace presentacion
                 return;
             }
 
-            // 🔹 Construcción del médico
+            //  Construcción del médico
             Medico med = new Medico
             {
                 Id = idMedico,
@@ -263,7 +263,7 @@ namespace presentacion
                 }
             }
 
-            // 🔹 Guardar cambios
+            //  Guardar cambios
             negocio.Modificar(med);
 
             TurnoTrabajoNegocio turnosNeg = new TurnoTrabajoNegocio();
