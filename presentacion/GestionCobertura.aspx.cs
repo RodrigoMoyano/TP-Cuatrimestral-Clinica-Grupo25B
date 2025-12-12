@@ -60,6 +60,8 @@ namespace presentacion
                 {
                     pnlFormulario.Visible = true;
                     lblTituloFormulario.InnerText = "Editar Obra Social";
+                    txtTipo.Text = "Obra Social";
+                    txtTipo.Enabled = false;
                     hfIdCobertura.Value = c.Id.ToString();
                     txtNombreObraSocial.Text = c.NombreObraSocial;
                     txtPlanCobertura.Text = c.PlanCobertura;
