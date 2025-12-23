@@ -11,7 +11,6 @@ namespace presentacion
             base.OnInit(e);
 
             if (!Seguridad.esMedico(Session["usuario"]) && !Seguridad.esAdmin(Session["usuario"]))
-            {
                 Session.Add("error", "No tienes permisos para esta página.");
                 Response.Redirect("Menu.aspx", false);
                 return;

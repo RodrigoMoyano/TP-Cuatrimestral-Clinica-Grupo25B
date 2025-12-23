@@ -425,6 +425,33 @@ namespace Negocio
             }
         }
 
+        public Usuario ObtenerPorNombreUsuario(string nombreUsuario)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("SELECT * FROM Usuario WHERE NombreUsuario = @user");
+                datos.SetearParametro("@user", nombreUsuario);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Usuario u = new Usuario();
+                    u.Id = (int)datos.Lector["Id"];
+                    u.NombreUsuario = datos.Lector["NombreUsuario"].ToString();
+                    u.Clave = datos.Lector["Clave"].ToString();
+                    u.Activo = (bool)datos.Lector["Activo"];
+                    u.Rol = new Rol
+                    {
+                        Id = (int)datos.Lector["IdRol"]
+                    };
+
+                    return u;
+                }
+
+                return null;
+            }
+
+        }
 
     }
 }

@@ -75,5 +75,10 @@ namespace presentacion
         {
             Response.Redirect("Registro.aspx", false);
         }
+
+        protected void lnkOlvide_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("OlvideContraseña.aspx", false);
+        }
     }
 }

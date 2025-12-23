@@ -16,7 +16,7 @@ namespace presentacion
             //Oculto NavBar en LogIn.aspx
             string currentPage = System.IO.Path.GetFileName(Request.Path);
 
-            if (currentPage.Equals("LogIn.aspx", StringComparison.OrdinalIgnoreCase) || currentPage.Equals("Registro.aspx", StringComparison.OrdinalIgnoreCase))
+            if (currentPage.Equals("LogIn.aspx", StringComparison.OrdinalIgnoreCase) || currentPage.Equals("Registro.aspx", StringComparison.OrdinalIgnoreCase) || currentPage.Equals("Error.aspx", StringComparison.OrdinalIgnoreCase) || currentPage.Equals("OlvideContraseña.aspx", StringComparison.OrdinalIgnoreCase))
             {
                 pnlNavbar.Visible = false;
             }

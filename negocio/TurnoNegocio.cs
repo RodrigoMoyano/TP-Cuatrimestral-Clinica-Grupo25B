@@ -508,25 +508,15 @@ namespace Negocio
                 t.Fecha,
                 t.Hora,
                 t.Observaciones,
-
-                -- Paciente
                 p.Id AS IdPaciente,
                 p.Nombre AS NombrePaciente,
                 p.Apellido AS ApellidoPaciente,
                 p.IdCobertura,
-
-                -- Cobertura
                 c.Tipo AS TipoCobertura,
                 c.NombreObraSocial,
-
-                -- Medico
                 t.IdMedico,
-
-                -- Especialidad
                 e.Id AS IdEspecialidad,
                 e.Descripcion AS EspecialidadDescripcion,
-
-                -- Estado del turno
                 et.Id AS IdEstadoTurno,
                 et.Descripcion AS EstadoDescripcion
 
@@ -556,9 +546,7 @@ namespace Negocio
                                           ? datos.Lector["Observaciones"].ToString()
                                           : "";
 
-                    // ============================
-                    //   PACIENTE COMPLETO
-                    // ============================
+                    //Paciente
                     turno.Paciente = new Paciente
                     {
                         Id = (int)datos.Lector["IdPaciente"],
@@ -572,18 +560,13 @@ namespace Negocio
                         }
                     };
 
-                    // ============================
-                    //   ESPECIALIDAD COMPLETA
-                    // ============================
+                    //Especialidad
                     turno.Especialidad = new Especialidad
                     {
                         Id = (int)datos.Lector["IdEspecialidad"],
                         Descripcion = datos.Lector["EspecialidadDescripcion"].ToString()
                     };
-
-                    // ============================
-                    //   ESTADO COMPLETO
-                    // ============================
+                    //Estado
                     turno.Estado = new EstadoTurno
                     {
                         Id = (int)datos.Lector["IdEstadoTurno"],
@@ -734,7 +717,7 @@ namespace Negocio
                                               ? ""
                                               : (string)datos.Lector["Observaciones"];
 
-                        // ----- PACIENTE + COBERTURA -----
+                        //Paciente y Cobertura
                         turno.Paciente = new Paciente();
                         turno.Paciente.Id = (int)datos.Lector["IdPaciente"];
 
@@ -743,7 +726,7 @@ namespace Negocio
                         turno.Paciente.Cobertura.Tipo = datos.Lector["TipoCobertura"].ToString();
                         turno.Paciente.Cobertura.NombreObraSocial = datos.Lector["NombreObraSocial"].ToString();
 
-                        // ----- MÉDICO / ESP / ESTADO -----
+                        //Medico Especualidad y Estado
                         turno.Medico = new Medico { Id = (int)datos.Lector["IdMedico"] };
                         turno.Especialidad = new Especialidad { Id = (int)datos.Lector["IdEspecialidad"] };
                         turno.Estado = new EstadoTurno { Id = (int)datos.Lector["IdEstadoTurno"] };

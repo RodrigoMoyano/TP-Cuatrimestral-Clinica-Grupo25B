@@ -421,8 +421,20 @@ namespace Negocio
             }
             return null;
         }
+        public string ObtenerEmailPorIdUsuario(int idUsuario)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("SELECT Email FROM Paciente WHERE IdUsuario = @id");
+                datos.SetearParametro("@id", idUsuario);
+                datos.EjecutarLectura();
 
+                if (datos.Lector.Read())
+                    return datos.Lector["Email"].ToString();
 
+                return null;
+            }
+        }
 
     }
 

@@ -8,10 +8,10 @@ public class EmailService
     private readonly string host = "smtp.gmail.com";
     private readonly int port = 587;
 
-    // CAMBIAR POR TU CORREO GMAIL
+    //correo gmaikl
     private readonly string user;
 
-    // CONTRASEÑA DE APLICACIÓN (16 dígitos)
+    //clave aplicacion
     private readonly string pass;
 
     public EmailService()
@@ -38,6 +38,31 @@ public class EmailService
         var client = new SmtpClient(host, port)
         {
             Credentials = new NetworkCredential(user, pass),
+            EnableSsl = true
+        };
+
+        client.Send(desde, emailDestino, asunto, cuerpo);
+    }
+
+    public void EnviarContraseñaOlvidada(string emailDestino, string nombreUsuario, string clave)
+    {
+        if(string.IsNullOrEmpty (user) || string.IsNullOrEmpty(pass))
+        {
+            throw new Exception("Faltan credenciales en el Web.Config");
+        }
+
+        string desde = user;
+        string asunto = "Recuperacion de Contraseña - Gestor de Turnos";
+        string cuerpo = $"Hola {nombreUsuario}, \n\n" +
+            "Solicitaste el cambio de contraseña \n" +
+            $"Tu constraseña es:  {clave}\n\n" +
+            "Te recomendamos cambiarla luego de iniciar sesion.\n\n" +
+            "Saludos!";
+
+
+        var client = new SmtpClient(host, port)
+        {
+            Credentials = new NetworkCredential(user,pass),
             EnableSsl = true
         };
 

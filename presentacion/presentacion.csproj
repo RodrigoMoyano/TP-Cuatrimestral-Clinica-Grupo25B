@@ -91,6 +91,7 @@
     <Content Include="Menu.aspx" />
     <Content Include="MenuPaciente.aspx" />
     <Content Include="ObservacionesTurno.aspx" />
+    <Content Include="OlvideContraseña.aspx" />
     <Content Include="Pacientes.aspx" />
     <Content Include="PanelMedico.aspx" />
     <Content Include="PedirTurno.aspx" />
@@ -244,6 +245,13 @@
     </Compile>
     <Compile Include="ObservacionesTurno.aspx.designer.cs">
       <DependentUpon>ObservacionesTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OlvideContraseña.aspx.cs">
+      <DependentUpon>OlvideContraseña.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OlvideContraseña.aspx.designer.cs">
+      <DependentUpon>OlvideContraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pacientes.aspx.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>
