@@ -11,21 +11,21 @@
     <div class="card p-3 mb-3">
         <div class="row">
 
-            <!-- FILTRO POR NOMBRE -->
+           
             <div class="col-md-4 mb-2">
                 <label><strong>Buscar por nombre:</strong></label>
                 <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control"
                     AutoPostBack="true" OnTextChanged="txtBuscar_TextChanged" />
             </div>
 
-            <!-- FILTRO POR ESPECIALIDAD -->
+          
             <div class="col-md-4 mb-2">
                 <label><strong>Especialidad:</strong></label>
                 <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select"
                     AutoPostBack="true" OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged" />
             </div>
 
-            <!-- FILTRO POR ESTADO -->
+          
             <div class="col-md-4 mb-2">
                 <label><strong>Estado:</strong></label>
                 <asp:DropDownList ID="ddlEstado" runat="server" CssClass="form-select"

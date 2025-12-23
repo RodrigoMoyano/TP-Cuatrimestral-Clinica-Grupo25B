@@ -11,7 +11,7 @@ namespace Presentacion
         {
             if (!IsPostBack)
             {
-                // 1) Validar existencia del ID
+                // Validar existencia del ID
                 if (Request.QueryString["id"] == null)
                 {
                     Response.Redirect("PanelMedico.aspx");
@@ -20,7 +20,7 @@ namespace Presentacion
 
                 int idTurno = Convert.ToInt32(Request.QueryString["id"]);
 
-                // 2) Obtener el turno
+                // Obtener el turno
                 TurnoNegocio turnoNegocio = new TurnoNegocio();
                 Turno turno = turnoNegocio.BuscarPorId(idTurno);
 
@@ -30,7 +30,7 @@ namespace Presentacion
                     return;
                 }
 
-                // 3) Validación de seguridad → el médico solo ve sus turnos
+                // Validación de seguridad → el médico solo ve sus turnos
                 Usuario usuario = (Usuario)Session["Usuario"];
 
                 if (usuario != null && usuario.Rol.Id == 3) // Médico
@@ -44,13 +44,13 @@ namespace Presentacion
                     }
                 }
 
-                // Guardamos el turno para usarlo luego en validaciones
+                // Guardo el turno para usarlo luego en validaciones
                 Session["TurnoActual"] = turno;
 
-                // 4) Mostrar datos
+                //  Mostrar datos
                 lblFecha.Text = "Fecha: " + turno.Fecha.ToString("dd/MM/yyyy");
 
-                // --- FORMATEO DE HORA SIMPLE Y SEGURO ---
+                
                 try
                 {
                     string valorHora = turno.Hora.ToString();
@@ -91,20 +91,18 @@ namespace Presentacion
         }
 
 
-        // ================================================================
-        // 🔵 Aplica validaciones según el estado y la fecha del turno
-        // ================================================================
+      
         private void AplicarValidacionesDeEstado(Turno turno)
         {
-            // ❌ No permitir cerrar si ya está cerrado
+          
             if (turno.Estado.Id == 5) // Estado = Cerrado
                 btnCerrar.Enabled = false;
 
-            // ❌ No permitir "No asistió" si ya tiene ese estado
+            // No permitir "No asistió" si ya tiene ese estado
             if (turno.Estado.Id == 4)
                 btnNoAsistio.Enabled = false;
 
-            // ❌ No permitir modificar estados si el turno es anterior a hoy
+            // No permitir modificar estados si el turno es anterior a hoy
             if (turno.Fecha.Date < DateTime.Today)
             {
                 btnCerrar.Enabled = false;
@@ -115,9 +113,7 @@ namespace Presentacion
         }
 
 
-        // ================================================================
-        // 🔵 ROLES: QUÉ BOTONES SE MUESTRAN
-        // ================================================================
+        
         private void ConfigurarAccionesPorRol()
         {
             Usuario usuario = (Usuario)Session["Usuario"];
@@ -158,9 +154,7 @@ namespace Presentacion
         }
 
 
-        // ================================================================
-        // 🔵 EDICIÓN DE OBSERVACIONES
-        // ================================================================
+    
         protected void btnEditarObs_Click(object sender, EventArgs e)
         {
             txtObservaciones.Visible = true;
@@ -200,9 +194,7 @@ namespace Presentacion
         }
 
 
-        // ================================================================
-        // 🔵 CAMBIOS DE ESTADO (CON VALIDACIÓN)
-        // ================================================================
+       
         protected void btnReprogramar_Click(object sender, EventArgs e)
         {
             new TurnoNegocio().CambiarEstado(

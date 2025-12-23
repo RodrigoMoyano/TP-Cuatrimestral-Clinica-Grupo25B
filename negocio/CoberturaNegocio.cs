@@ -56,14 +56,14 @@ namespace Negocio
 
 
         
-       /* public void Agregar(Cobertura nueva)
+       public void Agregar(Cobertura nueva)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
 
-                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, Plan) VALUES (@Tipo, @NombreObraSocial, @PlanCobertura)");
+                    datos.SetearConsulta("INSERT INTO Cobertura (Tipo, NombreObraSocial, PlanCobertura) VALUES (@Tipo, @NombreObraSocial, @PlanCobertura)");
                     datos.SetearParametro("@Tipo", nueva.Tipo);
                     datos.SetearParametro("@NombreObraSocial", nueva.NombreObraSocial);
                     datos.SetearParametro("@PlanCobertura", nueva.PlanCobertura);
@@ -85,11 +85,11 @@ namespace Negocio
                 try
                 {
 
-                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, PlanCobertura = @Plan WHERE IdCobertura = @IdCobertura");
+                    datos.SetearConsulta("UPDATE Cobertura SET Tipo = @Tipo, NombreObraSocial = @NombreObraSocial, PlanCobertura = @PlanCobertura WHERE Id = @IdCobertura");
                     datos.SetearParametro("@Tipo", cobertura.Tipo);
                     datos.SetearParametro("@NombreObraSocial", cobertura.NombreObraSocial);
                     datos.SetearParametro("@PlanCobertura", cobertura.PlanCobertura);
-                    datos.SetearParametro("@IdCobertura", cobertura.IdCobertura);
+                    datos.SetearParametro("@IdCobertura", cobertura.Id);
 
                     datos.EjecutarAccion();
                 }
@@ -107,7 +107,7 @@ namespace Negocio
             {
                 try
                 {
-                    datos.SetearConsulta("DELETE FROM Cobertura WHERE IdCobertura = @IdCobertura");
+                    datos.SetearConsulta("DELETE FROM Cobertura WHERE Id = @IdCobertura");
                     datos.SetearParametro("@IdCobertura", idCobertura);
                     datos.EjecutarAccion();
                 }
@@ -116,6 +116,6 @@ namespace Negocio
                     throw new Exception("Error al eliminar cobertura: " + ex.Message);
                 }
             }
-        }*/
+        }
     }
 }

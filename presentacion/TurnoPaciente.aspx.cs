@@ -103,7 +103,8 @@ namespace presentacion
 
 
                 if (turno.Estado.Descripcion == "Cancelado" ||
-                    turno.Estado.Descripcion == "No Asistió")
+                    turno.Estado.Descripcion == "No Asistió" ||
+                    turno.Estado.Descripcion == "Cerrado" )
                 {
                     btnCancelar.Visible = false;
                 }

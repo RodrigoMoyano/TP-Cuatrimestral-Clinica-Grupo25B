@@ -34,12 +34,14 @@ namespace presentacion
                     liAdmin.Visible = true;
                     lnkGestionMedicos.Visible = true;
                     lnkGestionPaciente.Visible = true;
+                    lnkGestionObraSocial.Visible = true;
                     lnkEspecialidades.Visible = true;
 
                     liTurnos.Visible = false;
                     lnkGestionTurnos.Visible = true;
 
                     lnkAdmin.Visible = true;
+
                     
                     lnkMisTurnos.Visible = false;
                     lnkPedirTurno.Visible = false;

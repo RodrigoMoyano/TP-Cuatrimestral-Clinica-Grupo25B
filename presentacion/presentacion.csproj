@@ -81,6 +81,7 @@
     <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
     <Content Include="GestionAdmin.aspx" />
+    <Content Include="GestionCobertura.aspx" />
     <Content Include="GestionMedicos.aspx" />
     <Content Include="GestionPaciente.aspx" />
     <Content Include="Global.asax" />
@@ -193,6 +194,13 @@
     </Compile>
     <Compile Include="GestionAdmin.aspx.designer.cs">
       <DependentUpon>GestionAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionCobertura.aspx.cs">
+      <DependentUpon>GestionCobertura.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GestionCobertura.aspx.designer.cs">
+      <DependentUpon>GestionCobertura.aspx</DependentUpon>
     </Compile>
     <Compile Include="GestionMedicos.aspx.cs">
       <DependentUpon>GestionMedicos.aspx</DependentUpon>

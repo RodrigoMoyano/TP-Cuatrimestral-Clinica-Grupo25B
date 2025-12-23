@@ -6,12 +6,12 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <!-- TÍTULO CENTRADO -->
+   
     <h3 class="text-center mb-4" style="font-size: 32px; font-weight: bold;">
         Observaciones del Turno
     </h3>
 
-    <!-- CARD DETALLES -->
+   
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white fw-bold">
             Datos del Turno
@@ -56,7 +56,7 @@
     </div>
 
 
-    <!-- CARD ACCIONES -->
+    
 <div class="card shadow-sm mt-4">
     <div class="card-header bg-light text-dark fw-bold">
         Acciones
@@ -87,7 +87,7 @@
     </div>
 </div>
 
-    <!-- BOTÓN VOLVER (CENTRADO) -->
+    
     <div class="text-center mt-4">
         <asp:Button 
             ID="btnVolver" 

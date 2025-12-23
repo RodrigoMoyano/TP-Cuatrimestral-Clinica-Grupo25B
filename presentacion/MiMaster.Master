@@ -53,6 +53,12 @@
                                     </li>
                                     <li>
                                         <asp:HyperLink ID="lnkGestionMedicos" runat="server" CssClass="dropdown-item" NavigateUrl="~/GestionMedicos.aspx" Visible="false">Gestion de Medicos</asp:HyperLink></li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <asp:HyperLink ID="lnkGestionObraSocial" runat="server" CssClass="dropdown-item" NavigateUrl="~/GestionCobertura.aspx" Visible="false">Gestion ObraSocial</asp:HyperLink></li>
+                                    
                                 </ul>
                             </li>
 
